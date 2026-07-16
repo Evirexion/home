@@ -1,3 +1,5 @@
+import type { PortableTextBlock } from "@portabletext/types";
+
 export type PostCategory = "corriente" | "innovations";
 
 export interface Post {
@@ -7,7 +9,7 @@ export interface Post {
   category: PostCategory;
   tag: string;
   excerpt: string;
-  body: string;
+  body: PortableTextBlock[];
   coverImage?: string;
   author: string;
   publishedAt: string;

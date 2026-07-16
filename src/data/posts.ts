@@ -1,4 +1,19 @@
 import type { Post } from "@/types/content";
+import type { PortableTextBlock } from "@portabletext/types";
+
+/** Wraps plain paragraphs (blank-line separated) into minimal Portable Text blocks. */
+function toBlocks(text: string): PortableTextBlock[] {
+  return text
+    .split("\n\n")
+    .map((paragraph) => paragraph.trim())
+    .filter(Boolean)
+    .map((paragraph, i) => ({
+      _type: "block",
+      _key: `block-${i}`,
+      style: "normal",
+      children: [{ _type: "span", _key: `span-${i}`, text: paragraph }],
+    }));
+}
 
 /**
  * Placeholder editorial content. Structure mirrors the `post` document type
@@ -15,7 +30,9 @@ export const mockPosts: Post[] = [
     tag: "Movilidad urbana",
     excerpt:
       "La flota eléctrica del sistema troncal supera las 1,600 unidades, consolidando a la capital como la ciudad con más buses eléctricos fuera de China.",
-    body: "La flota eléctrica del sistema troncal supera las 1,600 unidades, consolidando a la capital como la ciudad con más buses eléctricos fuera de China. Los nuevos vehículos operarán en los portales de Suba y Usme, reduciendo en un estimado de 3,200 toneladas de CO2 al año.",
+    body: toBlocks(
+      "La flota eléctrica del sistema troncal supera las 1,600 unidades, consolidando a la capital como la ciudad con más buses eléctricos fuera de China.\n\nLos nuevos vehículos operarán en los portales de Suba y Usme, reduciendo en un estimado de 3,200 toneladas de CO2 al año."
+    ),
     author: "Redacción E-VIREXION",
     publishedAt: "2026-07-10",
     status: "published",
@@ -28,7 +45,9 @@ export const mockPosts: Post[] = [
     tag: "Política pública",
     excerpt:
       "La medida busca acelerar la adopción de EVs en Colombia, donde representan apenas el 3.2% de las ventas totales de vehículos nuevos.",
-    body: "La medida busca acelerar la adopción de EVs en Colombia, donde representan apenas el 3.2% de las ventas totales de vehículos nuevos. El Ministerio de Comercio estima que la exención podría reducir el precio de entrada en un 19% promedio.",
+    body: toBlocks(
+      "La medida busca acelerar la adopción de EVs en Colombia, donde representan apenas el 3.2% de las ventas totales de vehículos nuevos.\n\nEl Ministerio de Comercio estima que la exención podría reducir el precio de entrada en un 19% promedio."
+    ),
     author: "Redacción E-VIREXION",
     publishedAt: "2026-07-05",
     status: "published",
@@ -41,7 +60,9 @@ export const mockPosts: Post[] = [
     tag: "Infraestructura",
     excerpt:
       "Ocho estaciones de carga ultrarrápida conectarán el Valle de Aburrá con el Eje Cafetero, con tiempos de carga de 18 minutos al 80%.",
-    body: "Ocho estaciones de carga ultrarrápida conectarán el Valle de Aburrá con el Eje Cafetero, con tiempos de carga de 18 minutos al 80%. El proyecto es una alianza entre EPM y tres operadores privados de movilidad eléctrica.",
+    body: toBlocks(
+      "Ocho estaciones de carga ultrarrápida conectarán el Valle de Aburrá con el Eje Cafetero, con tiempos de carga de 18 minutos al 80%.\n\nEl proyecto es una alianza entre EPM y tres operadores privados de movilidad eléctrica."
+    ),
     author: "Redacción E-VIREXION",
     publishedAt: "2026-06-28",
     status: "published",
@@ -54,7 +75,9 @@ export const mockPosts: Post[] = [
     tag: "Mercado",
     excerpt:
       "El segmento de dos ruedas lidera la transición eléctrica del país, impulsado por domicilios y micro-movilidad urbana.",
-    body: "El segmento de dos ruedas lidera la transición eléctrica del país, impulsado por domicilios y micro-movilidad urbana. Marcas como AKT y Segway ya representan más del 40% de las matrículas eléctricas nuevas.",
+    body: toBlocks(
+      "El segmento de dos ruedas lidera la transición eléctrica del país, impulsado por domicilios y micro-movilidad urbana.\n\nMarcas como AKT y Segway ya representan más del 40% de las matrículas eléctricas nuevas."
+    ),
     author: "Redacción E-VIREXION",
     publishedAt: "2026-06-15",
     status: "published",
@@ -67,7 +90,9 @@ export const mockPosts: Post[] = [
     tag: "Tecnología de baterías",
     excerpt:
       "Fabricantes asiáticos aceleran la producción piloto de celdas de estado sólido, prometiendo autonomías superiores a 800 km.",
-    body: "Fabricantes asiáticos aceleran la producción piloto de celdas de estado sólido, prometiendo autonomías superiores a 800 km y tiempos de carga bajo 10 minutos. Analistas anticipan su llegada comercial a Latinoamérica hacia 2029.",
+    body: toBlocks(
+      "Fabricantes asiáticos aceleran la producción piloto de celdas de estado sólido, prometiendo autonomías superiores a 800 km y tiempos de carga bajo 10 minutos.\n\nAnalistas anticipan su llegada comercial a Latinoamérica hacia 2029."
+    ),
     author: "Redacción E-VIREXION",
     publishedAt: "2026-07-12",
     status: "published",
@@ -80,7 +105,9 @@ export const mockPosts: Post[] = [
     tag: "Vehicle-to-Home",
     excerpt:
       "La tecnología V2H permite usar la batería del vehículo como respaldo energético durante cortes de luz, un caso de uso clave en zonas con red inestable.",
-    body: "La tecnología V2H permite usar la batería del vehículo como respaldo energético durante cortes de luz, un caso de uso clave en zonas con red inestable. Los primeros pilotos en Colombia arrancarán en Barranquilla y Cali este año.",
+    body: toBlocks(
+      "La tecnología V2H permite usar la batería del vehículo como respaldo energético durante cortes de luz, un caso de uso clave en zonas con red inestable.\n\nLos primeros pilotos en Colombia arrancarán en Barranquilla y Cali este año."
+    ),
     author: "Redacción E-VIREXION",
     publishedAt: "2026-07-02",
     status: "published",
@@ -93,7 +120,9 @@ export const mockPosts: Post[] = [
     tag: "Software y datos",
     excerpt:
       "Startups colombianas desarrollan algoritmos que combinan clima, tráfico y nivel de batería para maximizar la eficiencia de flotas EV.",
-    body: "Startups colombianas desarrollan algoritmos que combinan clima, tráfico y nivel de batería para maximizar la eficiencia de flotas EV. Las primeras pruebas muestran ahorros de hasta 22% en consumo energético por ruta.",
+    body: toBlocks(
+      "Startups colombianas desarrollan algoritmos que combinan clima, tráfico y nivel de batería para maximizar la eficiencia de flotas EV.\n\nLas primeras pruebas muestran ahorros de hasta 22% en consumo energético por ruta."
+    ),
     author: "Redacción E-VIREXION",
     publishedAt: "2026-06-20",
     status: "published",
@@ -106,7 +135,9 @@ export const mockPosts: Post[] = [
     tag: "Powertrain",
     excerpt:
       "El diseño de flujo axial reduce hasta un 40% el peso del motor frente a los diseños radiales tradicionales, sin sacrificar torque.",
-    body: "El diseño de flujo axial reduce hasta un 40% el peso del motor frente a los diseños radiales tradicionales, sin sacrificar torque. Varios fabricantes de motos eléctricas ya evalúan su adopción para modelos 2027.",
+    body: toBlocks(
+      "El diseño de flujo axial reduce hasta un 40% el peso del motor frente a los diseños radiales tradicionales, sin sacrificar torque.\n\nVarios fabricantes de motos eléctricas ya evalúan su adopción para modelos 2027."
+    ),
     author: "Redacción E-VIREXION",
     publishedAt: "2026-06-08",
     status: "published",
