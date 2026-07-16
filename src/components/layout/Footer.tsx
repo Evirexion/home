@@ -2,6 +2,8 @@ import Link from "next/link";
 import { Container } from "@/components/ui/Container";
 import { Logo } from "@/components/ui/Logo";
 import { FacebookIcon, InstagramIcon, TikTokIcon } from "@/components/icons/SocialIcons";
+import { HologramAccent } from "@/components/ui/HologramAccent";
+import { CurrentLine } from "@/components/ui/CurrentLine";
 
 const SOCIAL_LINKS = [
   { href: "https://instagram.com/evirexion", label: "Instagram", Icon: InstagramIcon },
@@ -18,11 +20,22 @@ const FOOTER_LINKS = [
 
 export function Footer() {
   return (
-    <footer className="border-t border-silver-700/15 bg-ink-raised">
+    <footer className="relative isolate overflow-hidden border-t border-silver-700/15 bg-ink-raised">
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0 -z-10"
+        style={{ background: "radial-gradient(70% 60% at 15% 0%, rgba(29,158,117,0.14), transparent 65%)" }}
+      />
+      <CurrentLine className="h-5 w-full text-silver-700 opacity-50" />
+
       <Container className="flex flex-col gap-10 py-14 md:flex-row md:items-start md:justify-between">
         <div className="max-w-xs">
           <Logo size="sm" />
           <p className="mt-3 text-sm text-silver-500">Driving the Electric Shift</p>
+          <div className="mt-4 flex items-center gap-2 text-xs text-silver-700">
+            <HologramAccent className="h-2 w-2" />
+            Diseñado y operado desde Colombia
+          </div>
         </div>
 
         <div className="flex flex-col gap-2 text-sm">
@@ -43,7 +56,7 @@ export function Footer() {
                 target="_blank"
                 rel="noreferrer"
                 aria-label={label}
-                className="flex h-10 w-10 items-center justify-center rounded-full border border-silver-700/30 text-silver-300 transition-colors hover:border-electric/60 hover:text-electric"
+                className="flex h-10 w-10 items-center justify-center rounded-full border border-silver-700/30 text-silver-300 transition-all duration-300 hover:scale-110 hover:border-electric/60 hover:text-electric hover:shadow-[0_0_18px_rgba(0,255,65,0.3)]"
               >
                 <Icon className="h-4 w-4" />
               </a>

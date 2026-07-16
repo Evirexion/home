@@ -77,9 +77,51 @@ h1, h2, h3, h4, h5, h6 {
   animation: glow-pulse 5s ease-in-out infinite;
 }
 
+@keyframes logo-shine {
+  0%, 12% { background-position: 160% 0; }
+  45%, 100% { background-position: -60% 0; }
+}
+.animate-logo-shine {
+  animation: logo-shine 5s ease-in-out infinite;
+}
+
+@keyframes hologram-shift {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+.animate-hologram-shift {
+  animation: hologram-shift 6s ease-in-out infinite;
+  background-size: 300% 300%;
+}
+
+@keyframes current-flow {
+  0% { stroke-dashoffset: 1; }
+  100% { stroke-dashoffset: -1; }
+}
+.animate-current-flow {
+  stroke-dasharray: 0.12 0.88;
+  animation: current-flow 2.6s linear infinite;
+}
+
+@keyframes count-fade-in {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Ambient dark-teal color-grade wash, applied once behind the whole site */
+.site-atmosphere {
+  background:
+    radial-gradient(90% 60% at 50% -10%, rgba(29, 158, 117, 0.16), transparent 60%),
+    radial-gradient(70% 50% at 100% 20%, rgba(0, 255, 65, 0.05), transparent 60%),
+    radial-gradient(60% 40% at 0% 80%, rgba(29, 158, 117, 0.08), transparent 65%);
+}
+
 @media (prefers-reduced-motion: reduce) {
   .animate-bolt-flicker,
-  .animate-glow-pulse {
+  .animate-glow-pulse,
+  .animate-logo-shine,
+  .animate-hologram-shift,
+  .animate-current-flow {
     animation: none;
   }
 }
