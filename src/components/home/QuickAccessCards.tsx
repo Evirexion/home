@@ -68,29 +68,36 @@ function QuickAccessCard({ href, icon: Icon, title, description, featured }: Car
     <Link
       href={href}
       className={clsx(
-        "group relative flex h-full flex-col justify-between overflow-hidden rounded-2xl border border-silver-700/20 bg-ink-raised transition-all duration-300",
-        "hover:-translate-y-1 hover:border-electric/50 hover:shadow-[0_0_44px_rgba(0,255,65,0.16)]",
+        "group metal-edge relative flex h-full flex-col justify-between overflow-hidden rounded-2xl border border-silver-300/15 bg-ink-raised ease-in-out transition-all duration-500",
+        "hover:-translate-y-1 hover:border-electric/40 hover:shadow-[0_0_40px_rgba(0,255,65,0.12)]",
         featured ? "min-h-[280px] p-8" : "min-h-[160px] p-6"
       )}
     >
       <div
         aria-hidden
-        className="pointer-events-none absolute inset-0 rounded-2xl opacity-0 transition-opacity duration-500 group-hover:opacity-100"
-        style={{ background: "radial-gradient(120% 100% at 50% 100%, rgba(0,255,65,0.14), transparent 70%)" }}
+        className="pointer-events-none absolute inset-0 rounded-2xl opacity-0 transition-opacity duration-500 ease-in-out group-hover:opacity-100"
+        style={{ background: "radial-gradient(120% 100% at 50% 100%, rgba(0,255,65,0.1), transparent 70%)" }}
       />
       <div
         aria-hidden
-        className="pointer-events-none absolute inset-0 rounded-2xl border border-transparent transition-colors duration-500 group-hover:border-electric/20"
+        className="pointer-events-none absolute inset-0 rounded-2xl border border-transparent transition-colors duration-500 ease-in-out group-hover:border-electric/15"
       />
 
       <div className="relative">
         <div
           className={clsx(
-            "mb-4 flex items-center justify-center rounded-full bg-electric/10 text-electric transition-all duration-300 group-hover:bg-electric group-hover:text-ink group-hover:shadow-[0_0_26px_rgba(0,255,65,0.55)]",
+            "relative mb-4 flex items-center justify-center overflow-hidden rounded-full",
             featured ? "h-14 w-14" : "h-11 w-11"
           )}
         >
-          <Icon className={featured ? "h-6 w-6" : "h-5 w-5"} />
+          <div className="brand-gradient-bg absolute inset-0 opacity-[0.12] transition-opacity duration-500 ease-in-out group-hover:opacity-100" />
+          <div className="absolute inset-0 rounded-full opacity-0 shadow-[0_0_22px_rgba(0,255,65,0.5)] transition-opacity duration-500 ease-in-out group-hover:opacity-100" />
+          <Icon
+            className={clsx(
+              "relative text-electric transition-colors duration-500 ease-in-out group-hover:text-ink",
+              featured ? "h-6 w-6" : "h-5 w-5"
+            )}
+          />
         </div>
         <h3 className={clsx("font-semibold text-silver-100", featured ? "text-2xl md:text-3xl" : "text-lg")}>
           {title}

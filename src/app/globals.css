@@ -61,6 +61,23 @@ h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-body), system-ui, sans-serif;
 }
 
+/* Shared brand gradient (teal -> electric), used instead of flat neon fills
+   for a more engineered/metallic feel on primary surfaces. */
+.brand-gradient-bg {
+  background-image: linear-gradient(135deg, var(--color-teal) 0%, var(--color-electric) 100%);
+}
+.brand-gradient-text {
+  background-image: linear-gradient(135deg, var(--color-teal) 0%, var(--color-electric) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* Thin machined-metal edge highlight, layered onto card/button borders. */
+.metal-edge {
+  box-shadow: inset 0 1px 0 rgba(244, 246, 245, 0.08);
+}
+
 @keyframes hologram-shift {
   0%, 100% { background-position: 0% 50%; }
   50% { background-position: 100% 50%; }
@@ -110,7 +127,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 .animate-spark-rise {
   animation-name: spark-rise;
-  animation-timing-function: linear;
+  animation-timing-function: ease-out;
   animation-iteration-count: infinite;
 }
 

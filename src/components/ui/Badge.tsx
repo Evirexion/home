@@ -14,7 +14,7 @@ export function Badge({
       className={clsx(
         "inline-flex items-center rounded-full px-3 py-1 text-xs font-medium tracking-wide uppercase",
         variant === "outline" && "border border-electric/40 text-electric",
-        variant === "solid" && "bg-electric text-ink font-semibold",
+        variant === "solid" && "brand-gradient-bg text-ink font-semibold",
         variant === "silver" && "border border-silver-300/25 bg-silver-100/5 text-silver-300",
         className
       )}

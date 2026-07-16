@@ -8,8 +8,8 @@ const CATEGORY_LABEL: Record<Post["category"], string> = {
 };
 
 const CATEGORY_GLOW: Record<Post["category"], string> = {
-  corriente: "rgba(0, 255, 65, 0.18)",
-  innovations: "rgba(29, 158, 117, 0.22)",
+  corriente: "rgba(0, 255, 65, 0.14)",
+  innovations: "rgba(29, 158, 117, 0.16)",
 };
 
 export function ArticleCard({ post, showCategory = false }: { post: Post; showCategory?: boolean }) {
@@ -19,12 +19,12 @@ export function ArticleCard({ post, showCategory = false }: { post: Post; showCa
   return (
     <Link
       href={`${basePath}/${post.slug}`}
-      className="group relative flex flex-col overflow-hidden rounded-2xl border border-silver-700/20 bg-ink-raised p-6 transition-all duration-300 hover:-translate-y-1 hover:scale-[1.015] hover:border-electric/40 hover:shadow-[0_0_40px_var(--card-glow)]"
+      className="group metal-edge relative flex flex-col overflow-hidden rounded-2xl border border-silver-300/15 bg-ink-raised p-6 ease-in-out transition-all duration-500 hover:-translate-y-1 hover:scale-[1.015] hover:border-electric/35 hover:shadow-[0_0_32px_var(--card-glow)]"
       style={{ "--card-glow": glow } as React.CSSProperties}
     >
       <div
         aria-hidden
-        className="pointer-events-none absolute inset-0 opacity-60 transition-opacity duration-500 group-hover:opacity-100"
+        className="pointer-events-none absolute inset-0 opacity-50 transition-opacity duration-500 ease-in-out group-hover:opacity-100"
         style={{ background: `radial-gradient(120% 80% at 100% 0%, ${glow}, transparent 60%)` }}
       />
       <div className="relative flex flex-1 flex-col">

@@ -5,11 +5,13 @@ import { PlasmaField } from "@/components/home/PlasmaField";
 import { GridFloor } from "@/components/home/GridFloor";
 import { Sparks } from "@/components/home/Sparks";
 import { HeroStage } from "@/components/home/HeroStage";
+import { HeroDepth } from "@/components/home/HeroDepth";
 
 export function Hero() {
   return (
     <section className="relative isolate flex min-h-[620px] flex-col overflow-hidden md:min-h-[760px]">
       <div aria-hidden className="absolute inset-0 -z-10">
+        <HeroDepth />
         <PlasmaField />
         <GridFloor />
         <Sparks />
