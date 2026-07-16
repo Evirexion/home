@@ -1,0 +1,85 @@
+@import "tailwindcss";
+
+:root {
+  --color-ink: #0a0c0b;
+  --color-ink-raised: #12140f;
+  --color-electric: #00ff41;
+  --color-teal: #1d9e75;
+  --color-mint: #4fffb0;
+  --color-silver-100: #f4f6f5;
+  --color-silver-300: #cdd3d1;
+  --color-silver-500: #9aa3a0;
+  --color-silver-700: #5c6663;
+}
+
+@theme inline {
+  --color-ink: var(--color-ink);
+  --color-ink-raised: var(--color-ink-raised);
+  --color-electric: var(--color-electric);
+  --color-teal: var(--color-teal);
+  --color-mint: var(--color-mint);
+  --color-silver-100: var(--color-silver-100);
+  --color-silver-300: var(--color-silver-300);
+  --color-silver-500: var(--color-silver-500);
+  --color-silver-700: var(--color-silver-700);
+
+  --font-display: var(--font-space-grotesk);
+  --font-body: var(--font-inter);
+}
+
+body {
+  background: var(--color-ink);
+  color: var(--color-silver-100);
+  font-family: var(--font-body), system-ui, sans-serif;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-display), system-ui, sans-serif;
+}
+
+::selection {
+  background: var(--color-electric);
+  color: var(--color-ink);
+}
+
+/* Thin, brand-colored scrollbar */
+::-webkit-scrollbar {
+  width: 10px;
+}
+::-webkit-scrollbar-track {
+  background: var(--color-ink);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--color-silver-700);
+  border-radius: 9999px;
+}
+
+.leaflet-container {
+  background: var(--color-ink-raised);
+  font-family: var(--font-body), system-ui, sans-serif;
+}
+
+@keyframes bolt-flicker {
+  0%, 100% { opacity: 1; filter: drop-shadow(0 0 12px var(--color-electric)); }
+  45% { opacity: 0.85; filter: drop-shadow(0 0 6px var(--color-electric)); }
+  50% { opacity: 0.45; filter: drop-shadow(0 0 2px var(--color-electric)); }
+  55% { opacity: 0.9; filter: drop-shadow(0 0 10px var(--color-electric)); }
+}
+.animate-bolt-flicker {
+  animation: bolt-flicker 3.4s ease-in-out infinite;
+}
+
+@keyframes glow-pulse {
+  0%, 100% { opacity: 0.3; }
+  50% { opacity: 0.55; }
+}
+.animate-glow-pulse {
+  animation: glow-pulse 5s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-bolt-flicker,
+  .animate-glow-pulse {
+    animation: none;
+  }
+}
