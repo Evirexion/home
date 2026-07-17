@@ -30,6 +30,8 @@ export interface ChargingStation {
   connectorTypes: string[];
   vehicleTypes: VehicleType[];
   hours: string;
+  pricing?: string;
+  status?: "operational" | "maintenance" | "offline";
   contactPhone?: string;
   contactEmail?: string;
   operator: string;

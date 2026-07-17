@@ -1,7 +1,7 @@
 "use client";
 
 import clsx from "clsx";
-import { Clock, Mail, MapPin, Phone, Zap } from "lucide-react";
+import { Clock, DollarSign, Mail, MapPin, Phone, Wrench, Zap } from "lucide-react";
 import { VEHICLE_TYPE_META } from "@/lib/vehicleTypes";
 import type { ChargingStation } from "@/types/content";
 
@@ -32,12 +32,20 @@ export function StationCard({
             {station.zone} · {station.city}
           </p>
         </div>
-        {station.fastCharging && (
-          <span className="flex shrink-0 items-center gap-1 rounded-full border border-electric/30 px-2 py-1 text-[10px] font-medium uppercase text-electric">
-            <Zap className="h-3 w-3" />
-            Rápida
-          </span>
-        )}
+        <div className="flex shrink-0 flex-col items-end gap-1.5">
+          {station.fastCharging && (
+            <span className="flex items-center gap-1 rounded-full border border-electric/30 px-2 py-1 text-[10px] font-medium uppercase text-electric">
+              <Zap className="h-3 w-3" />
+              Rápida
+            </span>
+          )}
+          {station.status && station.status !== "operational" && (
+            <span className="flex items-center gap-1 rounded-full border border-silver-500/30 px-2 py-1 text-[10px] font-medium uppercase text-silver-500">
+              <Wrench className="h-3 w-3" />
+              {station.status === "maintenance" ? "Mantenimiento" : "Fuera de servicio"}
+            </span>
+          )}
+        </div>
       </div>
 
       <div className="mt-3 flex items-start gap-2 text-sm text-silver-500">
@@ -48,6 +56,12 @@ export function StationCard({
         <Clock className="h-4 w-4 shrink-0" />
         <span>{station.hours}</span>
       </div>
+      {station.pricing && (
+        <div className="mt-2 flex items-center gap-2 text-sm text-silver-500">
+          <DollarSign className="h-4 w-4 shrink-0" />
+          <span>{station.pricing}</span>
+        </div>
+      )}
 
       <div className="mt-3 flex flex-wrap gap-2">
         {station.vehicleTypes.map((type) => {

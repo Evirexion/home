@@ -42,6 +42,20 @@ export const station = defineType({
       validation: (Rule) => Rule.required().min(1),
     }),
     defineField({ name: "hours", title: "Operating hours", type: "string" }),
+    defineField({ name: "pricing", title: "Pricing", type: "string", description: "e.g. \"≈ $1.700 COP/kWh\" or \"Gratis para clientes\"" }),
+    defineField({
+      name: "status",
+      title: "Status",
+      type: "string",
+      options: {
+        list: [
+          { title: "Operational", value: "operational" },
+          { title: "Maintenance", value: "maintenance" },
+          { title: "Offline", value: "offline" },
+        ],
+      },
+      initialValue: "operational",
+    }),
     defineField({ name: "contactPhone", title: "Contact phone", type: "string" }),
     defineField({ name: "contactEmail", title: "Contact email", type: "string" }),
     defineField({ name: "operator", title: "Operator", type: "string" }),

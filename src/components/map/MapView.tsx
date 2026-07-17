@@ -68,6 +68,7 @@ export function MapView({
               <p className="font-semibold text-ink">{station.name}</p>
               <p className="mt-1 text-xs text-ink/70">{station.address}</p>
               <p className="mt-1 text-xs text-ink/70">{station.hours}</p>
+              {station.pricing && <p className="mt-1 text-xs font-medium text-ink/70">{station.pricing}</p>}
             </div>
           </Popup>
         </Marker>

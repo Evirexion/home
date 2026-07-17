@@ -51,6 +51,8 @@ export const stationsQuery = `*[_type == "station"] | order(name asc) {
   connectorTypes,
   vehicleTypes,
   hours,
+  pricing,
+  status,
   contactPhone,
   contactEmail,
   operator,
