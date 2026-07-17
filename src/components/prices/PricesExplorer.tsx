@@ -4,7 +4,7 @@ import { useState } from "react";
 import clsx from "clsx";
 import { Calculator } from "./Calculator";
 import { PriceBrowser } from "./PriceBrowser";
-import type { VehiclePriceEntry } from "@/types/content";
+import type { VehicleListing } from "@/types/content";
 
 const TABS = [
   { id: "calculator", label: "Calculadora" },
@@ -13,7 +13,7 @@ const TABS = [
 
 type Tab = (typeof TABS)[number]["id"];
 
-export function PricesExplorer({ entries }: { entries: VehiclePriceEntry[] }) {
+export function PricesExplorer({ listings }: { listings: VehicleListing[] }) {
   const [tab, setTab] = useState<Tab>("calculator");
 
   return (
@@ -34,7 +34,7 @@ export function PricesExplorer({ entries }: { entries: VehiclePriceEntry[] }) {
         ))}
       </div>
 
-      {tab === "calculator" ? <Calculator entries={entries} /> : <PriceBrowser entries={entries} />}
+      {tab === "calculator" ? <Calculator listings={listings} /> : <PriceBrowser listings={listings} />}
     </div>
   );
 }

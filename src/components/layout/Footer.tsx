@@ -13,9 +13,10 @@ const SOCIAL_LINKS = [
 
 const FOOTER_LINKS = [
   { href: "/map", label: "Mapa de carga" },
-  { href: "/news", label: "CORRIENTE" },
+  { href: "/news", label: "Corriente" },
   { href: "/innovations", label: "Innovación" },
   { href: "/prices", label: "Precios" },
+  { href: "/contact", label: "Contáctanos" },
 ];
 
 export function Footer() {

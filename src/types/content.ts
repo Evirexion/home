@@ -21,6 +21,8 @@ export type VehicleType = "car" | "motorcycle" | "e-bike" | "scooter" | "bus";
 export interface ChargingStation {
   _id: string;
   name: string;
+  country: string;
+  city: string;
   zone: string;
   address: string;
   lat: number;
@@ -34,16 +36,24 @@ export interface ChargingStation {
   fastCharging: boolean;
 }
 
-export type VehicleCondition = "excellent" | "good" | "fair";
-
-export interface VehiclePriceEntry {
+/**
+ * A vehicle listing from the E-VIREXION price guide. Sourced from the
+ * consolidated master spreadsheet (brand/model/spec/suggested price range),
+ * not a buy-vs-sell dealer quote — there is no per-condition or per-year
+ * pricing in the source data, just a single suggested market price range.
+ */
+export interface VehicleListing {
   _id: string;
-  vehicleType: VehicleType;
   brand: string;
   model: string;
-  year: number;
-  condition: VehicleCondition;
-  buyPrice: number;
-  sellPrice: number;
+  vehicleType: VehicleType;
+  motor: string;
+  battery: string;
+  maxSpeed: string;
+  range: string;
+  features: string;
+  priceMin: number | null;
+  priceMax: number | null;
   currency: "COP";
+  source: string;
 }

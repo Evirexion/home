@@ -9,6 +9,8 @@ export const mockStations: ChargingStation[] = [
   {
     _id: "station-1",
     name: "Electroterminal Usaquén",
+    country: "Colombia",
+    city: "Bogotá",
     zone: "Usaquén",
     address: "Cra. 7 #116-50, Bogotá",
     lat: 4.7110,
@@ -24,6 +26,8 @@ export const mockStations: ChargingStation[] = [
   {
     _id: "station-2",
     name: "Centro Comercial Andino",
+    country: "Colombia",
+    city: "Bogotá",
     zone: "Chapinero",
     address: "Cra. 11 #82-71, Bogotá",
     lat: 4.6668,
@@ -38,6 +42,8 @@ export const mockStations: ChargingStation[] = [
   {
     _id: "station-3",
     name: "Portal 80 - Estación Buses Eléctricos",
+    country: "Colombia",
+    city: "Bogotá",
     zone: "Engativá",
     address: "Av. Calle 80 #103-01, Bogotá",
     lat: 4.7106,
@@ -52,6 +58,8 @@ export const mockStations: ChargingStation[] = [
   {
     _id: "station-4",
     name: "Parque de la 93",
+    country: "Colombia",
+    city: "Bogotá",
     zone: "Chapinero",
     address: "Cra. 13 #93-40, Bogotá",
     lat: 4.6764,
@@ -66,6 +74,8 @@ export const mockStations: ChargingStation[] = [
   {
     _id: "station-5",
     name: "Terminal de Transporte Salitre",
+    country: "Colombia",
+    city: "Bogotá",
     zone: "Fontibón",
     address: "Diag. 23 #69-11, Bogotá",
     lat: 4.6659,
@@ -81,6 +91,8 @@ export const mockStations: ChargingStation[] = [
   {
     _id: "station-6",
     name: "Unicentro Bogotá",
+    country: "Colombia",
+    city: "Bogotá",
     zone: "Suba",
     address: "Av. Cra. 15 #124-30, Bogotá",
     lat: 4.7024,
@@ -95,6 +107,8 @@ export const mockStations: ChargingStation[] = [
   {
     _id: "station-7",
     name: "Estación Bici-Eléctrica San Diego",
+    country: "Colombia",
+    city: "Bogotá",
     zone: "Santa Fe",
     address: "Cra. 5 #26-20, Bogotá",
     lat: 4.6126,
@@ -109,6 +123,8 @@ export const mockStations: ChargingStation[] = [
   {
     _id: "station-8",
     name: "Zona T Electro Hub",
+    country: "Colombia",
+    city: "Bogotá",
     zone: "Chapinero",
     address: "Cll. 82 #12-15, Bogotá",
     lat: 4.6679,

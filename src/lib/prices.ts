@@ -1,11 +1,11 @@
-import { mockVehiclePrices } from "@/data/vehiclePrices";
-import type { VehiclePriceEntry } from "@/types/content";
+import { mockVehicleListings } from "@/data/vehicles";
+import type { VehicleListing } from "@/types/content";
 import { isSanityConfigured, sanityClient } from "./sanity/client";
-import { vehiclePricesQuery } from "./sanity/queries";
+import { vehicleListingsQuery } from "./sanity/queries";
 
-export async function getVehiclePrices(): Promise<VehiclePriceEntry[]> {
+export async function getVehicleListings(): Promise<VehicleListing[]> {
   if (isSanityConfigured && sanityClient) {
-    return sanityClient.fetch<VehiclePriceEntry[]>(vehiclePricesQuery);
+    return sanityClient.fetch<VehicleListing[]>(vehicleListingsQuery);
   }
-  return mockVehiclePrices;
+  return mockVehicleListings;
 }

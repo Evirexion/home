@@ -14,6 +14,9 @@ const eslintConfig = defineConfig([
     "next-env.d.ts",
     // Separate project with its own dependencies/tooling, see studio/package.json
     "studio/**",
+    // Generated Cloudflare/OpenNext build output, not source
+    ".open-next/**",
+    ".wrangler/**",
   ]),
 ]);
 

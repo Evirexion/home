@@ -28,7 +28,9 @@ export function StationCard({
       <div className="flex items-start justify-between gap-3">
         <div>
           <h3 className="font-semibold text-silver-100">{station.name}</h3>
-          <p className="mt-0.5 text-xs uppercase tracking-wide text-teal">{station.zone}</p>
+          <p className="mt-0.5 text-xs uppercase tracking-wide text-teal">
+            {station.zone} · {station.city}
+          </p>
         </div>
         {station.fastCharging && (
           <span className="flex shrink-0 items-center gap-1 rounded-full border border-electric/30 px-2 py-1 text-[10px] font-medium uppercase text-electric">

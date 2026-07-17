@@ -42,6 +42,8 @@ export const pendingPostsQuery = `*[_type == "post" && status == "pending"] | or
 export const stationsQuery = `*[_type == "station"] | order(name asc) {
   _id,
   name,
+  country,
+  city,
   zone,
   address,
   lat,
@@ -55,14 +57,18 @@ export const stationsQuery = `*[_type == "station"] | order(name asc) {
   fastCharging
 }`;
 
-export const vehiclePricesQuery = `*[_type == "vehiclePrice"] | order(brand asc, model asc, year desc) {
+export const vehicleListingsQuery = `*[_type == "vehicleListing"] | order(brand asc, model asc) {
   _id,
-  vehicleType,
   brand,
   model,
-  year,
-  condition,
-  buyPrice,
-  sellPrice,
-  currency
+  vehicleType,
+  motor,
+  battery,
+  maxSpeed,
+  range,
+  features,
+  priceMin,
+  priceMax,
+  currency,
+  source
 }`;

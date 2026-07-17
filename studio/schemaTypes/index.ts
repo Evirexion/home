@@ -1,5 +1,5 @@
 import { post } from "./post";
 import { station } from "./station";
-import { vehiclePrice } from "./vehiclePrice";
+import { vehicleListing } from "./vehicleListing";
 
-export const schemaTypes = [post, station, vehiclePrice];
+export const schemaTypes = [post, station, vehicleListing];

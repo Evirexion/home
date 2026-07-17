@@ -14,6 +14,14 @@ export const station = defineType({
   type: "document",
   fields: [
     defineField({ name: "name", title: "Name", type: "string", validation: (Rule) => Rule.required() }),
+    defineField({
+      name: "country",
+      title: "Country",
+      type: "string",
+      initialValue: "Colombia",
+      validation: (Rule) => Rule.required(),
+    }),
+    defineField({ name: "city", title: "City", type: "string", validation: (Rule) => Rule.required() }),
     defineField({ name: "zone", title: "Zone / Locality", type: "string", validation: (Rule) => Rule.required() }),
     defineField({ name: "address", title: "Address", type: "string", validation: (Rule) => Rule.required() }),
     defineField({ name: "lat", title: "Latitude", type: "number", validation: (Rule) => Rule.required() }),

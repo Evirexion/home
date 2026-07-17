@@ -61,6 +61,12 @@ h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-body), system-ui, sans-serif;
 }
 
+/* Softer greenish-cyan neon tint on the dark basemap, instead of the harsh
+   stock black/white contrast — tints roads/labels, not just a color swap. */
+.evx-map-tiles {
+  filter: sepia(0.45) saturate(2.4) hue-rotate(122deg) brightness(0.88) contrast(0.92);
+}
+
 /* Shared brand gradient (teal -> electric), used instead of flat neon fills
    for a more engineered/metallic feel on primary surfaces. */
 .brand-gradient-bg {

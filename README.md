@@ -24,6 +24,7 @@ src/
       innovations/
         [slug]/
       prices/           # calculator + browse
+      contact/          # Contáctanos form, routes by motivo to a team inbox
     api/                # route handlers (internal auth, news submissions)
     studio -> see /studio (separate project, not part of this app)
   components/           # ui/, layout/, home/, map/, news/, prices/, icons/
@@ -53,7 +54,7 @@ Runs entirely on mock data with no environment variables required.
 3. Set `SANITY_STUDIO_PROJECT_ID` / `SANITY_STUDIO_DATASET` (studio env) and, in the **root** project, copy `.env.example` to `.env.local` and set the matching `NEXT_PUBLIC_SANITY_PROJECT_ID` / `NEXT_PUBLIC_SANITY_DATASET`.
 4. `npm run dev` (inside `studio/`) to run Sanity Studio locally at `localhost:3333`, or `npm run deploy` to publish it to a free `your-project.sanity.studio` URL — this is entirely separate from the Cloudflare deploy of the main site.
 5. Create a write-access API token (Manage → API → Tokens) and set it as `SANITY_API_WRITE_TOKEN` in the root project — this is what lets the internal news form create draft documents.
-6. Content types: `post` (News/Innovations, distinguished by `category`), `station` (charging stations), `vehiclePrice` (price guide entries). Seed a few and the site will start reading live content automatically.
+6. Content types: `post` (News/Innovations, distinguished by `category`), `station` (charging stations, with `country`/`city`/`zone`), `vehicleListing` (price guide entries). Seed a few and the site will start reading live content automatically.
 
 ## Internal news draft area
 
@@ -61,8 +62,19 @@ Runs entirely on mock data with no environment variables required.
 
 ## Replacing mock data with real data
 
-- **Charging stations / vehicle prices**: once Sanity is connected, add/edit `station` and `vehiclePrice` documents directly in the Studio — no code or redeploy needed. `src/data/stations.ts` and `src/data/vehiclePrices.ts` are dev-only fallbacks.
-- The vehicle price mock dataset (`src/data/vehiclePrices.ts`) is synthetic (~180 generated rows), not real market data — replace via Sanity once you have real figures.
+- **Charging stations**: once Sanity is connected, add/edit `station` documents directly in the Studio — no code or redeploy needed. `src/data/stations.ts` is a dev-only fallback with real Bogotá data; other cities/countries can be added the same way once verified.
+- **Vehicle prices**: `src/data/vehicles.ts` is generated from the team's master Google Sheet (brand/model/spec/suggested price range) — it's real data, not synthetic. Re-run the same import against the updated sheet to refresh it, or manage `vehicleListing` documents directly in Sanity once connected.
+
+## Contact form (Contáctanos)
+
+`/contact` submits via a Server Action (`src/app/(site)/contact/actions.ts`) that calls the [Resend](https://resend.com) REST API directly with `fetch` — no SDK dependency. Set `RESEND_API_KEY` (and optionally `CONTACT_FROM_EMAIL`, which must be on a domain verified in Resend) for submissions to actually deliver; without it, the form shows a clear "not configured yet" error instead of failing silently. The "Motivo" dropdown routes each message to a different inbox (`src/lib/contact.ts`):
+
+| Motivo | Destino |
+| --- | --- |
+| Publicidad y alianzas | publicidad@evirexion.com |
+| Talleres y estaciones de carga | talleres@evirexion.com |
+| Prensa y negocios | gerencia@evirexion.com |
+| Otro / Comentarios generales | contacto@evirexion.com |
 
 ## Deploying to Cloudflare
 
