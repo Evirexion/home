@@ -99,6 +99,18 @@ export function MapExplorer({ stations }: { stations: ChargingStation[] }) {
           <MapView stations={filtered} selectedStationId={selectedId} onSelectStation={setSelectedId} />
         </div>
       </div>
+
+      <p className="text-xs text-silver-700">
+        Datos de estaciones:{" "}
+        <a
+          href="https://openchargemap.org"
+          target="_blank"
+          rel="noreferrer"
+          className="underline decoration-silver-700/40 underline-offset-2 transition-colors hover:text-electric"
+        >
+          Open Charge Map
+        </a>
+      </p>
     </div>
   );
 }
