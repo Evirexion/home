@@ -6,7 +6,7 @@ import { getStations } from "@/lib/stations";
 
 export const metadata: Metadata = {
   title: "Mapa de carga",
-  description: "Estaciones de carga para vehículos eléctricos en Bogotá, filtrables por tipo de vehículo.",
+  description: "Estaciones de carga para vehículos eléctricos en Colombia, México y Perú, filtrables por país, ciudad y tipo de vehículo.",
 };
 
 export default async function MapPage() {
@@ -17,8 +17,8 @@ export default async function MapPage() {
       <Container>
         <SectionHeading
           eyebrow="Infraestructura"
-          title="Mapa de carga en Bogotá"
-          description="Encuentra estaciones de carga filtrables por tipo de vehículo, con conectores, horarios y contacto de cada operador."
+          title="Mapa de carga"
+          description="Encuentra estaciones de carga en Colombia, México y Perú, filtrables por país, ciudad y tipo de vehículo, con conectores, horarios y contacto de cada operador."
         />
         <div className="mt-10">
           <MapExplorer stations={stations} />

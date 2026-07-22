@@ -62,9 +62,16 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 /* Softer greenish-cyan neon tint on the dark basemap, instead of the harsh
-   stock black/white contrast — tints roads/labels, not just a color swap. */
+   stock black/white contrast — tints roads/labels, not just a color swap.
+   The CARTO dark basemap already draws major roads/avenues brighter than
+   minor streets; raising contrast (vs. flattening it) pulls that hierarchy
+   forward so it reads: station markers (brightest, unfiltered) > main
+   roads (medium) > minor streets (dimmest). A raster tile + CSS filter
+   can't target road classes individually — that would need vector tiles
+   (e.g. MapLibre GL) — so this tunes the filter to amplify the brightness
+   levels already baked into the source cartography instead. */
 .evx-map-tiles {
-  filter: sepia(0.45) saturate(2.4) hue-rotate(122deg) brightness(0.88) contrast(0.92);
+  filter: sepia(0.4) saturate(2.1) hue-rotate(122deg) brightness(0.95) contrast(1.2);
 }
 
 /* Shared brand gradient (teal -> electric), used instead of flat neon fills

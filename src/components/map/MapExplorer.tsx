@@ -15,16 +15,25 @@ const MapView = dynamic(() => import("./MapView").then((m) => m.MapView), {
   ),
 });
 
+/** Picks the value with the most stations (ties broken alphabetically) so
+ *  the default view lands on the best-covered country/city rather than
+ *  whichever sorts first alphabetically. */
+function mostCommon(values: string[]): string {
+  const counts = new Map<string, number>();
+  for (const v of values) counts.set(v, (counts.get(v) ?? 0) + 1);
+  return Array.from(counts.entries()).sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]))[0]?.[0] ?? "";
+}
+
 export function MapExplorer({ stations }: { stations: ChargingStation[] }) {
   const countries = useMemo(() => Array.from(new Set(stations.map((s) => s.country))).sort(), [stations]);
-  const [country, setCountry] = useState(countries[0] ?? "");
+  const [country, setCountry] = useState(() => mostCommon(stations.map((s) => s.country)));
 
   const cities = useMemo(
     () =>
       Array.from(new Set(stations.filter((s) => s.country === country).map((s) => s.city))).sort(),
     [stations, country]
   );
-  const [city, setCity] = useState(cities[0] ?? "");
+  const [city, setCity] = useState(() => mostCommon(stations.filter((s) => s.country === country).map((s) => s.city)));
 
   const [query, setQuery] = useState("");
   const [activeTypes, setActiveTypes] = useState<VehicleType[]>(VEHICLE_TYPES);
@@ -32,8 +41,7 @@ export function MapExplorer({ stations }: { stations: ChargingStation[] }) {
 
   function handleCountryChange(value: string) {
     setCountry(value);
-    const nextCities = Array.from(new Set(stations.filter((s) => s.country === value).map((s) => s.city))).sort();
-    setCity(nextCities[0] ?? "");
+    setCity(mostCommon(stations.filter((s) => s.country === value).map((s) => s.city)));
     setSelectedId(null);
   }
 
