@@ -31,12 +31,31 @@ function FlyToStation({ station }: { station: ChargingStation | null }) {
   return null;
 }
 
+/** Recenters on the selected city/country whenever that set of stations
+ *  changes, independent of the vehicle-type/search filters that only
+ *  affect which markers are drawn. */
+function FlyToFocus({ stations }: { stations: ChargingStation[] }) {
+  const map = useMap();
+  useEffect(() => {
+    if (stations.length === 0) return;
+    if (stations.length === 1) {
+      map.flyTo([stations[0].lat, stations[0].lng], 13, { duration: 0.8 });
+      return;
+    }
+    const bounds = L.latLngBounds(stations.map((s): [number, number] => [s.lat, s.lng]));
+    map.flyToBounds(bounds, { padding: [32, 32], duration: 0.8, maxZoom: 14 });
+  }, [stations, map]);
+  return null;
+}
+
 export function MapView({
   stations,
+  focusStations,
   selectedStationId,
   onSelectStation,
 }: {
   stations: ChargingStation[];
+  focusStations: ChargingStation[];
   selectedStationId: string | null;
   onSelectStation: (id: string) => void;
 }) {
@@ -55,6 +74,7 @@ export function MapView({
         url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
         className="evx-map-tiles"
       />
+      <FlyToFocus stations={focusStations} />
       <FlyToStation station={selected} />
       {stations.map((station) => (
         <Marker

@@ -5,7 +5,7 @@ import { PricesExplorer } from "@/components/prices/PricesExplorer";
 import { getVehicleListings } from "@/lib/prices";
 
 export const metadata: Metadata = {
-  title: "Precios",
+  title: "Guía de precios",
   description: "Calculadora de precio y guía de precios de vehículos eléctricos en Colombia.",
 };
 

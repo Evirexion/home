@@ -20,7 +20,7 @@ const CARDS: CardDef[] = [
     icon: MapPin,
     title: "Mapa de carga",
     description:
-      "Encuentra estaciones de carga en Bogotá filtrables por tipo de vehículo: carros, motos, e-bikes, scooters y buses.",
+      "Encuentra estaciones de carga en Colombia, México y Perú, filtrables por país, ciudad y tipo de vehículo.",
     span: "md:col-span-2 md:row-span-2",
     featured: true,
   },
@@ -41,7 +41,7 @@ const CARDS: CardDef[] = [
   {
     href: "/prices",
     icon: Calculator,
-    title: "Precios",
+    title: "Guía de precios",
     description: "Calcula el valor de reventa o explora el precio de más de 180 vehículos.",
     span: "md:col-span-1 md:row-span-1",
   },

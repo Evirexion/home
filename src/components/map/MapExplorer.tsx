@@ -54,16 +54,24 @@ export function MapExplorer({ stations }: { stations: ChargingStation[] }) {
     setActiveTypes((prev) => (prev.includes(type) ? prev.filter((t) => t !== type) : [...prev, type]));
   }
 
+  // Stations in the selected city, before the vehicle-type/search filters
+  // narrow them further. Drives map recentering so the view still jumps to
+  // the right city even if the current vehicle-type filter would hide
+  // every marker there.
+  const cityStations = useMemo(
+    () => stations.filter((s) => s.country === country && s.city === city),
+    [stations, country, city]
+  );
+
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
-    return stations.filter((station) => {
-      const matchesLocation = station.country === country && station.city === city;
+    return cityStations.filter((station) => {
       const matchesType = station.vehicleTypes.some((t) => activeTypes.includes(t));
       const matchesQuery =
         !q || station.name.toLowerCase().includes(q) || station.zone.toLowerCase().includes(q);
-      return matchesLocation && matchesType && matchesQuery;
+      return matchesType && matchesQuery;
     });
-  }, [stations, country, city, query, activeTypes]);
+  }, [cityStations, query, activeTypes]);
 
   return (
     <div className="flex flex-col gap-6">
@@ -96,7 +104,12 @@ export function MapExplorer({ stations }: { stations: ChargingStation[] }) {
         </div>
 
         <div className="metal-edge h-[420px] overflow-hidden rounded-2xl border border-silver-300/15 lg:h-[640px]">
-          <MapView stations={filtered} selectedStationId={selectedId} onSelectStation={setSelectedId} />
+          <MapView
+            stations={filtered}
+            focusStations={cityStations}
+            selectedStationId={selectedId}
+            onSelectStation={setSelectedId}
+          />
         </div>
       </div>
 
