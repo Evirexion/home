@@ -25,13 +25,18 @@ src/
         [slug]/
       prices/           # calculator + browse
       contact/          # Contáctanos form, routes by motivo to a team inbox
-    api/                # route handlers (internal auth, news submissions)
-    studio -> see /studio (separate project, not part of this app)
-  components/           # ui/, layout/, home/, map/, news/, prices/, icons/
+    api/
+      sync-vehicles/    # Sheet -> Sanity sync, called by the Studio tool
+  components/           # ui/, layout/, home/, map/, news/, prices/, contact/, icons/
   data/                 # mock datasets (posts, stations, vehicle prices)
   lib/                  # data-fetching (Sanity-first, mock-data fallback)
+    googleSheets.ts     # Sheets API v4 via service account (Web Crypto JWT)
+    vehicleSheet.ts     # sheet parsing: columns by name, skips brand headers
+    vehicleSync.ts      # diff against Sanity: create / patch / leave alone
   types/                # shared content types
 studio/                 # standalone Sanity Studio (own package.json)
+  tools/                # custom Studio tools (vehicle sync button)
+docs/                   # setup guides (Google Sheets sync)
 ```
 
 ### Why mock data still exists once Sanity is connected
@@ -63,7 +68,15 @@ Runs entirely on mock data with no environment variables required.
 ## Replacing mock data with real data
 
 - **Charging stations**: once Sanity is connected, add/edit `station` documents directly in the Studio — no code or redeploy needed. `src/data/stations.ts` is a dev-only fallback with real Bogotá data; other cities/countries can be added the same way once verified.
-- **Vehicle prices**: `src/data/vehicles.ts` is generated from the team's master Google Sheet (brand/model/spec/suggested price range) — it's real data, not synthetic. Re-run the same import against the updated sheet to refresh it, or manage `vehicleListing` documents directly in Sanity once connected.
+- **Vehicle prices**: `src/data/vehicles.ts` is generated from the team's master Google Sheet (brand/model/spec/suggested price range) — it's real data, not synthetic. Once Sanity is connected, keep `vehicleListing` documents up to date with the sync button below instead of regenerating the file.
+
+## Vehicle price sync (Google Sheet → Sanity)
+
+Sanity Studio has a **Sincronizar vehículos desde Sheet** tool that pulls the private vehicle master sheet into `vehicleListing` documents on demand: new rows are created, changed rows patched, identical rows left alone, and malformed rows skipped and reported. It supports a dry run that shows what would change without writing.
+
+The sheet stays private — access is via the Sheets API v4 as a service account the sheet is shared with, never a public export link. The service account key lives only in the Worker's environment (`GOOGLE_SERVICE_ACCOUNT_KEY`), so it never reaches the Studio bundle; the Studio calls `POST /api/sync-vehicles` with a shared secret instead.
+
+**Setup walkthrough: [`docs/google-sheets-sync.md`](docs/google-sheets-sync.md)** — Google Cloud project, service account, sharing the sheet, and storing the secrets.
 
 ## Contact form (Contáctanos)
 

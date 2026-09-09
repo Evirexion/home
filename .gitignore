@@ -48,4 +48,5 @@ next-env.d.ts
 # sanity studio (separate project, see /studio)
 studio/node_modules
 studio/dist
+studio/.sanity
 
