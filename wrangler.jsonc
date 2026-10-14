@@ -19,6 +19,14 @@
 			"service": "e-virexion"
 		}
 	],
+	// Published price guide. Written by /api/prices/publish when someone clicks
+	// "Publicar precios en la web" in the Google Sheet; read by /prices.
+	// No id needed: `wrangler deploy` creates the namespace on first deploy.
+	"kv_namespaces": [
+		{
+			"binding": "PRICES_KV"
+		}
+	],
 	"images": {
 		// Enable image optimization
 		// see https://opennext.js.org/cloudflare/howtos/image

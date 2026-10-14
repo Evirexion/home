@@ -1,5 +1,7 @@
 # Vehicle price sync — private Google Sheet → Sanity
 
+> **Para la Guía de precios usa ahora `docs/publicar-precios.md`** (botón dentro del Sheet, sin Google Cloud ni Sanity). Este documento describe la ruta anterior vía Sanity, que sigue en el código pero no es necesaria.
+
 The vehicle master list (`EVirexion_Guia_de_Precios`, 189 vehicles) lives in a
 private Google Sheet. A button inside Sanity Studio pulls it in on demand:
 new vehicles are created, changed ones updated, identical ones left alone.

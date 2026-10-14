@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { connection } from "next/server";
 import { Container } from "@/components/ui/Container";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { PricesExplorer } from "@/components/prices/PricesExplorer";
@@ -10,6 +11,9 @@ export const metadata: Metadata = {
 };
 
 export default async function PricesPage() {
+  // Render per request so a publish from the Google Sheet shows up immediately,
+  // instead of the build-time snapshot being cached for a year.
+  await connection();
   const listings = await getVehicleListings();
 
   return (
