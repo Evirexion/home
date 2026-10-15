@@ -16,7 +16,7 @@ export interface Post {
   status?: "draft" | "pending" | "published";
 }
 
-export type VehicleType = "car" | "motorcycle" | "e-bike" | "scooter" | "bus";
+export type VehicleType = "car" | "motorcycle" | "e-bike" | "scooter" | "bus" | "truck" | "quad";
 
 export interface ChargingStation {
   _id: string;

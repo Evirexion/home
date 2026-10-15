@@ -6,6 +6,8 @@ const VEHICLE_TYPES = [
   { title: "E-bike", value: "e-bike" },
   { title: "Scooter", value: "scooter" },
   { title: "Bus", value: "bus" },
+  { title: "Truck", value: "truck" },
+  { title: "Quad", value: "quad" },
 ];
 
 export const vehicleListing = defineType({

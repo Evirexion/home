@@ -180,10 +180,12 @@ export function parsePriceRange(raw: string): { min: number | null; max: number 
  */
 const CATEGORY_KEYWORDS: [RegExp, VehicleType][] = [
   [/bici|bike|bicycle|pedelec|cicla\b/, "e-bike"],
-  [/\bbus|buseta|microbus/, "bus"],
+  [/autobus|\bbus|buseta|microbus/, "bus"],
+  [/camion(?!eta)|tractomula|tractocamion|volqueta|furgon|carga pesada/, "truck"],
+  [/cuadriciclo|cuatrimoto|\bquad|\batv\b/, "quad"],
   [/moto|ciclomotor|moped|tricimoto/, "motorcycle"],
   [/scooter|patinet|vmp|kick/, "scooter"],
-  [/carro|auto|suv|sedan|camioneta|pickup|hatchback|crossover|\bvan\b|vehiculoliviano/, "car"],
+  [/carro|auto|taxi|suv|sedan|camioneta|pickup|hatchback|crossover|\bvan\b|vehiculoliviano/, "car"],
 ];
 
 export function mapCategory(raw: string): VehicleType | null {

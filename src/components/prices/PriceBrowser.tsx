@@ -3,7 +3,7 @@
 import { useMemo, useState } from "react";
 import { Bar, BarChart, CartesianGrid, Legend, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 import { Search } from "lucide-react";
-import { VEHICLE_TYPE_META, VEHICLE_TYPES } from "@/lib/vehicleTypes";
+import { PRICE_VEHICLE_TYPES, VEHICLE_TYPE_META } from "@/lib/vehicleTypes";
 import { formatCOP } from "@/lib/format";
 import type { VehicleListing, VehicleType } from "@/types/content";
 
@@ -52,7 +52,7 @@ export function PriceBrowser({ listings }: { listings: VehicleListing[] }) {
           className={selectClass}
         >
           <option value="all">Todos los vehículos</option>
-          {VEHICLE_TYPES.map((t) => (
+          {PRICE_VEHICLE_TYPES.map((t) => (
             <option key={t} value={t}>
               {VEHICLE_TYPE_META[t].label}
             </option>

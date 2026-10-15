@@ -2,7 +2,7 @@
 
 import { useMemo, useState } from "react";
 import { Battery, Gauge, Route, Zap } from "lucide-react";
-import { VEHICLE_TYPE_META, VEHICLE_TYPES } from "@/lib/vehicleTypes";
+import { PRICE_VEHICLE_TYPES, VEHICLE_TYPE_META } from "@/lib/vehicleTypes";
 import { formatCOP } from "@/lib/format";
 import type { VehicleListing, VehicleType } from "@/types/content";
 
@@ -54,7 +54,7 @@ export function Calculator({ listings }: { listings: VehicleListing[] }) {
             className={selectClass}
           >
             <option value="">Selecciona...</option>
-            {VEHICLE_TYPES.map((type) => (
+            {PRICE_VEHICLE_TYPES.map((type) => (
               <option key={type} value={type}>
                 {VEHICLE_TYPE_META[type].label}
               </option>
