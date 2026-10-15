@@ -173,10 +173,33 @@ export function parsePriceRange(raw: string): { min: number | null; max: number 
   return { min: Math.min(...values), max: Math.max(...values) };
 }
 
+/**
+ * Keyword fallback for category names that aren't in CATEGORY_MAP verbatim
+ * ("E-bike", "Ciclomotores / Mopeds", "VMP / Scooters Eléctricos Livianos"…).
+ * Checked in order, so "bici" wins over "moto" and "moto" over "scooter".
+ */
+const CATEGORY_KEYWORDS: [RegExp, VehicleType][] = [
+  [/bici|bike|bicycle|pedelec|cicla\b/, "e-bike"],
+  [/\bbus|buseta|microbus/, "bus"],
+  [/moto|ciclomotor|moped|tricimoto/, "motorcycle"],
+  [/scooter|patinet|vmp|kick/, "scooter"],
+  [/carro|auto|suv|sedan|camioneta|pickup|hatchback|crossover|\bvan\b|vehiculoliviano/, "car"],
+];
+
 export function mapCategory(raw: string): VehicleType | null {
   const key = normalize(raw);
   if (!key) return null;
-  return CATEGORY_MAP[key] ?? null;
+  if (CATEGORY_MAP[key]) return CATEGORY_MAP[key];
+
+  const loose = raw
+    .normalize("NFD")
+    .replace(/[̀-ͯ]/g, "")
+    .toLowerCase()
+    .replace(/[-_]/g, "");
+  for (const [pattern, type] of CATEGORY_KEYWORDS) {
+    if (pattern.test(loose)) return type;
+  }
+  return null;
 }
 
 /** Finds the header row (the one carrying both Marca and Modelo) and maps columns. */

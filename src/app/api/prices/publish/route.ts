@@ -152,9 +152,23 @@ export async function POST(request: Request) {
     if (!after.has(key)) removed.push(`${vehicle.brand} ${vehicle.model}`);
   }
 
-  const problems = parsed.skipped
-    .filter((row) => !EXPECTED_SKIPS.has(row.reason))
-    .map((row) => `Fila ${row.rowNumber}: ${row.detail}`);
+  // Unknown categories are grouped by name first, so one unrecognized label
+  // shows as a single line instead of burying everything else.
+  const unknownCategories = new Map<string, number[]>();
+  for (const row of parsed.skipped) {
+    if (row.reason !== "unknown-category") continue;
+    const name = /"(.*)"/.exec(row.detail)?.[1] ?? "(vacía)";
+    unknownCategories.set(name, [...(unknownCategories.get(name) ?? []), row.rowNumber]);
+  }
+  const problems = [
+    ...[...unknownCategories].map(
+      ([name, rowNumbers]) =>
+        `Categoría "${name}" no reconocida: ${rowNumbers.length} fila(s) (${rowNumbers.slice(0, 5).join(", ")}${rowNumbers.length > 5 ? "…" : ""})`
+    ),
+    ...parsed.skipped
+      .filter((row) => !EXPECTED_SKIPS.has(row.reason) && row.reason !== "unknown-category")
+      .map((row) => `Fila ${row.rowNumber}: ${row.detail}`),
+  ];
   const problemCounts: Record<string, number> = {};
   for (const row of parsed.skipped) {
     if (EXPECTED_SKIPS.has(row.reason)) continue;
