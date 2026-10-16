@@ -41,6 +41,8 @@ export interface ParsedVehicle {
   features: string;
   priceMin: number | null;
   priceMax: number | null;
+  /** The price cell exactly as written, for reporting cells that couldn't be read. */
+  priceRaw: string;
   source: string;
 }
 
@@ -48,6 +50,9 @@ export interface ParseResult {
   vehicles: ParsedVehicle[];
   skipped: SkippedRow[];
   headerRowNumber: number;
+  /** Header label of the column read as price, or null if none was found. */
+  priceHeader: string | null;
+  headerLabels: string[];
 }
 
 /** Lowercase, strip accents and all whitespace, for tolerant header/category matching. */
@@ -129,47 +134,60 @@ function cell(row: string[], index: number): string {
   return (row[index] ?? "").toString().trim();
 }
 
-/** Parses one price token: "$79M" -> 79000000, "$4.3M" -> 4300000. */
-function parseMoneyToken(token: string): number | null {
-  const cleaned = token
-    .replace(/\$/g, "")
-    .replace(/cop/gi, "")
-    .replace(/\s/g, "");
-  if (!cleaned) return null;
+const MILLIONS_SUFFIX = /^(mm|millones|millon|mill|mlls?|m)$/;
 
-  // The sheet writes every price with an "M" (millions) suffix; there the dot
-  // is a decimal separator ("4.3M" = 4,300,000).
-  const millions = /^([\d.,]+)m$/i.exec(cleaned);
-  if (millions) {
-    const value = Number.parseFloat(millions[1].replace(/,/g, "."));
-    return Number.isFinite(value) ? Math.round(value * 1_000_000) : null;
+/** Turns one number as written ("79", "79,5", "79.000.000") into a plain number. */
+function readNumber(text: string, millions: boolean): number | null {
+  let value: number;
+  if (/^\d{1,3}([.,]\d{3})+$/.test(text)) {
+    // Thousands separators: "79.000.000" / "79,000,000" — and "$1.200M" is 1,200 millions.
+    value = Number.parseInt(text.replace(/[.,]/g, ""), 10);
+  } else {
+    // Decimal separator, either "," or ".": "79,5" / "4.3".
+    const cleaned = text.replace(/[.,](?=.*[.,])/g, "").replace(",", ".");
+    value = Number.parseFloat(cleaned);
   }
-
-  // Otherwise treat dots/commas as thousands separators ("79.000.000").
-  const digits = cleaned.replace(/[.,]/g, "");
-  if (!/^\d+$/.test(digits)) return null;
-  const value = Number.parseInt(digits, 10);
-  return Number.isFinite(value) ? value : null;
+  if (!Number.isFinite(value)) return null;
+  // "$79M", "79 millones" — or a bare "79" in a COP column, which can only mean millions.
+  if (millions || value < 100_000) value *= 1_000_000;
+  return Math.round(value);
 }
 
 /**
- * Parses the "Precio Sugerido (COP)" cell, which is either a range
- * ("$79M – $85M"), a single value ("$2.1M"), or unavailable ("N/D").
+ * Parses the price cell. Accepts the forms the team actually types:
+ * "$79M – $85M", "$2.1M", "$79.000.000 - $85.000.000", "79 a 85 millones",
+ * "Desde $79M", "COP 79,5M". "N/D", "-" or empty → no price.
  */
 export function parsePriceRange(raw: string): { min: number | null; max: number | null } {
-  const text = (raw ?? "").trim();
-  if (!text || /^n\/?\.?d\.?$/i.test(text) || /^[-–—]+$/.test(text)) {
+  const text = (raw ?? "")
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase()
+    .trim();
+  if (!text || /^n\/?\.?d\.?$/.test(text) || /^[-–—]+$/.test(text) || /consultar|no disponible|sin precio/.test(text)) {
     return { min: null, max: null };
   }
 
-  const tokens = text
-    .split(/\s*(?:–|—|-|\ba\b)\s*/i)
-    .map((part) => part.trim())
-    .filter(Boolean);
-
-  const values = tokens.map(parseMoneyToken).filter((value): value is number => value !== null);
+  const pattern = /(\$?)\s*(\d[\d.,]*)\s*(mm|millones|millon|mill|mlls?|m)?(?![a-z])/g;
+  const found: { value: number; strong: boolean }[] = [];
+  let match: RegExpExecArray | null;
+  while ((match = pattern.exec(text))) {
+    const [, dollar, digits, suffix] = match;
+    const number = digits.replace(/[.,]$/, "");
+    if (!number) continue;
+    const millions = Boolean(suffix && MILLIONS_SUFFIX.test(suffix));
+    const value = readNumber(number, millions);
+    if (value !== null) found.push({ value, strong: Boolean(dollar) || millions || /[.,]\d{3}/.test(number) });
+  }
+  // Prefer numbers that clearly are money ("$…", "…M", "79.000.000") over stray ones like a year.
+  const strong = found.filter((item) => item.strong);
+  // A bare number next to a clear one ("79 a 85 millones", "79 - 85M") shares its
+  // unit, so keep it when it's in the same ballpark; a year like "(2026)" is not.
+  const ballpark = (value: number) => strong.some((item) => value >= item.value / 5 && value <= item.value * 5);
+  const values = (strong.length ? found.filter((item) => item.strong || ballpark(item.value)) : found).map(
+    (item) => item.value
+  );
   if (values.length === 0) return { min: null, max: null };
-  if (values.length === 1) return { min: values[0], max: values[0] };
   return { min: Math.min(...values), max: Math.max(...values) };
 }
 
@@ -205,7 +223,23 @@ export function mapCategory(raw: string): VehicleType | null {
 }
 
 /** Finds the header row (the one carrying both Marca and Modelo) and maps columns. */
-function findHeader(rows: string[][]): { index: number; columns: ColumnIndex } | null {
+/** Header names that aren't verbatim in COLUMN_MAP ("Precio sugerido COP", "Rango de precio"…). */
+function fuzzyColumn(header: string): keyof ColumnIndex | null {
+  if (!header) return null;
+  if (header.startsWith("marca")) return "brand";
+  if (header.startsWith("modelo")) return "model";
+  if (header.includes("precio") || header.includes("valor") || header === "cop") return "price";
+  if (header.includes("categ") || header.startsWith("tipo")) return "category";
+  if (header.includes("bater")) return "battery";
+  if (header.includes("velocidad")) return "maxSpeed";
+  if (header.includes("autonom")) return "range";
+  if (header.includes("motor") || header.includes("potencia")) return "motor";
+  if (header.includes("caracter") || header.includes("descrip")) return "features";
+  if (header.includes("fuente")) return "source";
+  return null;
+}
+
+function findHeader(rows: string[][]): { index: number; columns: ColumnIndex; labels: string[] } | null {
   for (let i = 0; i < rows.length; i += 1) {
     const row = rows[i] ?? [];
     const normalized = row.map((value) => normalize(String(value ?? "")));
@@ -213,13 +247,13 @@ function findHeader(rows: string[][]): { index: number; columns: ColumnIndex } |
 
     const columns: ColumnIndex = { ...EMPTY_COLUMNS };
     normalized.forEach((header, columnIndex) => {
-      const field = COLUMN_MAP[header];
+      const field = COLUMN_MAP[header] ?? fuzzyColumn(header);
       // First match wins, so a stray repeated header later can't clobber it.
       if (field && columns[field] === -1) {
         columns[field] = columnIndex;
       }
     });
-    return { index: i, columns };
+    return { index: i, columns, labels: row.map((value) => String(value ?? "").trim()) };
   }
   return null;
 }
@@ -299,7 +333,8 @@ export function parseVehicleSheet(rows: string[][]): ParseResult {
     }
     seen.set(key, rowNumber);
 
-    const { min, max } = parsePriceRange(cell(row, columns.price));
+    const priceRaw = cell(row, columns.price);
+    const { min, max } = parsePriceRange(priceRaw);
 
     vehicles.push({
       rowNumber,
@@ -313,11 +348,18 @@ export function parseVehicleSheet(rows: string[][]): ParseResult {
       features: cell(row, columns.features),
       priceMin: min,
       priceMax: max,
+      priceRaw,
       source: cell(row, columns.source),
     });
   }
 
-  return { vehicles, skipped, headerRowNumber: header.index + 1 };
+  return {
+    vehicles,
+    skipped,
+    headerRowNumber: header.index + 1,
+    priceHeader: columns.price >= 0 ? header.labels[columns.price] || null : null,
+    headerLabels: header.labels.filter(Boolean),
+  };
 }
 
 /** Stable key used to match a sheet row to an existing Sanity document. */

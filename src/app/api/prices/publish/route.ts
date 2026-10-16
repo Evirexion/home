@@ -160,7 +160,25 @@ export async function POST(request: Request) {
     const name = /"(.*)"/.exec(row.detail)?.[1] ?? "(vacía)";
     unknownCategories.set(name, [...(unknownCategories.get(name) ?? []), row.rowNumber]);
   }
+  // Price sanity: a vehicle guide without prices is worse than no publish.
+  const unpriced = parsed.vehicles.filter((v) => v.priceMin === null);
+  const unreadable = unpriced.filter((v) => v.priceRaw && !/^(n\/?\.?d\.?|[-–—]+)$/i.test(v.priceRaw));
+  const priceProblems: string[] = [];
+  if (!parsed.priceHeader) {
+    priceProblems.push(
+      `No encontré la columna de precio. Encabezados leídos: ${parsed.headerLabels.join(" | ")}`
+    );
+  } else {
+    if (unreadable.length > 0) {
+      const examples = unreadable.slice(0, 3).map((v) => `fila ${v.rowNumber}: "${v.priceRaw}"`).join("; ");
+      priceProblems.push(`${unreadable.length} precio(s) en "${parsed.priceHeader}" no se pudieron leer (${examples})`);
+    }
+    const empty = unpriced.length - unreadable.length;
+    if (empty > 0) priceProblems.push(`${empty} vehículo(s) sin precio (vacío o N/D) se mostrarán como N/D`);
+  }
+
   const problems = [
+    ...priceProblems,
     ...[...unknownCategories].map(
       ([name, rowNumbers]) =>
         `Categoría "${name}" no reconocida: ${rowNumbers.length} fila(s) (${rowNumbers.slice(0, 5).join(", ")}${rowNumbers.length > 5 ? "…" : ""})`
