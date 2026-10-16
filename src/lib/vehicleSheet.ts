@@ -139,8 +139,10 @@ const MILLIONS_SUFFIX = /^(mm|millones|millon|mill|mlls?|m)$/;
 /** Turns one number as written ("79", "79,5", "79.000.000") into a plain number. */
 function readNumber(text: string, millions: boolean): number | null {
   let value: number;
-  if (/^\d{1,3}([.,]\d{3})+$/.test(text)) {
-    // Thousands separators: "79.000.000" / "79,000,000" — and "$1.200M" is 1,200 millions.
+  // With an "M" suffix the sheet's convention is "." as decimal ("$4.745M" = 4,745,000),
+  // so only a run of 3-digit groups ("79.000.000") counts as thousands separators.
+  if (/^\d{1,3}([.,]\d{3}){2,}$/.test(text) || (!millions && /^\d{1,3}([.,]\d{3})+$/.test(text))) {
+    // Thousands separators: "79.000.000" / "79,000,000".
     value = Number.parseInt(text.replace(/[.,]/g, ""), 10);
   } else {
     // Decimal separator, either "," or ".": "79,5" / "4.3".
