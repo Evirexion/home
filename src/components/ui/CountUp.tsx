@@ -3,6 +3,15 @@
 import { useEffect, useRef } from "react";
 import { animate, useInView } from "motion/react";
 
+/** "33889" -> "33.889", identical on server and client (no ICU differences). */
+function format(value: number): string {
+  return String(Math.round(value)).replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+}
+
+/**
+ * Renders the real number from the start (so it's never stuck at 0 if the
+ * animation doesn't run) and counts up from 0 the first time it scrolls into view.
+ */
 export function CountUp({
   value,
   suffix = "",
@@ -13,7 +22,7 @@ export function CountUp({
   className?: string;
 }) {
   const ref = useRef<HTMLSpanElement>(null);
-  const inView = useInView(ref, { once: true, margin: "-100px" });
+  const inView = useInView(ref, { once: true, amount: 0.5 });
 
   useEffect(() => {
     const node = ref.current;
@@ -22,15 +31,19 @@ export function CountUp({
       duration: 1.6,
       ease: [0.16, 1, 0.3, 1],
       onUpdate(latest) {
-        node.textContent = `${Math.round(latest).toLocaleString("es-CO")}${suffix}`;
+        node.textContent = `${format(latest)}${suffix}`;
       },
     });
-    return () => controls.stop();
+    return () => {
+      controls.stop();
+      node.textContent = `${format(value)}${suffix}`;
+    };
   }, [inView, value, suffix]);
 
   return (
     <span ref={ref} className={className}>
-      0{suffix}
+      {format(value)}
+      {suffix}
     </span>
   );
 }

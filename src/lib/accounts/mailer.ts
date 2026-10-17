@@ -33,11 +33,13 @@ function escapeHtml(value: string): string {
   return value.replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]!);
 }
 
-function layout(title: string, intro: string, buttonLabel: string, url: string, footnote: string): string {
+function layout(origin: string, title: string, intro: string, buttonLabel: string, url: string, footnote: string): string {
+  const logo = `${origin}/brand/email-logo.png`;
   return `<!doctype html><html lang="es"><body style="margin:0;background:#0a0c0b;font-family:Inter,Arial,sans-serif;color:#cdd3d1">
 <table width="100%" cellpadding="0" cellspacing="0" style="background:#0a0c0b;padding:32px 16px"><tr><td align="center">
 <table width="100%" cellpadding="0" cellspacing="0" style="max-width:520px;background:#12140f;border:1px solid #2a302d;border-radius:16px;padding:32px">
-<tr><td style="font-size:12px;letter-spacing:4px;color:#00ff41">E-VIREXION</td></tr>
+<tr><td><img src="${escapeHtml(logo)}" width="260" height="46" alt="E-VIREXION" style="display:block;border:0;outline:none;width:260px;height:auto;font-size:18px;letter-spacing:4px;color:#00ff41"></td></tr>
+<tr><td style="padding-top:20px;border-bottom:1px solid #2a302d"></td></tr>
 <tr><td style="padding-top:16px;font-size:24px;font-weight:700;color:#f4f6f5">${escapeHtml(title)}</td></tr>
 <tr><td style="padding-top:12px;font-size:15px;line-height:1.6">${escapeHtml(intro)}</td></tr>
 <tr><td style="padding-top:24px"><a href="${escapeHtml(url)}" style="display:inline-block;background:#00ff41;color:#0a0c0b;text-decoration:none;font-weight:700;padding:12px 24px;border-radius:999px">${escapeHtml(buttonLabel)}</a></td></tr>
@@ -45,24 +47,24 @@ function layout(title: string, intro: string, buttonLabel: string, url: string, 
 </table></td></tr></table></body></html>`;
 }
 
-export function sendVerificationEmail(to: string, name: string, url: string) {
+export function sendVerificationEmail(to: string, name: string, url: string, origin: string) {
   const intro = `Hola ${name}, confirma tu correo para activar tu cuenta y leer la revista completa.`;
   const footnote = "El enlace vence en 24 horas. Si no creaste esta cuenta, ignora este mensaje.";
   return send({
     to,
     subject: "Confirma tu correo — E-VIREXION",
     text: `${intro}\n\n${url}\n\n${footnote}`,
-    html: layout("Confirma tu correo", intro, "Confirmar correo", url, footnote),
+    html: layout(origin, "Confirma tu correo", intro, "Confirmar correo", url, footnote),
   });
 }
 
-export function sendPasswordResetEmail(to: string, url: string) {
+export function sendPasswordResetEmail(to: string, url: string, origin: string) {
   const intro = "Recibimos una solicitud para cambiar la contraseña de tu cuenta E-VIREXION.";
   const footnote = "El enlace vence en 1 hora. Si no lo pediste, ignora este mensaje: tu contraseña no cambia.";
   return send({
     to,
     subject: "Cambia tu contraseña — E-VIREXION",
     text: `${intro}\n\n${url}\n\n${footnote}`,
-    html: layout("Cambia tu contraseña", intro, "Crear nueva contraseña", url, footnote),
+    html: layout(origin, "Cambia tu contraseña", intro, "Crear nueva contraseña", url, footnote),
   });
 }

@@ -75,8 +75,9 @@ export async function register(_prev: FormState, formData: FormData): Promise<Fo
     if (!user.emailVerified) {
       const token = await issueVerificationToken(user.id);
       if (token) {
-        const url = `${await siteOrigin()}/cuenta/verificar?token=${token}`;
-        const sent = await sendVerificationEmail(user.email, user.name, url);
+        const origin = await siteOrigin();
+        const url = `${origin}/cuenta/verificar?token=${token}`;
+        const sent = await sendVerificationEmail(user.email, user.name, url, origin);
         if (!sent.ok) return { error: sent.error };
       }
     }
@@ -123,8 +124,9 @@ export async function login(_prev: FormState, formData: FormData): Promise<FormS
     } else if (result.reason === "unverified" && result.user) {
       const token = await issueVerificationToken(result.user.id);
       if (token) {
-        const url = `${await siteOrigin()}/cuenta/verificar?token=${token}`;
-        await sendVerificationEmail(result.user.email, result.user.name, url);
+        const origin = await siteOrigin();
+        const url = `${origin}/cuenta/verificar?token=${token}`;
+        await sendVerificationEmail(result.user.email, result.user.name, url, origin);
         return { error: "Aún no has confirmado tu correo. Te enviamos de nuevo el enlace de activación." };
       }
       return { error: "Aún no has confirmado tu correo. Revisa tu bandeja (y spam); en un minuto puedes pedir otro enlace." };
@@ -149,8 +151,9 @@ export async function requestReset(_prev: FormState, formData: FormData): Promis
   try {
     const issued = await issuePasswordResetToken(email);
     if (issued) {
-      const url = `${await siteOrigin()}/cuenta/restablecer?token=${issued.token}`;
-      await sendPasswordResetEmail(issued.user.email, url);
+      const origin = await siteOrigin();
+      const url = `${origin}/cuenta/restablecer?token=${issued.token}`;
+      await sendPasswordResetEmail(issued.user.email, url, origin);
     }
   } catch (error) {
     return friendly(error);
