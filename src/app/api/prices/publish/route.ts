@@ -45,6 +45,9 @@ const COMPARED_FIELDS: (keyof VehicleListing)[] = [
   "priceMin",
   "priceMax",
   "priceNote",
+  "usedPriceMin",
+  "usedPriceMax",
+  "usedPriceNote",
   "source",
 ];
 
@@ -59,6 +62,12 @@ const SKIP_LABELS: Record<SkipReason, string> = {
 
 /** Skip reasons that are just the sheet's layout, not something to fix. */
 const EXPECTED_SKIPS = new Set<SkipReason>(["brand-header", "empty-row"]);
+
+/** Text like "Descontinuado" to show in place of a price; null for empty / N/D. */
+function priceNote(min: number | null, raw: string): string | null {
+  if (min !== null || !raw || /^(n\/?\.?d\.?|[-–—]+)$/i.test(raw)) return null;
+  return raw.slice(0, 60);
+}
 
 export async function POST(request: Request) {
   const expected = process.env.PRICES_PUBLISH_SECRET;
@@ -124,10 +133,10 @@ export async function POST(request: Request) {
     features: vehicle.features,
     priceMin: vehicle.priceMin,
     priceMax: vehicle.priceMax,
-    priceNote:
-      vehicle.priceMin === null && vehicle.priceRaw && !/^(n\/?\.?d\.?|[-–—]+)$/i.test(vehicle.priceRaw)
-        ? vehicle.priceRaw.slice(0, 60)
-        : null,
+    priceNote: priceNote(vehicle.priceMin, vehicle.priceRaw),
+    usedPriceMin: vehicle.usedPriceMin,
+    usedPriceMax: vehicle.usedPriceMax,
+    usedPriceNote: priceNote(vehicle.usedPriceMin, vehicle.usedPriceRaw),
     currency: "COP",
     source: vehicle.source,
   }));
@@ -180,6 +189,10 @@ export async function POST(request: Request) {
     }
     const empty = unpriced.length - unreadable.length;
     if (empty > 0) priceProblems.push(`${empty} vehículo(s) sin precio (vacío o N/D) se mostrarán como N/D`);
+  }
+
+  if (parsed.priceHeader && !parsed.usedPriceHeader) {
+    priceProblems.push('No encontré columna de precio usado (un encabezado con "Usado"); solo se publicará el precio nuevo');
   }
 
   const problems = [

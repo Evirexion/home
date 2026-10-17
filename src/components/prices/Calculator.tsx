@@ -3,7 +3,7 @@
 import { useMemo, useState } from "react";
 import { Battery, Gauge, Route, Zap } from "lucide-react";
 import { PRICE_VEHICLE_TYPES, VEHICLE_TYPE_META } from "@/lib/vehicleTypes";
-import { formatCOP } from "@/lib/format";
+import { formatPriceRange } from "@/lib/format";
 import type { VehicleListing, VehicleType } from "@/types/content";
 
 const selectClass =
@@ -97,17 +97,21 @@ export function Calculator({ listings }: { listings: VehicleListing[] }) {
 
       {result && (
         <div className="mt-8">
-          <div className="rounded-xl border border-electric/30 bg-electric/5 p-5">
-            <p className="text-xs uppercase tracking-wide text-silver-500">Precio sugerido</p>
-            <p className="brand-gradient-text mt-2 text-2xl font-bold">
-              {result.priceMin === null
-                ? result.priceNote || "No disponible"
-                : result.priceMin === result.priceMax
-                  ? formatCOP(result.priceMin)
-                  : `${formatCOP(result.priceMin)} – ${formatCOP(result.priceMax!)}`}
-            </p>
-            <p className="mt-1 text-xs text-silver-700">Fuente: {result.source}</p>
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+            <div className="rounded-xl border border-electric/30 bg-electric/5 p-5">
+              <p className="text-xs uppercase tracking-wide text-silver-500">Precio nuevo</p>
+              <p className="brand-gradient-text mt-2 text-2xl font-bold">
+                {formatPriceRange(result.priceMin, result.priceMax, result.priceNote, "No disponible")}
+              </p>
+            </div>
+            <div className="rounded-xl border border-silver-300/20 bg-white/[0.02] p-5">
+              <p className="text-xs uppercase tracking-wide text-silver-500">Precio usado</p>
+              <p className="mt-2 text-2xl font-bold text-silver-100">
+                {formatPriceRange(result.usedPriceMin, result.usedPriceMax, result.usedPriceNote, "No disponible")}
+              </p>
+            </div>
           </div>
+          {result.source && <p className="mt-2 text-xs text-silver-700">Fuente: {result.source}</p>}
 
           <div className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
             <Spec icon={Zap} label="Motor" value={result.motor} />

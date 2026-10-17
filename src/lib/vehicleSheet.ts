@@ -43,6 +43,9 @@ export interface ParsedVehicle {
   priceMax: number | null;
   /** The price cell exactly as written, for reporting cells that couldn't be read. */
   priceRaw: string;
+  usedPriceMin: number | null;
+  usedPriceMax: number | null;
+  usedPriceRaw: string;
   source: string;
 }
 
@@ -52,6 +55,8 @@ export interface ParseResult {
   headerRowNumber: number;
   /** Header label of the column read as price, or null if none was found. */
   priceHeader: string | null;
+  /** Header label of the used-price column, or null if the sheet has none. */
+  usedPriceHeader: string | null;
   headerLabels: string[];
 }
 
@@ -113,6 +118,7 @@ interface ColumnIndex {
   range: number;
   features: number;
   price: number;
+  usedPrice: number;
   source: number;
 }
 
@@ -126,6 +132,7 @@ const EMPTY_COLUMNS: ColumnIndex = {
   range: -1,
   features: -1,
   price: -1,
+  usedPrice: -1,
   source: -1,
 };
 
@@ -230,6 +237,8 @@ function fuzzyColumn(header: string): keyof ColumnIndex | null {
   if (!header) return null;
   if (header.startsWith("marca")) return "brand";
   if (header.startsWith("modelo")) return "model";
+  // "Precio Usado (COP)" / "Usado" before the general price match, so new and used stay apart.
+  if (header.includes("usad")) return "usedPrice";
   if (header.includes("precio") || header.includes("valor") || header === "cop") return "price";
   if (header.includes("categ") || header.startsWith("tipo")) return "category";
   if (header.includes("bater")) return "battery";
@@ -337,6 +346,8 @@ export function parseVehicleSheet(rows: string[][]): ParseResult {
 
     const priceRaw = cell(row, columns.price);
     const { min, max } = parsePriceRange(priceRaw);
+    const usedPriceRaw = cell(row, columns.usedPrice);
+    const used = parsePriceRange(usedPriceRaw);
 
     vehicles.push({
       rowNumber,
@@ -351,6 +362,9 @@ export function parseVehicleSheet(rows: string[][]): ParseResult {
       priceMin: min,
       priceMax: max,
       priceRaw,
+      usedPriceMin: used.min,
+      usedPriceMax: used.max,
+      usedPriceRaw,
       source: cell(row, columns.source),
     });
   }
@@ -360,6 +374,7 @@ export function parseVehicleSheet(rows: string[][]): ParseResult {
     skipped,
     headerRowNumber: header.index + 1,
     priceHeader: columns.price >= 0 ? header.labels[columns.price] || null : null,
+    usedPriceHeader: columns.usedPrice >= 0 ? header.labels[columns.usedPrice] || null : null,
     headerLabels: header.labels.filter(Boolean),
   };
 }

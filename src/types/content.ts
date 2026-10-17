@@ -58,6 +58,10 @@ export interface VehicleListing {
   priceMax: number | null;
   /** Text from the Sheet shown when there is no price, e.g. "Descontinuado" or "Bajo cotización". */
   priceNote?: string | null;
+  /** Used-market price range, when the Sheet has a "Precio Usado" column. */
+  usedPriceMin?: number | null;
+  usedPriceMax?: number | null;
+  usedPriceNote?: string | null;
   currency: "COP";
   source: string;
 }

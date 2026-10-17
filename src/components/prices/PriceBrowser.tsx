@@ -4,7 +4,7 @@ import { useMemo, useState } from "react";
 import { Bar, BarChart, CartesianGrid, Legend, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 import { Search } from "lucide-react";
 import { PRICE_VEHICLE_TYPES, VEHICLE_TYPE_META } from "@/lib/vehicleTypes";
-import { formatCOP } from "@/lib/format";
+import { formatCOP, formatPriceRange } from "@/lib/format";
 import type { VehicleListing, VehicleType } from "@/types/content";
 
 export function PriceBrowser({ listings }: { listings: VehicleListing[] }) {
@@ -114,7 +114,8 @@ export function PriceBrowser({ listings }: { listings: VehicleListing[] }) {
               <th className="px-4 py-3 font-medium">Modelo</th>
               <th className="px-4 py-3 font-medium">Tipo</th>
               <th className="px-4 py-3 font-medium">Autonomía</th>
-              <th className="px-4 py-3 text-right font-medium">Precio sugerido</th>
+              <th className="px-4 py-3 text-right font-medium">Precio nuevo</th>
+              <th className="px-4 py-3 text-right font-medium">Precio usado</th>
             </tr>
           </thead>
           <tbody>
@@ -124,12 +125,11 @@ export function PriceBrowser({ listings }: { listings: VehicleListing[] }) {
                 <td className="px-4 py-3 text-silver-300">{l.model}</td>
                 <td className="px-4 py-3 text-silver-500">{VEHICLE_TYPE_META[l.vehicleType].label}</td>
                 <td className="px-4 py-3 text-silver-500">{l.range || "N/D"}</td>
-                <td className="px-4 py-3 text-right font-medium text-electric">
-                  {l.priceMin === null
-                    ? l.priceNote || "N/D"
-                    : l.priceMin === l.priceMax
-                      ? formatCOP(l.priceMin)
-                      : `${formatCOP(l.priceMin)} – ${formatCOP(l.priceMax!)}`}
+                <td className="whitespace-nowrap px-4 py-3 text-right font-medium text-electric">
+                  {formatPriceRange(l.priceMin, l.priceMax, l.priceNote)}
+                </td>
+                <td className="whitespace-nowrap px-4 py-3 text-right text-silver-300">
+                  {formatPriceRange(l.usedPriceMin, l.usedPriceMax, l.usedPriceNote)}
                 </td>
               </tr>
             ))}
