@@ -44,6 +44,7 @@ const COMPARED_FIELDS: (keyof VehicleListing)[] = [
   "features",
   "priceMin",
   "priceMax",
+  "priceNote",
   "source",
 ];
 
@@ -123,6 +124,10 @@ export async function POST(request: Request) {
     features: vehicle.features,
     priceMin: vehicle.priceMin,
     priceMax: vehicle.priceMax,
+    priceNote:
+      vehicle.priceMin === null && vehicle.priceRaw && !/^(n\/?\.?d\.?|[-–—]+)$/i.test(vehicle.priceRaw)
+        ? vehicle.priceRaw.slice(0, 60)
+        : null,
     currency: "COP",
     source: vehicle.source,
   }));
@@ -171,7 +176,7 @@ export async function POST(request: Request) {
   } else {
     if (unreadable.length > 0) {
       const examples = unreadable.slice(0, 3).map((v) => `fila ${v.rowNumber}: "${v.priceRaw}"`).join("; ");
-      priceProblems.push(`${unreadable.length} precio(s) en "${parsed.priceHeader}" no se pudieron leer (${examples})`);
+      priceProblems.push(`${unreadable.length} vehículo(s) sin precio numérico; la web mostrará el texto del Sheet (${examples})`);
     }
     const empty = unpriced.length - unreadable.length;
     if (empty > 0) priceProblems.push(`${empty} vehículo(s) sin precio (vacío o N/D) se mostrarán como N/D`);

@@ -101,7 +101,7 @@ export function Calculator({ listings }: { listings: VehicleListing[] }) {
             <p className="text-xs uppercase tracking-wide text-silver-500">Precio sugerido</p>
             <p className="brand-gradient-text mt-2 text-2xl font-bold">
               {result.priceMin === null
-                ? "No disponible"
+                ? result.priceNote || "No disponible"
                 : result.priceMin === result.priceMax
                   ? formatCOP(result.priceMin)
                   : `${formatCOP(result.priceMin)} – ${formatCOP(result.priceMax!)}`}

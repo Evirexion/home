@@ -56,6 +56,8 @@ export interface VehicleListing {
   features: string;
   priceMin: number | null;
   priceMax: number | null;
+  /** Text from the Sheet shown when there is no price, e.g. "Descontinuado" or "Bajo cotización". */
+  priceNote?: string | null;
   currency: "COP";
   source: string;
 }
