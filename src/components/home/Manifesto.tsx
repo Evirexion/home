@@ -1,3 +1,5 @@
+import Link from "next/link";
+import { BookOpen } from "lucide-react";
 import { Container } from "@/components/ui/Container";
 import { Reveal } from "@/components/ui/Reveal";
 
@@ -47,6 +49,12 @@ export function Manifesto() {
               <span className="brand-gradient-text">Edición tras edición. Bienvenidos.</span>
             </p>
             <p className="text-sm uppercase tracking-[0.2em] text-silver-500">— Equipo E-Virexion</p>
+            <Link
+              href="/revista"
+              className="brand-gradient-bg metal-edge mt-4 inline-flex items-center gap-2 rounded-full px-6 py-3 text-sm font-semibold text-ink transition-transform duration-300 hover:scale-[1.02]"
+            >
+              <BookOpen className="h-4 w-4" /> Lee la Edición 001
+            </Link>
           </div>
         </Reveal>
       </Container>

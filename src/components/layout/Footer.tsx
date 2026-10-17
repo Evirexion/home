@@ -12,6 +12,7 @@ const SOCIAL_LINKS = [
 ];
 
 const FOOTER_LINKS = [
+  { href: "/revista", label: "Revista" },
   { href: "/map", label: "Mapa de carga" },
   { href: "/news", label: "Corriente" },
   { href: "/prices", label: "Guía de precios" },
@@ -66,7 +67,10 @@ export function Footer() {
       </Container>
       <Container className="border-t border-silver-700/10 py-6">
         <p className="text-xs text-silver-700">
-          © {new Date().getFullYear()} E-VIREXION. Todos los derechos reservados.
+          © {new Date().getFullYear()} E-VIREXION. Todos los derechos reservados. ·{" "}
+          <Link href="/privacidad" className="hover:text-electric">
+            Política de Tratamiento de Datos
+          </Link>
         </p>
       </Container>
     </footer>

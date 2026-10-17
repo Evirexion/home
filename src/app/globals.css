@@ -188,3 +188,66 @@ h1, h2, h3, h4, h5, h6 {
     animation: none;
   }
 }
+
+/* ── Magazine reader (page-flip owns these nodes, so they're styled globally) ── */
+.evx-book .evx-page {
+  background: #0a0c0b;
+  overflow: hidden;
+}
+.evx-book .evx-page img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  user-select: none;
+  -webkit-user-drag: none;
+}
+.evx-book .evx-page--locked {
+  background:
+    radial-gradient(ellipse at top, rgba(0, 255, 65, 0.14), transparent 60%),
+    linear-gradient(180deg, #12140f, #0a0c0b);
+  border: 1px solid rgba(0, 255, 65, 0.25);
+}
+.evx-locked {
+  display: flex;
+  height: 100%;
+  flex-direction: column;
+  justify-content: center;
+  gap: 0.9rem;
+  padding: 12%;
+  text-align: center;
+}
+.evx-locked__eyebrow {
+  font-size: 0.7rem;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--color-electric);
+}
+.evx-locked__title {
+  font-family: var(--font-display, inherit);
+  font-size: clamp(1.1rem, 2.4vw, 1.75rem);
+  font-weight: 700;
+  line-height: 1.15;
+  color: var(--color-silver-100);
+}
+.evx-locked__text {
+  font-size: 0.85rem;
+  line-height: 1.55;
+  color: var(--color-silver-300);
+}
+.evx-locked__cta {
+  margin-top: 0.5rem;
+  align-self: center;
+  border-radius: 999px;
+  padding: 0.7rem 1.4rem;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--color-ink);
+  background-image: linear-gradient(135deg, var(--color-teal) 0%, var(--color-electric) 100%);
+}
+.evx-locked__link {
+  font-size: 0.8rem;
+  color: var(--color-silver-500);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}

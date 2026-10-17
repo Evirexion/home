@@ -21,10 +21,20 @@
 	],
 	// Published price guide. Written by /api/prices/publish when someone clicks
 	// "Publicar precios en la web" in the Google Sheet; read by /prices.
-	// No id needed: `wrangler deploy` creates the namespace on first deploy.
+	// Also holds the magazine page images under "revista:<edición>:<página>".
 	"kv_namespaces": [
 		{
-			"binding": "PRICES_KV"
+			"binding": "PRICES_KV",
+			"id": "32a0489d6b1e42bbaf709a1ce68c59b6"
+		}
+	],
+	// Reader accounts for the magazine portal (users, sessions, email tokens).
+	// No id needed: `wrangler deploy` creates the database on first deploy, and
+	// the app creates its tables on first use.
+	"d1_databases": [
+		{
+			"binding": "DB",
+			"database_name": "evirexion-cuentas"
 		}
 	],
 	"images": {
