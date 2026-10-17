@@ -3,6 +3,13 @@
 	"main": ".open-next/worker.js",
 	"name": "e-virexion",
 	"compatibility_date": "2026-07-16",
+	// Production domains. `wrangler deploy` attaches them to this Worker and
+	// creates their DNS records; the workers.dev URL keeps working too.
+	"workers_dev": true,
+	"routes": [
+		{ "pattern": "evirexion.com", "custom_domain": true },
+		{ "pattern": "www.evirexion.com", "custom_domain": true }
+	],
 	"compatibility_flags": [
 		"nodejs_compat",
 		"global_fetch_strictly_public"

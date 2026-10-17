@@ -15,12 +15,19 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://evirexion.com"),
   title: {
     default: "E-VIREXION — Driving the Electric Shift",
     template: "%s | E-VIREXION",
   },
   description:
-    "E-VIREXION es la revista de movilidad eléctrica premium para Colombia y Latinoamérica: noticias, innovación, mapa de carga y precios de vehículos eléctricos.",
+    "E-VIREXION es la revista de movilidad eléctrica premium para Colombia y Latinoamérica: revista digital, noticias, mapa de carga y precios de vehículos eléctricos.",
+  openGraph: {
+    type: "website",
+    locale: "es_CO",
+    siteName: "E-VIREXION",
+    url: "https://evirexion.com",
+  },
 };
 
 export default function RootLayout({

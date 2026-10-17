@@ -4,6 +4,13 @@ const nextConfig: NextConfig = {
   // Innovación is hidden for now; send old links home instead of to a dead section.
   async redirects() {
     return [
+      // One canonical address: www → evirexion.com.
+      {
+        source: "/:path*",
+        has: [{ type: "host", value: "www.evirexion.com" }],
+        destination: "https://evirexion.com/:path*",
+        permanent: true,
+      },
       { source: "/innovations", destination: "/", permanent: false },
       { source: "/innovations/:slug*", destination: "/", permanent: false },
     ];
