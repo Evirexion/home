@@ -10,6 +10,16 @@ const components: PortableTextComponents = {
       <blockquote className="mt-6 border-l-2 border-electric/40 pl-4 italic text-silver-300">{children}</blockquote>
     ),
   },
+  list: {
+    bullet: ({ children }) => <ul className="mt-5 space-y-2">{children}</ul>,
+  },
+  listItem: {
+    bullet: ({ children }) => (
+      <li className="relative pl-5 leading-relaxed text-silver-300 before:absolute before:left-0 before:top-[0.6em] before:h-1.5 before:w-1.5 before:rounded-full before:bg-electric">
+        {children}
+      </li>
+    ),
+  },
   marks: {
     link: ({ children, value }) => (
       <a
