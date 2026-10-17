@@ -17,7 +17,7 @@ export async function FeaturedNews() {
         <Reveal className="flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
           <SectionHeading
             eyebrow="Recién publicado"
-            title="Lo último en CORRIENTE"
+            title="Lo último en Corriente"
             description="Historias de movilidad eléctrica, política pública e infraestructura de carga en Colombia y la región."
           />
           <Button href="/news" variant="outline" className="shrink-0">

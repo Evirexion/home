@@ -3,7 +3,7 @@ import { Badge } from "@/components/ui/Badge";
 import type { Post } from "@/types/content";
 
 const CATEGORY_LABEL: Record<Post["category"], string> = {
-  corriente: "CORRIENTE",
+  corriente: "Corriente",
   innovations: "Innovación",
 };
 

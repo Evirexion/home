@@ -23,7 +23,7 @@ export function Hero() {
 
       <Container className="relative z-[5] flex justify-center pb-16 md:pb-20">
         <div className="flex flex-wrap justify-center gap-4">
-          <Button href="/news">Leer CORRIENTE</Button>
+          <Button href="/news">Leer Corriente</Button>
           <Button href="/map" variant="outline">
             Explorar el mapa de carga
           </Button>

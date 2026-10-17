@@ -33,7 +33,7 @@ export function DraftForm() {
           <label className="flex flex-col gap-1.5 text-sm text-silver-300">
             Categoría
             <select name="category" defaultValue="corriente" className={inputClass}>
-              <option value="corriente">CORRIENTE (Noticias)</option>
+              <option value="corriente">Corriente (Noticias)</option>
               <option value="innovations">Innovación</option>
             </select>
           </label>

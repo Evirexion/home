@@ -17,8 +17,9 @@ const WIDTHS = {
  */
 export const Logo = forwardRef<HTMLImageElement, { size?: keyof typeof WIDTHS; className?: string }>(
   function Logo({ size = "md", className }, ref) {
-    const width = WIDTHS[size];
-    const height = Math.round(width / WORDMARK_RATIO);
+    // Shrink with the screen instead of keeping a fixed height: on phones a
+    // fixed 620×109 box got squeezed sideways by max-width:100%.
+    const width = size === "lg" ? `min(${WIDTHS.lg}px, 86vw)` : `${WIDTHS[size]}px`;
     return (
       <Image
         ref={ref}
@@ -28,7 +29,7 @@ export const Logo = forwardRef<HTMLImageElement, { size?: keyof typeof WIDTHS; c
         height={189}
         priority={size === "lg"}
         className={clsx("h-auto w-auto", className)}
-        style={{ width, height }}
+        style={{ width, height: "auto", aspectRatio: WORDMARK_RATIO }}
       />
     );
   }

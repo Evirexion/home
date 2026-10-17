@@ -13,7 +13,7 @@ export function HeroStage() {
     <div ref={containerRef} className="pointer-events-none absolute inset-0">
       <LightningBolts containerRef={containerRef} targetRef={logoRef} />
 
-      <div className="absolute left-1/2 top-1/2 z-[2] flex -translate-x-1/2 -translate-y-1/2 flex-col items-center">
+      <div className="absolute left-1/2 top-1/2 z-[2] flex w-max -translate-x-1/2 -translate-y-1/2 flex-col items-center">
         <div className="relative flex items-center justify-center">
           <div
             aria-hidden
