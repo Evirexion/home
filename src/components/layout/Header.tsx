@@ -9,7 +9,6 @@ import { Container } from "@/components/ui/Container";
 const NAV_LINKS = [
   { href: "/map", label: "Mapa" },
   { href: "/news", label: "Corriente" },
-  { href: "/innovations", label: "Innovación" },
   { href: "/prices", label: "Guía de precios" },
   { href: "/contact", label: "Contáctanos" },
 ];

@@ -65,13 +65,19 @@ export function MapView({
     <MapContainer
       center={BOGOTA_CENTER}
       zoom={12}
+      minZoom={4}
+      maxZoom={18}
       scrollWheelZoom
       className="h-full w-full"
       style={{ background: "#12140f" }}
     >
       <TileLayer
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-        url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
+        // OpenStreetMap needs no API key (CARTO's dark tiles started returning
+        // "API KEY REQUIRED"); the dark look comes from .evx-map-tiles in globals.css.
+        url="https://tile.openstreetmap.org/{z}/{x}/{y}.png"
+        maxZoom={18}
+        maxNativeZoom={19}
         className="evx-map-tiles"
       />
       <FlyToFocus stations={focusStations} />

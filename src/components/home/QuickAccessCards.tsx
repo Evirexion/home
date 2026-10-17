@@ -1,6 +1,6 @@
 import Link from "next/link";
 import clsx from "clsx";
-import { MapPin, Newspaper, Cpu, Calculator, ArrowUpRight } from "lucide-react";
+import { MapPin, Newspaper, Calculator, ArrowUpRight } from "lucide-react";
 import type { ComponentType } from "react";
 import { Container } from "@/components/ui/Container";
 import { Reveal } from "@/components/ui/Reveal";
@@ -27,23 +27,16 @@ const CARDS: CardDef[] = [
   {
     href: "/news",
     icon: Newspaper,
-    title: "CORRIENTE",
+    title: "Corriente",
     description: "Las noticias de movilidad eléctrica más relevantes de Colombia y LatAm.",
     span: "md:col-span-2 md:row-span-1",
-  },
-  {
-    href: "/innovations",
-    icon: Cpu,
-    title: "Innovación",
-    description: "Tecnología, baterías y tendencias que redefinen el sector EV.",
-    span: "md:col-span-1 md:row-span-1",
   },
   {
     href: "/prices",
     icon: Calculator,
     title: "Guía de precios",
-    description: "Calcula el valor de reventa o explora el precio de más de 180 vehículos.",
-    span: "md:col-span-1 md:row-span-1",
+    description: "Precio nuevo y usado de más de 300 vehículos eléctricos en Colombia.",
+    span: "md:col-span-2 md:row-span-1",
   },
 ];
 

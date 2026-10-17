@@ -71,7 +71,9 @@ h1, h2, h3, h4, h5, h6 {
    (e.g. MapLibre GL) — so this tunes the filter to amplify the brightness
    levels already baked into the source cartography instead. */
 .evx-map-tiles {
-  filter: sepia(0.4) saturate(2.1) hue-rotate(122deg) brightness(0.95) contrast(1.2);
+  /* Turns the light OpenStreetMap tiles into the dark, green-tinted brand look. */
+  filter: invert(1) hue-rotate(180deg) grayscale(0.85) brightness(0.75) contrast(1.15) sepia(0.35)
+    hue-rotate(95deg) saturate(1.6);
 }
 
 /* Shared brand gradient (teal -> electric), used instead of flat neon fills

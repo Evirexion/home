@@ -6,7 +6,8 @@ import { ArticleCard } from "@/components/news/ArticleCard";
 import { Reveal } from "@/components/ui/Reveal";
 
 export async function FeaturedNews() {
-  const posts = (await getPosts()).slice(0, 3);
+  // Only Corriente while Innovación is hidden.
+  const posts = (await getPosts("corriente")).slice(0, 3);
 
   if (posts.length === 0) return null;
 

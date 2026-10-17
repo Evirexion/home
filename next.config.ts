@@ -1,6 +1,13 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  // Innovación is hidden for now; send old links home instead of to a dead section.
+  async redirects() {
+    return [
+      { source: "/innovations", destination: "/", permanent: false },
+      { source: "/innovations/:slug*", destination: "/", permanent: false },
+    ];
+  },
   images: {
     // Optimization is served by the Cloudflare Images binding declared in
     // wrangler.jsonc (see https://opennext.js.org/cloudflare/howtos/image)

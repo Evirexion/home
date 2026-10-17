@@ -8,7 +8,7 @@ import { getPostBySlug } from "@/lib/posts";
 import type { PostCategory } from "@/types/content";
 
 const BASE_PATH: Record<PostCategory, string> = { corriente: "/news", innovations: "/innovations" };
-const CATEGORY_LABEL: Record<PostCategory, string> = { corriente: "CORRIENTE", innovations: "Innovación" };
+const CATEGORY_LABEL: Record<PostCategory, string> = { corriente: "Corriente", innovations: "Innovación" };
 
 export async function ArticleDetail({ slug, category }: { slug: string; category: PostCategory }) {
   const post = await getPostBySlug(slug);
