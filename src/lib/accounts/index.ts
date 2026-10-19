@@ -71,6 +71,22 @@ const SCHEMA = [
     created_at INTEGER NOT NULL
   )`,
   `CREATE INDEX IF NOT EXISTS email_tokens_user ON email_tokens(user_id, purpose)`,
+  // Google sign-ins waiting for the reader to authorise data processing.
+  `CREATE TABLE IF NOT EXISTS oauth_pending (
+    token_hash TEXT PRIMARY KEY,
+    provider TEXT NOT NULL,
+    subject TEXT NOT NULL,
+    email TEXT NOT NULL,
+    name TEXT NOT NULL,
+    next TEXT NOT NULL,
+    expires_at INTEGER NOT NULL
+  )`,
+];
+
+/** Columns added after the first release; ALTER fails harmlessly once they exist. */
+const MIGRATIONS = [
+  "ALTER TABLE users ADD COLUMN google_sub TEXT",
+  "CREATE UNIQUE INDEX IF NOT EXISTS users_google_sub ON users(google_sub)",
 ];
 
 let schemaReady = false;
@@ -80,6 +96,13 @@ async function db(): Promise<D1Like> {
   if (!database) throw new AccountError("Las cuentas no están disponibles en este momento.");
   if (!schemaReady) {
     await database.batch(SCHEMA.map((sql) => database.prepare(sql)));
+    for (const sql of MIGRATIONS) {
+      try {
+        await database.prepare(sql).run();
+      } catch {
+        // Already applied.
+      }
+    }
     schemaReady = true;
   }
   return database;
@@ -402,4 +425,129 @@ export async function countVerifiedSubscribers(): Promise<number> {
     .prepare("SELECT COUNT(*) AS n FROM users WHERE email_verified_at IS NOT NULL")
     .first<{ n: number }>();
   return row?.n ?? 0;
+}
+
+/** Admin removal on a reader's request (Ley 1581 supresión). Returns false if no such reader. */
+export async function deleteSubscriberByEmail(email: string): Promise<boolean> {
+  const row = await findByEmail(email);
+  if (!row) return false;
+  const database = await db();
+  await database.batch([
+    database.prepare("DELETE FROM sessions WHERE user_id = ?").bind(row.id),
+    database.prepare("DELETE FROM email_tokens WHERE user_id = ?").bind(row.id),
+    database.prepare("DELETE FROM users WHERE id = ?").bind(row.id),
+  ]);
+  return true;
+}
+
+// ── Sign in with Google ────────────────────────────────────────────────────
+
+export interface GoogleProfile {
+  sub: string;
+  email: string;
+  name: string;
+}
+
+/**
+ * Finds the reader for a Google profile: by Google ID first, then by email
+ * (linking the Google ID to an existing password account). Google has
+ * verified the address, so an unconfirmed account becomes confirmed.
+ * Returns null when nobody has that email yet — the caller then asks for
+ * consent before creating the account.
+ */
+export async function findOrLinkGoogleUser(
+  profile: GoogleProfile
+): Promise<{ user: User; firstTime: boolean } | null> {
+  const database = await db();
+  let row = await database.prepare("SELECT * FROM users WHERE google_sub = ?").bind(profile.sub).first<UserRow>();
+  if (!row) row = await findByEmail(profile.email);
+  if (!row) return null;
+  const firstTime = !row.email_verified_at;
+  if (firstTime) {
+    // An unconfirmed password account could have been created by someone else
+    // with this address. Google proves the real owner is here, so drop that
+    // unknown password and any sessions before confirming the account.
+    await database.batch([
+      database
+        .prepare(
+          "UPDATE users SET google_sub = ?, email_verified_at = ?, password_hash = 'google', failed_logins = 0, locked_until = NULL WHERE id = ?"
+        )
+        .bind(profile.sub, new Date().toISOString(), row.id),
+      database.prepare("DELETE FROM sessions WHERE user_id = ?").bind(row.id),
+    ]);
+  } else {
+    await database
+      .prepare("UPDATE users SET google_sub = ?, failed_logins = 0, locked_until = NULL WHERE id = ?")
+      .bind(profile.sub, row.id)
+      .run();
+  }
+  const updated = await findById(row.id);
+  return updated ? { user: toUser(updated), firstTime } : null;
+}
+
+const PENDING_TTL_MS = 30 * 60 * 1000;
+
+export async function createPendingGoogleSignup(profile: GoogleProfile, next: string): Promise<string> {
+  const token = randomToken();
+  const database = await db();
+  await database.batch([
+    database.prepare("DELETE FROM oauth_pending WHERE expires_at < ?").bind(Date.now()),
+    database
+      .prepare(
+        "INSERT INTO oauth_pending (token_hash, provider, subject, email, name, next, expires_at) VALUES (?, 'google', ?, ?, ?, ?, ?)"
+      )
+      .bind(await sha256(token), profile.sub, normalizeEmail(profile.email), profile.name.slice(0, 120), next, Date.now() + PENDING_TTL_MS),
+  ]);
+  return token;
+}
+
+export async function readPendingGoogleSignup(
+  token: string
+): Promise<(GoogleProfile & { next: string }) | null> {
+  const row = await (await db())
+    .prepare("SELECT subject, email, name, next, expires_at FROM oauth_pending WHERE token_hash = ?")
+    .bind(await sha256(token))
+    .first<{ subject: string; email: string; name: string; next: string; expires_at: number }>();
+  if (!row || row.expires_at < Date.now()) return null;
+  return { sub: row.subject, email: row.email, name: row.name, next: row.next };
+}
+
+/** Creates the account once the reader has authorised data processing. */
+export async function completeGoogleSignup(
+  token: string,
+  input: { marketingConsent: boolean; ip: string | null }
+): Promise<{ user: User; next: string; firstTime: boolean } | null> {
+  const pending = await readPendingGoogleSignup(token);
+  if (!pending) return null;
+  const database = await db();
+  await database.prepare("DELETE FROM oauth_pending WHERE token_hash = ?").bind(await sha256(token)).run();
+
+  // Someone may have registered that email meanwhile: just link it.
+  const existing = await findOrLinkGoogleUser(pending);
+  if (existing) return { ...existing, next: pending.next };
+
+  const now = new Date().toISOString();
+  const id = randomId();
+  await database
+    .prepare(
+      `INSERT INTO users (id, email, name, password_hash, email_verified_at, consent_at, consent_version, consent_ip,
+         marketing_consent, created_at, google_sub)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
+    )
+    .bind(
+      id,
+      pending.email,
+      pending.name,
+      "google", // Not a valid hash: password login is off until they set one via "¿Olvidaste tu contraseña?".
+      now,
+      now,
+      PRIVACY_POLICY_VERSION,
+      input.ip,
+      input.marketingConsent ? 1 : 0,
+      now,
+      pending.sub
+    )
+    .run();
+  const row = await findById(id);
+  return row ? { user: toUser(row), next: pending.next, firstTime: true } : null;
 }

@@ -2,8 +2,12 @@
 
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
+import { revalidatePath } from "next/cache";
 import {
   AccountError,
+  completeGoogleSignup,
+  deleteSubscriberByEmail,
+  isAdmin,
   countVerifiedSubscribers,
   authenticate,
   createUser,
@@ -242,4 +246,48 @@ export async function removeAccount(_prev: FormState, formData: FormData): Promi
     return friendly(error);
   }
   redirect("/?cuenta=eliminada");
+}
+
+export async function finishGoogleSignup(_prev: FormState, formData: FormData): Promise<FormState> {
+  const token = String(formData.get("token") ?? "");
+  if (formData.get("privacy") !== "on") {
+    return { error: "Para crear tu cuenta necesitamos tu autorización para el tratamiento de datos personales." };
+  }
+  let next: string | null = null;
+  try {
+    const ip = (await headers()).get("cf-connecting-ip");
+    const result = await completeGoogleSignup(token, { marketingConsent: formData.get("marketing") === "on", ip });
+    if (!result) return { error: "Este paso venció. Vuelve a intentar con “Continuar con Google”." };
+    await startSession(result.user.id);
+    if (result.firstTime) {
+      try {
+        await sendNewSubscriberNotice(result.user, await countVerifiedSubscribers(), await siteOrigin());
+      } catch (error) {
+        console.error("New-subscriber notice failed", error);
+      }
+    }
+    next = safeNext(result.next);
+  } catch (error) {
+    return friendly(error);
+  }
+  redirect(next.startsWith("/revista") ? `${next}${next.includes("?") ? "&" : "?"}bienvenida=1` : next);
+}
+
+/** Admin: delete a reader on request (Ley 1581 supresión). */
+export async function adminDeleteSubscriber(_prev: FormState, formData: FormData): Promise<FormState> {
+  const admin = await getCurrentUser();
+  if (!isAdmin(admin)) return { error: "No autorizado." };
+  const email = String(formData.get("email") ?? "").trim();
+  if (!email) return { error: "Falta el correo." };
+  if (admin && email.toLowerCase() === admin.email.toLowerCase()) {
+    return { error: "No puedes eliminar tu propia cuenta de administrador desde aquí." };
+  }
+  try {
+    const deleted = await deleteSubscriberByEmail(email);
+    if (!deleted) return { error: "Ese lector ya no existe." };
+  } catch (error) {
+    return friendly(error);
+  }
+  revalidatePath("/cuenta/suscriptores");
+  return { message: `${email} fue eliminado con todos sus datos.`, done: true };
 }

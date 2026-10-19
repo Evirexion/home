@@ -35,3 +35,19 @@ npx wrangler kv bulk put revista-upload/revista-2026-10.json --binding PRICES_KV
 - `/cuenta/suscriptores` muestra la lista y la descarga para Excel. Solo la ven
   los lectores cuyos correos estén en el secreto `ADMIN_EMAILS` (separados por
   coma): `npx wrangler secret put ADMIN_EMAILS`.
+
+## Continuar con Google
+
+- Rutas: `/api/auth/google/start` → Google → `/api/auth/google/callback`.
+  Lectores nuevos pasan por `/cuenta/google` para autorizar el tratamiento de
+  datos antes de crear la cuenta.
+- Secretos: `GOOGLE_OAUTH_CLIENT_ID` y `GOOGLE_OAUTH_CLIENT_SECRET`. Sin ellos
+  el botón no aparece.
+- URI de redirección autorizado en Google Cloud:
+  `https://evirexion.com/api/auth/google/callback` (y la de workers.dev si se usa).
+
+## Eliminar a un lector
+
+En `/cuenta/suscriptores`, botón "Eliminar" (solo administradores). Borra la
+cuenta, sus sesiones y enlaces pendientes. Borrar a alguien de un Excel
+descargado no lo elimina de la web.

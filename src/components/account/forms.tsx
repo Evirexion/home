@@ -4,7 +4,9 @@ import Link from "next/link";
 import { useActionState, useState } from "react";
 import { Eye, EyeOff } from "lucide-react";
 import {
+  adminDeleteSubscriber,
   completeReset,
+  finishGoogleSignup,
   confirmEmail,
   login,
   register,
@@ -255,6 +257,90 @@ export function DeleteAccountForm() {
       >
         {pending ? "Eliminando..." : "Eliminar mi cuenta"}
       </button>
+    </form>
+  );
+}
+
+/** Shown once to a new Google reader: the same privacy notice and authorisation as the email signup. */
+export function GoogleConsentForm({ token, name, email }: { token: string; name: string; email: string }) {
+  const [state, action, pending] = useActionState(finishGoogleSignup, initial);
+  return (
+    <form action={action} className="flex flex-col gap-4">
+      <input type="hidden" name="token" value={token} />
+      <div className="rounded-xl border border-silver-300/10 bg-white/[0.02] p-4 text-sm text-silver-300">
+        <p className="text-silver-100">{name}</p>
+        <p className="text-silver-500">{email}</p>
+      </div>
+      <div className="rounded-xl border border-silver-300/10 bg-white/[0.02] p-4 text-xs leading-relaxed text-silver-500">
+        <p className="font-semibold uppercase tracking-wide text-silver-300">Aviso de privacidad</p>
+        <p className="mt-2">
+          {DATA_CONTROLLER.legalName}, con domicilio en {DATA_CONTROLLER.city}, es responsable del tratamiento de los
+          datos que recibimos de Google (nombre y correo). Los usamos para crear y administrar tu cuenta, darte acceso a
+          la revista digital y, solo si lo autorizas, enviarte novedades de E-VIREXION. Puedes conocer, actualizar,
+          rectificar y suprimir tus datos y revocar esta autorización escribiendo a{" "}
+          <a href={`mailto:${DATA_CONTROLLER.email}`} className="text-electric underline underline-offset-2">
+            {DATA_CONTROLLER.email}
+          </a>{" "}
+          o desde tu cuenta. Más información en la{" "}
+          <Link href={PRIVACY_POLICY_PATH} target="_blank" className="text-electric underline underline-offset-2">
+            Política de Tratamiento de Datos Personales
+          </Link>
+          .
+        </p>
+      </div>
+      <label className="flex items-start gap-3 text-sm text-silver-300">
+        <input type="checkbox" name="privacy" required className="mt-0.5 h-4 w-4 accent-[#00ff41]" />
+        <span>
+          Autorizo de manera previa, expresa e informada el tratamiento de mis datos personales conforme a la{" "}
+          <Link href={PRIVACY_POLICY_PATH} target="_blank" className="text-electric underline underline-offset-2">
+            Política de Tratamiento de Datos
+          </Link>{" "}
+          (Ley 1581 de 2012).
+        </span>
+      </label>
+      <label className="flex items-start gap-3 text-sm text-silver-300">
+        <input type="checkbox" name="marketing" className="mt-0.5 h-4 w-4 accent-[#00ff41]" />
+        <span>Quiero recibir por correo las nuevas ediciones y novedades de E-VIREXION (opcional).</span>
+      </label>
+      <Feedback state={state} />
+      <button type="submit" disabled={pending} className={primaryButton}>
+        {pending ? "Creando cuenta..." : "Crear mi cuenta"}
+      </button>
+    </form>
+  );
+}
+
+/** Admin: two-step delete for one reader in the subscriber list. */
+export function AdminDeleteButton({ email }: { email: string }) {
+  const [state, action, pending] = useActionState(adminDeleteSubscriber, initial);
+  const [confirming, setConfirming] = useState(false);
+  if (state.done) return <span className="text-xs text-mint">Eliminado</span>;
+  if (!confirming) {
+    return (
+      <button
+        type="button"
+        onClick={() => setConfirming(true)}
+        className="rounded-full border border-red-400/30 px-3 py-1 text-xs text-red-300 transition-colors hover:bg-red-400/10"
+      >
+        Eliminar
+      </button>
+    );
+  }
+  return (
+    <form action={action} className="flex flex-wrap items-center gap-2">
+      <input type="hidden" name="email" value={email} />
+      <span className="text-xs text-silver-300">¿Borrar todos sus datos?</span>
+      <button
+        type="submit"
+        disabled={pending}
+        className="rounded-full bg-red-500/80 px-3 py-1 text-xs font-semibold text-white disabled:opacity-60"
+      >
+        {pending ? "Eliminando..." : "Sí, eliminar"}
+      </button>
+      <button type="button" onClick={() => setConfirming(false)} className="text-xs text-silver-500 hover:text-silver-100">
+        Cancelar
+      </button>
+      {state.error && <span className="w-full text-xs text-red-400">{state.error}</span>}
     </form>
   );
 }

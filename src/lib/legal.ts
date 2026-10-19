@@ -13,5 +13,5 @@ export const DATA_CONTROLLER = {
 };
 
 /** Bump when the policy text changes materially; stored with each consent. */
-export const PRIVACY_POLICY_VERSION = "2026-10-17";
+export const PRIVACY_POLICY_VERSION = "2026-10-19";
 export const PRIVACY_POLICY_PATH = "/privacidad";

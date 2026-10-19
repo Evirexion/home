@@ -72,6 +72,7 @@ export default function PrivacyPage() {
           <List
             items={[
               "Al crear una cuenta: nombre, correo electrónico y contraseña (que guardamos cifrada; nunca la vemos ni la conocemos).",
+              "Si eliges “Continuar con Google”: tu nombre, tu correo y un identificador de tu cuenta de Google que la propia Google nos entrega con tu permiso. No recibimos tu contraseña de Google ni accedemos a tu correo, contactos o archivos.",
               "Prueba de tu autorización: fecha y hora, versión de esta política y dirección IP desde la que la otorgaste.",
               "Tu preferencia sobre recibir correos con novedades.",
               "Datos técnicos mínimos para mantener tu sesión iniciada (una cookie de sesión).",

@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import { ArrowLeft, Download } from "lucide-react";
 import { Container } from "@/components/ui/Container";
 import { getCurrentUser, isAdmin, listSubscribers } from "@/lib/accounts";
+import { AdminDeleteButton } from "@/components/account/forms";
 
 export const metadata: Metadata = { title: "Suscriptores", robots: { index: false } };
 
@@ -31,7 +32,8 @@ export default async function SubscribersPage() {
         <h1 className="mt-3 font-display text-4xl font-bold text-silver-100">Suscriptores</h1>
         <p className="mt-2 text-sm text-silver-500">
           Datos personales protegidos por la Ley 1581: úsalos solo para las finalidades autorizadas y envía novedades
-          únicamente a quienes las aceptaron.
+          únicamente a quienes las aceptaron. Si alguien pide que borren sus datos, usa “Eliminar” (y bórralo también de
+          cualquier Excel que hayas descargado). Tienes hasta 15 días hábiles para atender la solicitud.
         </p>
 
         <div className="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-3">
@@ -59,7 +61,7 @@ export default async function SubscribersPage() {
         </div>
 
         <div className="metal-edge mt-8 overflow-x-auto rounded-2xl border border-silver-300/15 bg-ink-raised">
-          <table className="w-full min-w-[640px] text-left text-sm">
+          <table className="w-full min-w-[760px] text-left text-sm">
             <thead className="text-xs uppercase tracking-wide text-silver-500">
               <tr>
                 <th className="px-4 py-3 font-medium">Nombre</th>
@@ -67,6 +69,7 @@ export default async function SubscribersPage() {
                 <th className="px-4 py-3 font-medium">Novedades</th>
                 <th className="px-4 py-3 font-medium">Estado</th>
                 <th className="px-4 py-3 font-medium">Registro</th>
+                <th className="px-4 py-3 font-medium" aria-label="Acciones" />
               </tr>
             </thead>
             <tbody>
@@ -77,6 +80,9 @@ export default async function SubscribersPage() {
                   <td className="px-4 py-3">{s.marketingConsent ? <span className="text-mint">Sí</span> : <span className="text-silver-500">No</span>}</td>
                   <td className="px-4 py-3 text-silver-500">{s.verified ? "Activo" : "Sin confirmar"}</td>
                   <td className="px-4 py-3 text-silver-500">{fmt(s.createdAt)}</td>
+                  <td className="px-4 py-3 text-right">
+                    {s.email !== user!.email && <AdminDeleteButton email={s.email} />}
+                  </td>
                 </tr>
               ))}
             </tbody>
