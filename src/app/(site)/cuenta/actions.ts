@@ -17,7 +17,12 @@ import {
   validatePassword,
   verifyEmail,
 } from "@/lib/accounts";
-import { isMailerConfigured, sendPasswordResetEmail, sendVerificationEmail } from "@/lib/accounts/mailer";
+import {
+  isMailerConfigured,
+  sendAccountExistsEmail,
+  sendPasswordResetEmail,
+  sendVerificationEmail,
+} from "@/lib/accounts/mailer";
 
 export interface FormState {
   error?: string;
@@ -80,11 +85,26 @@ export async function register(_prev: FormState, formData: FormData): Promise<Fo
         const sent = await sendVerificationEmail(user.email, user.name, url, origin);
         if (!sent.ok) return { error: sent.error };
       }
+    } else {
+      // Already active: tell the owner by email (the page itself never reveals
+      // whether an address is registered). Rate-limited with the reset token.
+      const issued = await issuePasswordResetToken(user.email);
+      if (issued) {
+        const origin = await siteOrigin();
+        const sent = await sendAccountExistsEmail(
+          user.email,
+          user.name,
+          `${origin}/cuenta/ingresar`,
+          `${origin}/cuenta/restablecer?token=${issued.token}`,
+          origin
+        );
+        if (!sent.ok) return { error: sent.error };
+      }
     }
     // Same answer whether or not the address already had an account.
     return {
       done: true,
-      message: `Te enviamos un enlace a ${email}. Ábrelo para activar tu cuenta (revisa también spam o promociones).`,
+      message: `Te enviamos un correo a ${email} con los pasos para entrar (revisa también spam o promociones). Si ya tenías cuenta, te lo indicamos ahí.`,
     };
   } catch (error) {
     return friendly(error);

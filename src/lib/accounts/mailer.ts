@@ -58,6 +58,22 @@ export function sendVerificationEmail(to: string, name: string, url: string, ori
   });
 }
 
+/** Someone tried to sign up with an address that already has an active account. */
+export function sendAccountExistsEmail(to: string, name: string, loginUrl: string, resetUrl: string, origin: string) {
+  const intro = `Hola ${name}, alguien (probablemente tú) intentó crear una cuenta con este correo, pero ya tienes una cuenta activa en E-VIREXION. Solo ingresa con tu contraseña.`;
+  const footnote = `¿No recuerdas tu contraseña? Crea una nueva aquí (vence en 1 hora): ${resetUrl}`;
+  return send({
+    to,
+    subject: "Ya tienes una cuenta en E-VIREXION",
+    text: `${intro}
+
+Ingresar: ${loginUrl}
+
+${footnote}`,
+    html: layout(origin, "Ya tienes una cuenta", intro, "Ingresar", loginUrl, footnote),
+  });
+}
+
 export function sendPasswordResetEmail(to: string, url: string, origin: string) {
   const intro = "Recibimos una solicitud para cambiar la contraseña de tu cuenta E-VIREXION.";
   const footnote = "El enlace vence en 1 hora. Si no lo pediste, ignora este mensaje: tu contraseña no cambia.";
