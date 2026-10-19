@@ -1,11 +1,11 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { redirect } from "next/navigation";
-import { BookOpen } from "lucide-react";
+import { BookOpen, Users } from "lucide-react";
 import { Container } from "@/components/ui/Container";
 import { DeleteAccountForm, PreferencesForm } from "@/components/account/forms";
 import { logout } from "./actions";
-import { getCurrentUser } from "@/lib/accounts";
+import { getCurrentUser, isAdmin } from "@/lib/accounts";
 import { DATA_CONTROLLER, PRIVACY_POLICY_PATH } from "@/lib/legal";
 
 export const metadata: Metadata = { title: "Mi cuenta", robots: { index: false } };
@@ -31,6 +31,14 @@ export default async function AccountPage({ searchParams }: { searchParams: Prom
           >
             <BookOpen className="h-4 w-4" /> Leer la revista
           </Link>
+          {isAdmin(user) && (
+            <Link
+              href="/cuenta/suscriptores"
+              className="inline-flex items-center gap-2 rounded-full border border-electric/40 px-6 py-2.5 text-sm font-semibold text-electric"
+            >
+              <Users className="h-4 w-4" /> Suscriptores
+            </Link>
+          )}
           <form action={logout}>
             <button className="rounded-full border border-silver-300/20 px-6 py-2.5 text-sm text-silver-300 hover:text-silver-100">
               Cerrar sesión

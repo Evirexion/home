@@ -4,6 +4,7 @@ import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import {
   AccountError,
+  countVerifiedSubscribers,
   authenticate,
   createUser,
   deleteAccount,
@@ -20,6 +21,7 @@ import {
 import {
   isMailerConfigured,
   sendAccountExistsEmail,
+  sendNewSubscriberNotice,
   sendPasswordResetEmail,
   sendVerificationEmail,
 } from "@/lib/accounts/mailer";
@@ -115,10 +117,19 @@ export async function confirmEmail(_prev: FormState, formData: FormData): Promis
   const token = String(formData.get("token") ?? "");
   let ok = false;
   try {
-    const user = await verifyEmail(token);
-    if (user) {
-      await startSession(user.id);
+    const verified = await verifyEmail(token);
+    if (verified) {
+      await startSession(verified.user.id);
       ok = true;
+      if (verified.firstTime) {
+        // Best effort: a failed heads-up must never block the reader.
+        try {
+          const total = await countVerifiedSubscribers();
+          await sendNewSubscriberNotice(verified.user, total, await siteOrigin());
+        } catch (error) {
+          console.error("New-subscriber notice failed", error);
+        }
+      }
     }
   } catch (error) {
     return friendly(error);

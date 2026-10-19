@@ -58,6 +58,32 @@ export function sendVerificationEmail(to: string, name: string, url: string, ori
   });
 }
 
+/** Where new-reader notifications go. */
+export const NOTIFY_EMAIL = process.env.ACCOUNT_NOTIFY_EMAIL || "cuentas@evirexion.com";
+
+/** Internal heads-up to the team when a reader activates their account. */
+export function sendNewSubscriberNotice(
+  reader: { name: string; email: string; marketingConsent: boolean },
+  total: number,
+  origin: string
+) {
+  const when = new Date().toLocaleString("es-CO", { timeZone: "America/Bogota", dateStyle: "long", timeStyle: "short" });
+  const lines = [
+    `Nombre: ${reader.name}`,
+    `Correo: ${reader.email}`,
+    `Quiere recibir novedades: ${reader.marketingConsent ? "Sí" : "No"}`,
+    `Fecha: ${when}`,
+    `Total de lectores activos: ${total}`,
+  ];
+  const intro = lines.join(" · ");
+  return send({
+    to: NOTIFY_EMAIL,
+    subject: `Nuevo lector: ${reader.name}`,
+    text: `Un nuevo lector activó su cuenta en E-VIREXION.\n\n${lines.join("\n")}\n\nLista completa: ${origin}/cuenta/suscriptores`,
+    html: layout(origin, "Nuevo lector registrado", intro, "Ver suscriptores", `${origin}/cuenta/suscriptores`, "Aviso interno de evirexion.com."),
+  });
+}
+
 /** Someone tried to sign up with an address that already has an active account. */
 export function sendAccountExistsEmail(to: string, name: string, loginUrl: string, resetUrl: string, origin: string) {
   const intro = `Hola ${name}, alguien (probablemente tú) intentó crear una cuenta con este correo, pero ya tienes una cuenta activa en E-VIREXION. Solo ingresa con tu contraseña.`;

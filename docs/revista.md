@@ -27,3 +27,11 @@ npx wrangler kv bulk put revista-upload/revista-2026-10.json --binding PRICES_KV
 2. Convertir cada página a WebP de 1100 px de ancho y armar el JSON
    `[{ "key": "revista:<edición>:01", "value": "<base64>" }, …]`.
 3. Subirlo con el comando de arriba y agregar la edición en `src/data/editions.ts`.
+
+## Aviso de nuevos lectores y lista de suscriptores
+
+- Cuando un lector activa su cuenta por primera vez llega un aviso a
+  `cuentas@evirexion.com` (cambiable con la variable `ACCOUNT_NOTIFY_EMAIL`).
+- `/cuenta/suscriptores` muestra la lista y la descarga para Excel. Solo la ven
+  los lectores cuyos correos estén en el secreto `ADMIN_EMAILS` (separados por
+  coma): `npx wrangler secret put ADMIN_EMAILS`.

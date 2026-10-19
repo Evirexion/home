@@ -191,15 +191,18 @@ async function consumeEmailToken(token: string, purpose: "verify" | "reset"): Pr
   return row.expires_at > Date.now() ? row.user_id : null;
 }
 
-export async function verifyEmail(token: string): Promise<User | null> {
+/** Verifies the address; `firstTime` is true only the first time it's activated. */
+export async function verifyEmail(token: string): Promise<{ user: User; firstTime: boolean } | null> {
   const userId = await consumeEmailToken(token, "verify");
   if (!userId) return null;
+  const before = await findById(userId);
+  if (!before) return null;
   await (await db())
     .prepare("UPDATE users SET email_verified_at = COALESCE(email_verified_at, ?) WHERE id = ?")
     .bind(new Date().toISOString(), userId)
     .run();
   const row = await findById(userId);
-  return row ? toUser(row) : null;
+  return row ? { user: toUser(row), firstTime: !before.email_verified_at } : null;
 }
 
 // ── Login & sessions ───────────────────────────────────────────────────────
@@ -345,4 +348,58 @@ export function validatePassword(password: string): string | null {
     return "Usa al menos una letra y un número.";
   }
   return null;
+}
+
+// ── Subscriber list (admins only) ──────────────────────────────────────────
+
+export interface Subscriber {
+  name: string;
+  email: string;
+  verified: boolean;
+  marketingConsent: boolean;
+  createdAt: string;
+  verifiedAt: string | null;
+  consentVersion: string;
+}
+
+/** Admins are the readers whose emails are listed in ADMIN_EMAILS (comma-separated). */
+export function isAdmin(user: User | null): boolean {
+  if (!user) return false;
+  const admins = (process.env.ADMIN_EMAILS ?? "")
+    .split(",")
+    .map((e) => normalizeEmail(e))
+    .filter(Boolean);
+  return admins.includes(normalizeEmail(user.email));
+}
+
+export async function listSubscribers(): Promise<Subscriber[]> {
+  const { results } = await (await db())
+    .prepare(
+      `SELECT name, email, email_verified_at, marketing_consent, created_at, consent_version
+       FROM users ORDER BY created_at DESC`
+    )
+    .all<{
+      name: string;
+      email: string;
+      email_verified_at: string | null;
+      marketing_consent: number;
+      created_at: string;
+      consent_version: string;
+    }>();
+  return results.map((r) => ({
+    name: r.name,
+    email: r.email,
+    verified: Boolean(r.email_verified_at),
+    marketingConsent: r.marketing_consent === 1,
+    createdAt: r.created_at,
+    verifiedAt: r.email_verified_at,
+    consentVersion: r.consent_version,
+  }));
+}
+
+export async function countVerifiedSubscribers(): Promise<number> {
+  const row = await (await db())
+    .prepare("SELECT COUNT(*) AS n FROM users WHERE email_verified_at IS NOT NULL")
+    .first<{ n: number }>();
+  return row?.n ?? 0;
 }
