@@ -77,6 +77,7 @@ export default function PrivacyPage() {
               "Tu preferencia sobre recibir correos con novedades.",
               "Datos técnicos mínimos para mantener tu sesión iniciada (una cookie de sesión).",
               "Si nos escribes por el formulario de contacto: tu nombre, correo y mensaje.",
+              "Solo si aceptas las cookies de medición: datos de navegación seudónimos recogidos por Google Analytics (páginas visitadas, tiempo en el sitio, tipo de dispositivo y navegador, ciudad o país aproximados). No incluyen tu nombre ni tu correo.",
             ]}
           />
           <p>No solicitamos datos sensibles ni datos de niñas, niños o adolescentes.</p>
@@ -90,6 +91,7 @@ export default function PrivacyPage() {
               "Enviarte correos operativos de tu cuenta (activación, cambio de contraseña).",
               "Solo si lo autorizas: enviarte nuevas ediciones, novedades y contenidos de E-VIREXION. Puedes retirar esta autorización en cualquier momento desde tu cuenta o en el enlace de cada correo.",
               "Elaborar estadísticas agregadas y anónimas sobre la lectura de la revista.",
+              "Solo si aceptas las cookies de medición: medir el uso del sitio (qué secciones y artículos se leen, de dónde llegan los visitantes) para mejorar los contenidos. No usamos estos datos con fines publicitarios.",
               "Atender tus consultas, peticiones y reclamos, y cumplir obligaciones legales.",
             ]}
           />
@@ -130,8 +132,8 @@ export default function PrivacyPage() {
         <Section title="6. Proveedores y transferencia internacional">
           <p>
             Para operar el sitio usamos proveedores que tratan datos por nuestra cuenta y bajo nuestras instrucciones
-            (encargados): Cloudflare, Inc. (alojamiento del sitio y la base de datos de cuentas) y Resend (envío de
-            correos de la cuenta). Estos proveedores pueden almacenar o procesar la información fuera de Colombia,
+            (encargados): Cloudflare, Inc. (alojamiento del sitio y la base de datos de cuentas), Resend (envío de
+            correos de la cuenta) y Google LLC (Google Analytics, solo si aceptas las cookies de medición). Estos proveedores pueden almacenar o procesar la información fuera de Colombia,
             incluido Estados Unidos. Al aceptar esta política autorizas esa transmisión, que se hace con medidas de
             seguridad adecuadas y solo para las finalidades descritas.
           </p>
@@ -139,8 +141,15 @@ export default function PrivacyPage() {
 
         <Section title="7. Cookies">
           <p>
-            Usamos una cookie de sesión estrictamente necesaria para mantenerte conectado a tu cuenta. No usamos cookies
-            publicitarias.
+            Usamos una cookie de sesión estrictamente necesaria para mantenerte conectado a tu cuenta. No requiere tu
+            autorización porque sin ella no podrías ingresar.
+          </p>
+          <p>
+            Con tu autorización usamos además cookies de medición de Google Analytics (_ga y _ga_*), que guardan un
+            identificador aleatorio durante un máximo de dos (2) años para contar visitas y entender cómo se usa el
+            sitio. No se activan hasta que pulsas “Aceptar” en el aviso de cookies, y puedes cambiar tu decisión en
+            cualquier momento desde el enlace “Preferencias de cookies” al pie de cada página; si las rechazas, las
+            borramos de tu navegador. No usamos cookies publicitarias.
           </p>
         </Section>
 

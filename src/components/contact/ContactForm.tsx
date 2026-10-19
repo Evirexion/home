@@ -3,6 +3,7 @@
 import { useActionState, useRef, useEffect } from "react";
 import { submitContact, type ContactFormState } from "@/app/(site)/contact/actions";
 import { CONTACT_REASONS } from "@/lib/contact";
+import { track } from "@/lib/analytics";
 
 const initialState: ContactFormState = {};
 
@@ -14,7 +15,10 @@ export function ContactForm() {
   const formRef = useRef<HTMLFormElement>(null);
 
   useEffect(() => {
-    if (state.success) formRef.current?.reset();
+    if (!state.success) return;
+    const reason = new FormData(formRef.current ?? undefined).get("reason");
+    track("generate_lead", { motivo: typeof reason === "string" ? reason : "otro" });
+    formRef.current?.reset();
   }, [state.success]);
 
   return (

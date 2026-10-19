@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import { ChevronLeft, ChevronRight, Maximize2, Minimize2 } from "lucide-react";
+import { track } from "@/lib/analytics";
 
 interface PageFlipInstance {
   loadFromHTML(items: HTMLElement[]): void;
@@ -110,6 +111,18 @@ export function MagazineReader({ slug, totalPages, previewPages, canReadAll, wid
       book.remove();
     };
   }, [slug, visiblePages, canReadAll, totalPages, previewPages, width, height]);
+
+  // Analytics: which pages get read, and how many readers reach the free-preview wall.
+  const seenPages = useRef(new Set<number>());
+  useEffect(() => {
+    if (count === 0 || seenPages.current.has(current)) return;
+    seenPages.current.add(current);
+    if (!canReadAll && current >= visiblePages) {
+      track("revista_limite_gratis", { edicion: slug });
+    } else {
+      track("revista_pagina", { edicion: slug, pagina: current + 1, completa: canReadAll });
+    }
+  }, [current, count, canReadAll, visiblePages, slug]);
 
   const next = useCallback(() => flipRef.current?.flipNext(), []);
   const prev = useCallback(() => flipRef.current?.flipPrev(), []);

@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useActionState, useState } from "react";
+import { useActionState, useEffect, useState } from "react";
 import { Eye, EyeOff } from "lucide-react";
 import {
   adminDeleteSubscriber,
@@ -16,6 +16,7 @@ import {
   type FormState,
 } from "@/app/(site)/cuenta/actions";
 import { DATA_CONTROLLER, PRIVACY_POLICY_PATH } from "@/lib/legal";
+import { track } from "@/lib/analytics";
 
 const initial: FormState = {};
 
@@ -75,6 +76,9 @@ function Sent({ message }: { message?: string }) {
 
 export function RegisterForm() {
   const [state, action, pending] = useActionState(register, initial);
+  useEffect(() => {
+    if (state.done) track("sign_up", { method: "email" });
+  }, [state.done]);
   if (state.done) return <Sent message={state.message} />;
   return (
     <form action={action} className="flex flex-col gap-4">

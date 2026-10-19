@@ -4,6 +4,7 @@ import { Logo } from "@/components/ui/Logo";
 import { FacebookIcon, InstagramIcon, TikTokIcon } from "@/components/icons/SocialIcons";
 import { HologramAccent } from "@/components/ui/HologramAccent";
 import { CurrentLine } from "@/components/ui/CurrentLine";
+import { CookieSettingsLink } from "@/components/analytics/CookieSettingsLink";
 
 const SOCIAL_LINKS = [
   { href: "https://instagram.com/evirexion", label: "Instagram", Icon: InstagramIcon },
@@ -71,6 +72,7 @@ export function Footer() {
           <Link href="/privacidad" className="hover:text-electric">
             Política de Tratamiento de Datos
           </Link>
+          <CookieSettingsLink className="hover:text-electric" />
         </p>
       </Container>
     </footer>
