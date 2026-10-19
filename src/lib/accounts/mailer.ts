@@ -1,6 +1,7 @@
 /** Transactional email for reader accounts, sent with Resend's REST API. */
 
 interface Email {
+  from?: string;
   to: string;
   subject: string;
   text: string;
@@ -16,7 +17,7 @@ async function send(email: Email): Promise<{ ok: true } | { ok: false; error: st
   if (!apiKey) {
     return { ok: false, error: "El envío de correos aún no está configurado. Intenta más tarde." };
   }
-  const from = process.env.ACCOUNT_FROM_EMAIL || process.env.CONTACT_FROM_EMAIL || "E-VIREXION <onboarding@resend.dev>";
+  const from = email.from || process.env.ACCOUNT_FROM_EMAIL || process.env.CONTACT_FROM_EMAIL || "E-VIREXION <onboarding@resend.dev>";
   const response = await fetch("https://api.resend.com/emails", {
     method: "POST",
     headers: { Authorization: `Bearer ${apiKey}`, "Content-Type": "application/json" },
@@ -77,6 +78,8 @@ export function sendNewSubscriberNotice(
   ];
   const intro = lines.join(" · ");
   return send({
+    // Not from cuentas@ itself: Google Groups may drop mail that appears to come from the group.
+    from: process.env.NOTIFY_FROM_EMAIL || "E-VIREXION Web <notificaciones@evirexion.com>",
     to: NOTIFY_EMAIL,
     subject: `Nuevo lector: ${reader.name}`,
     text: `Un nuevo lector activó su cuenta en E-VIREXION.\n\n${lines.join("\n")}\n\nLista completa: ${origin}/cuenta/suscriptores`,
