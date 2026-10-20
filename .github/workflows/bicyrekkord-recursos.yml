@@ -1,0 +1,33 @@
+# Descarga las traducciones al español (es_CO) de WordPress y WooCommerce para la demo.
+# No publica nada; guarda los archivos en la rama bicyrekkord-recursos.
+name: Bicyrekkord recursos
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [bicyrekkord-web]
+    paths:
+      - '.github/workflows/bicyrekkord-recursos.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  idiomas:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Descargar paquetes de idioma
+        run: |
+          mkdir -p out/languages/plugins && cd out
+          for loc in es_CO es_ES; do
+            U=$(curl -s "https://api.wordpress.org/translations/core/1.0/?version=7.1.3" | jq -r --arg l "$loc" '.translations[] | select(.language==$l) | .package' | head -1)
+            echo "core $loc: $U"; [ -n "$U" ] && curl -sfL -o core.zip "$U" && unzip -oq core.zip -d languages && rm core.zip
+            U=$(curl -s "https://api.wordpress.org/translations/plugins/1.0/?slug=woocommerce&version=11.2.1" | jq -r --arg l "$loc" '.translations[] | select(.language==$l) | .package' | head -1)
+            echo "woo $loc: $U"; [ -n "$U" ] && curl -sfL -o woo.zip "$U" && unzip -oq woo.zip -d languages/plugins && rm woo.zip
+          done
+          ls -la languages languages/plugins | head -40
+      - name: Guardar
+        run: |
+          cd out && git init -q && git checkout -q -b bicyrekkord-recursos
+          git add -A && git -c user.name="github-actions" -c user.email="actions@github.com" commit -q -m "Traducciones es_CO/es_ES"
+          git push -q -f "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}" bicyrekkord-recursos
