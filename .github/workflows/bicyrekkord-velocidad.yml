@@ -4,6 +4,11 @@ name: Bicyrekkord velocidad
 
 on:
   workflow_dispatch:
+  push:
+    branches: [bicyrekkord-web]
+    paths:
+      - '.github/workflows/bicyrekkord-velocidad.yml'
+      - '.github/medir-velocidad.txt'
 
 permissions:
   contents: write
