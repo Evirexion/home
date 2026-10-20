@@ -23,25 +23,32 @@ jobs:
       - name: Tiempos de respuesta del servidor y encabezados
         continue-on-error: true
         run: |
+          set +e
           mkdir -p r
-          for u in https://www.bicyrekkord.com/ https://www.bicyrekkord.com/tienda/ https://www.bicyrekkord.com/producto/bornera-5-terminales/ https://www.bicyrekkord.com/wp-content/themes/ https://www.bicyrekkord.com/robots.txt; do
-            for i in 1 2 3 4 5; do
-              curl -s -o /dev/null -m 60 -w "$u\tcode=%{http_code}\tdns=%{time_namelookup}\tconnect=%{time_connect}\ttls=%{time_appconnect}\tttfb=%{time_starttransfer}\ttotal=%{time_total}\tsize=%{size_download}\n" -H 'Cache-Control: no-cache' "$u" >> r/tiempos.tsv
-              sleep 1
-            done
+          medir() { curl -s -o /dev/null -m 150 -w "$1\tcode=%{http_code}\tdns=%{time_namelookup}\tconnect=%{time_connect}\ttls=%{time_appconnect}\tttfb=%{time_starttransfer}\ttotal=%{time_total}\tsize=%{size_download}\tip=%{remote_ip}\n" "$1" >> r/tiempos.tsv; }
+          # Archivos estáticos (no pasan por WordPress) vs páginas de WordPress
+          for i in 1 2 3; do
+            medir https://www.bicyrekkord.com/wp-includes/css/dashicons.min.css
+            medir https://www.bicyrekkord.com/wp-includes/js/jquery/jquery.min.js
+            medir https://www.bicyrekkord.com/
+            medir https://www.bicyrekkord.com/tienda/
+            medir https://www.bicyrekkord.com/producto/bornera-5-terminales/
+            medir "https://www.bicyrekkord.com/?nocache=$RANDOM"
           done
-          curl -s -D r/headers-home.txt -o r/home.html -m 60 https://www.bicyrekkord.com/
-          curl -s -D r/headers-producto.txt -o r/producto.html -m 60 https://www.bicyrekkord.com/producto/bornera-5-terminales/
-          dig +short www.bicyrekkord.com > r/dns.txt; dig +short bicyrekkord.com NS >> r/dns.txt
-          for ip in $(dig +short www.bicyrekkord.com | grep -E '^[0-9.]+$' | head -2); do curl -s -m 15 "https://ipinfo.io/$ip/json" >> r/dns.txt; done
+          medir http://bicyrekkord.com/
+          curl -s -D r/headers-home.txt -o r/home.html -m 150 https://www.bicyrekkord.com/
+          curl -s -D r/headers-css.txt -o /dev/null -m 150 https://www.bicyrekkord.com/wp-includes/css/dashicons.min.css
+          (getent hosts www.bicyrekkord.com; getent hosts bicyrekkord.com) > r/dns.txt
+          for ip in $(getent hosts www.bicyrekkord.com | awk '{print $1}' | head -2); do curl -s -m 20 "https://ipinfo.io/$ip/json" >> r/dns.txt; done
+          curl -s -m 30 "https://dns.google/resolve?name=bicyrekkord.com&type=NS" >> r/dns.txt
       - name: Lighthouse (celular y computador)
         continue-on-error: true
         run: |
           for u in "https://www.bicyrekkord.com/" "https://www.bicyrekkord.com/tienda/" "https://www.bicyrekkord.com/producto/bornera-5-terminales/"; do
             n=$(echo "$u" | sed -E 's#https://www.bicyrekkord.com/##; s#/$##; s#/#-#g'); n=${n:-inicio}
-            npx --yes lighthouse@12 "$u" --quiet --only-categories=performance --output=json --output-path="r/lh-movil-$n.json" --chrome-flags="--headless=new --no-sandbox" --max-wait-for-load=90000 || true
+            npx --yes lighthouse@12 "$u" --quiet --only-categories=performance --output=json --output-path="r/lh-movil-$n.json" --chrome-flags="--headless=new --no-sandbox" --max-wait-for-load=150000 || true
           done
-          npx --yes lighthouse@12 "https://www.bicyrekkord.com/" --quiet --preset=desktop --only-categories=performance --output=json --output-path="r/lh-pc-inicio.json" --chrome-flags="--headless=new --no-sandbox" --max-wait-for-load=90000 || true
+          npx --yes lighthouse@12 "https://www.bicyrekkord.com/" --quiet --preset=desktop --only-categories=performance --output=json --output-path="r/lh-pc-inicio.json" --chrome-flags="--headless=new --no-sandbox" --max-wait-for-load=150000 || true
       - name: Guardar resultados
         run: |
           cd r && for f in lh-*.json; do [ -f "$f" ] && gzip -9 "$f"; done; cd ..
