@@ -2,11 +2,10 @@
 	"$schema": "https://unpkg.com/wrangler/config-schema.json",
 	// Sitio de demostración del nuevo bicyrekkord.com (solo archivos estáticos).
 	// WordPress + WooCommerce corren dentro del navegador del visitante (WordPress Playground).
+	// Es un Worker aparte ("bicyrekkord-dev"): no toca el Worker "e-virexion" ni el dominio evirexion.com.
+	// Se publica solo en la dirección *.workers.dev de la cuenta.
 	"name": "bicyrekkord-dev",
 	"compatibility_date": "2026-10-01",
 	"assets": { "directory": "./public" },
-	"workers_dev": true,
-	"routes": [
-		{ "pattern": "dev-bicyrekkord.evirexion.com", "custom_domain": true }
-	]
+	"workers_dev": true
 }

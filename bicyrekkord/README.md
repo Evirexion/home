@@ -19,7 +19,7 @@ git fetch origin && git checkout bicyrekkord-web && git pull
 ./bicyrekkord/dev-site/desplegar.sh
 ```
 
-La demostración queda en **https://dev-bicyrekkord.evirexion.com**. También queda en la dirección `workers.dev` que muestra Wrangler.
+La demostración queda en la dirección `bicyrekkord-dev.<subdominio>.workers.dev` de la cuenta. Se publica sola con GitHub Actions al subir cambios a la rama `bicyrekkord-web`. Necesita los secretos `CLOUDFLARE_API_TOKEN` y `CLOUDFLARE_ACCOUNT_ID` en el repositorio.
 
 - La primera carga tarda alrededor de un minuto, porque WordPress se instala dentro del navegador.
 - Cada recarga vuelve a dejar el sitio en su estado inicial.

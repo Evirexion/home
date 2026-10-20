@@ -1,5 +1,5 @@
 #!/bin/bash
-# Publica el sitio de demostración en https://dev-bicyrekkord.evirexion.com
+# Publica el sitio de demostración en bicyrekkord-dev.<subdominio>.workers.dev
 # Uso (en la Terminal del Mac):  ./bicyrekkord/dev-site/desplegar.sh
 set -e
 cd "$(dirname "$0")"
