@@ -9,7 +9,7 @@
  * Analytics only loads after the visitor accepts measurement cookies in the
  * notice (Ley 1581 / Política de Tratamiento de Datos, sección 7).
  */
-export const GA_MEASUREMENT_ID: string = process.env.NEXT_PUBLIC_GA_ID || "";
+export const GA_MEASUREMENT_ID: string = process.env.NEXT_PUBLIC_GA_ID || "G-9JTNDJ89SL";
 
 export type CookieConsent = "granted" | "denied";
 
