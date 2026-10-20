@@ -17,6 +17,8 @@ const eslintConfig = defineConfig([
     // Generated Cloudflare/OpenNext build output, not source
     ".open-next/**",
     ".wrangler/**",
+    // Sitio Bicyrekkord (WordPress/PHP), proyecto aparte
+    "bicyrekkord/**",
   ]),
 ]);
 

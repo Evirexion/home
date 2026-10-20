@@ -1,0 +1,12 @@
+{
+	"$schema": "https://unpkg.com/wrangler/config-schema.json",
+	// Sitio de demostración del nuevo bicyrekkord.com (solo archivos estáticos).
+	// WordPress + WooCommerce corren dentro del navegador del visitante (WordPress Playground).
+	"name": "bicyrekkord-dev",
+	"compatibility_date": "2026-10-01",
+	"assets": { "directory": "./public" },
+	"workers_dev": true,
+	"routes": [
+		{ "pattern": "dev-bicyrekkord.evirexion.com", "custom_domain": true }
+	]
+}

@@ -1,0 +1,34 @@
+/* BRK Operaciones — estilos base (el tema Bicyrekkord los complementa) */
+.brk-tipo-cuenta,.brk-fe-pregunta{border:0;padding:0;margin:0 0 18px;display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px}
+.brk-tipo-cuenta legend,.brk-fe-pregunta legend{font-weight:700;margin-bottom:10px;padding:0}
+.brk-opcion{display:flex;gap:10px;align-items:flex-start;border:1.5px solid #D5DBD7;border-radius:12px;padding:14px;cursor:pointer;background:#fff}
+.brk-opcion:has(input:checked){border-color:#00BF1A;box-shadow:0 0 0 3px rgba(0,191,26,.18)}
+.brk-opcion input{margin-top:3px;accent-color:#00BF1A}
+.brk-opcion small{display:block;color:#5F6A63;font-size:12px;margin-top:2px}
+.brk-fila{display:flex;gap:12px;flex-wrap:wrap}.brk-fila>.form-row{flex:1 1 200px;float:none;width:auto}
+.brk-taller[hidden],.brk-fe-datos[hidden]{display:none!important}
+.brk-taller{border-left:3px solid #00BF1A;padding-left:14px;margin:6px 0 16px}
+.brk-nota{font-size:13px;color:#4A544D;margin:4px 0 10px}
+.brk-verificacion{font-size:13px;font-weight:600;border-radius:10px;margin:4px 0 10px}
+.brk-verificacion.is-ok{background:#E7F8EA;color:#0B5A16;padding:10px 12px}
+.brk-verificacion.is-nuevo{background:#FFF6E0;color:#6B4A00;padding:10px 12px}
+.brk-fe{margin-top:24px}
+.brk-track{list-style:none;margin:16px 0;padding:0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));position:relative}
+.brk-track li{position:relative;padding-top:30px;text-align:left}
+.brk-track li::before{content:"";position:absolute;top:10px;left:0;right:0;height:4px;background:#E3E8E4}
+.brk-track li.hecho::before,.brk-track li.actual::before{background:#00BF1A}
+.brk-track li.actual::before{background:linear-gradient(90deg,#00BF1A 50%,#E3E8E4 50%)}
+.brk-track__punto{position:absolute;top:2px;left:0;width:20px;height:20px;border-radius:50%;background:#E3E8E4;border:3px solid #fff;box-shadow:0 0 0 1px #D5DBD7;z-index:1}
+.brk-track li.hecho .brk-track__punto,.brk-track li.actual .brk-track__punto{background:#00BF1A;box-shadow:0 0 0 1px #00BF1A}
+.brk-track li.actual .brk-track__punto{box-shadow:0 0 0 4px rgba(0,191,26,.25);animation:brkpulso 1.6s ease-in-out infinite}
+@keyframes brkpulso{50%{box-shadow:0 0 0 8px rgba(0,191,26,.08)}}
+.brk-track__txt{display:flex;flex-direction:column;gap:2px;padding-right:10px;font-size:14px}
+.brk-track__txt small{color:#5F6A63;font-size:12px;line-height:1.35}
+.brk-track li.pendiente .brk-track__txt{color:#8A938D}
+.brk-track__fecha{color:#0B7D1C!important;font-weight:600}
+.brk-guia{background:#F3F5F3;border-radius:10px;padding:10px 14px;font-size:14px}
+.brk-cuenta-tipo{background:#0B0D0C;color:#fff;border-radius:14px;padding:14px 18px;margin-bottom:18px}
+.brk-cuenta-tipo small{color:#C9D0CB}
+.brk-seguimiento,.brk-ultimo{margin-bottom:28px}
+@media (max-width:600px){.brk-track{grid-template-columns:1fr;gap:4px}.brk-track li{padding:0 0 14px 34px}.brk-track li::before{top:0;bottom:0;left:8px;right:auto;width:4px;height:auto}.brk-track li.actual::before{background:linear-gradient(180deg,#00BF1A 50%,#E3E8E4 50%)}.brk-track__punto{top:0}}
+@media (prefers-reduced-motion:reduce){.brk-track li.actual .brk-track__punto{animation:none}}

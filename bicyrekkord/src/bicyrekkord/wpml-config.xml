@@ -1,0 +1,14 @@
+<wpml-config>
+	<admin-texts>
+		<key name="theme_mods_bicyrekkord">
+			<key name="brk_topbar" />
+			<key name="brk_topbar2" />
+			<key name="brk_hero_eyebrow" />
+			<key name="brk_hero_t1" />
+			<key name="brk_hero_t2" />
+			<key name="brk_hero_texto" />
+			<key name="brk_marquee" />
+			<key name="brk_horario" />
+		</key>
+	</admin-texts>
+</wpml-config>
