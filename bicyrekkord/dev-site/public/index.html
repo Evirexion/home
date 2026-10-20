@@ -1,137 +1,450 @@
 <!doctype html>
-<html lang="es">
+<html lang="es-CO">
 <head>
-<meta charset="utf-8">
+<meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="robots" content="noindex, nofollow">
-<title>Bicyrekkord — sitio de demostración</title>
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='44' fill='%230B0D0C' stroke='%2300BF1A' stroke-width='8'/%3E%3Cpath d='M38 22h14l-6 24 18-24h18L60 50l14 22-24 8 8-16-12-8-6 18H32z' fill='%23fff'/%3E%3C/svg%3E">
-<style>
-:root{--n:#0B0D0C;--v:#00BF1A;--g:#9AA39D}
-*{box-sizing:border-box}
-html,body{margin:0;height:100%;background:var(--n);color:#fff;font-family:Montserrat,system-ui,-apple-system,"Segoe UI",sans-serif}
-.bar{height:56px;display:flex;align-items:center;gap:12px;padding:0 14px;border-bottom:1px solid rgba(255,255,255,.1);overflow-x:auto;white-space:nowrap}
-.marca{display:flex;align-items:center;gap:10px;font-weight:800;font-size:14px;margin-right:6px}
-.marca small{display:block;font-weight:600;font-size:11px;color:var(--g)}
-.tag{font-size:10px;font-weight:800;letter-spacing:.12em;background:var(--v);color:var(--n);padding:3px 7px;border-radius:5px}
-.bar button{font:inherit;font-size:13px;font-weight:700;color:#fff;background:transparent;border:1px solid rgba(255,255,255,.18);border-radius:999px;padding:0 14px;min-height:36px;cursor:pointer}
-.bar button:hover{border-color:var(--v);color:var(--v)}
-.bar button.prim{background:var(--v);color:var(--n);border-color:var(--v)}
-.sp{flex:1}
-#wp{display:block;width:100%;height:calc(100% - 56px);border:0;background:#fff}
-.carga{position:fixed;inset:56px 0 0 0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:22px;background:var(--n);z-index:5;text-align:center;padding:24px}
-.carga[hidden]{display:none}
-.carga svg{width:160px;height:160px}
-.carga .ring{stroke-dasharray:1571;stroke-dashoffset:1571;transition:stroke-dashoffset .6s ease}
-.carga h1{margin:0;font-size:22px}
-.carga p{margin:0;color:var(--g);font-size:14px;max-width:460px;line-height:1.5}
-.pct{font-size:40px;font-weight:900;font-style:italic}
-dialog{border:0;border-radius:18px;padding:24px;max-width:460px;width:calc(100% - 32px);background:#141815;color:#fff}
-dialog::backdrop{background:rgba(0,0,0,.6)}
-dialog h2{margin:0 0 12px;font-size:18px}
-dialog table{width:100%;border-collapse:collapse;font-size:14px}
-dialog td{padding:8px 4px;border-bottom:1px solid rgba(255,255,255,.08)}
-dialog code{color:var(--v);font-size:13px}
-dialog p{color:var(--g);font-size:13px;line-height:1.5}
-.err{color:#ff8a80}
+<meta name="theme-color" content="#0B0D0C">
+<title>Bicyrekkord &#8211; Repuestos para vehículos eléctricos de dos ruedas</title>
+<meta name='robots' content='max-image-preview:large' />
+
+<link rel="preload" href="/wp-content/themes/bicyrekkord/assets/fonts/barlow-condensed-latin-900-italic.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/wp-content/themes/bicyrekkord/assets/fonts/montserrat-latin-600-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="alternate" title="oEmbed (JSON)" type="application/json+oembed" href="/wp-json/oembed/1.0/embed?url=http%3A%2F%2F127.0.0.1%3A9401%2F" />
+<link rel="alternate" title="oEmbed (XML)" type="text/xml+oembed" href="/wp-json/oembed/1.0/embed?url=http%3A%2F%2F127.0.0.1%3A9401%2F&#038;format=xml" />
+<style id="wp-img-auto-sizes-contain-inline-css">
+img:is([sizes=auto i],[sizes^="auto," i]){contain-intrinsic-size:3000px 1500px}
+/*# sourceURL=wp-img-auto-sizes-contain-inline-css */
 </style>
-</head>
-<body>
-<div class="bar" role="toolbar" aria-label="Navegación de la demostración">
-	<div class="marca"><span class="tag">DEMO</span><span>Bicyrekkord<small>WordPress + WooCommerce</small></span></div>
-	<button data-ir="/">Inicio</button>
-	<button data-ir="/tienda/">Tienda</button>
-	<button data-ir="/mi-cuenta/">Crear cuenta / Mi cuenta</button>
-	<button data-ir="/wp-admin/admin.php?page=brk-pedidos" class="prim">Panel de pedidos</button>
-	<button data-ir="/wp-admin/admin.php?page=brk-demo-correos">Correos enviados</button>
-	<span class="sp"></span>
-	<button id="accesos">Accesos de prueba</button>
+<style id="wp-emoji-styles-inline-css">
+
+	img.wp-smiley, img.emoji {
+		display: inline !important;
+		border: none !important;
+		box-shadow: none !important;
+		height: 1em !important;
+		width: 1em !important;
+		margin: 0 0.07em !important;
+		vertical-align: -0.1em !important;
+		background: none !important;
+		padding: 0 !important;
+	}
+/*# sourceURL=wp-emoji-styles-inline-css */
+</style>
+<style id="wp-block-library-inline-css">
+:root{--wp-block-synced-color:#7a00df;--wp-block-synced-color--rgb:122,0,223;--wp-bound-block-color:var(--wp-block-synced-color);--wp-editor-canvas-background:#ddd;--wp-admin-theme-color:#007cba;--wp-admin-theme-color--rgb:0,124,186;--wp-admin-theme-color-darker-10:#006ba1;--wp-admin-theme-color-darker-10--rgb:0,107,160.5;--wp-admin-theme-color-darker-20:#005a87;--wp-admin-theme-color-darker-20--rgb:0,90,135;--wp-admin-border-width-focus:2px}@media (min-resolution:192dpi){:root{--wp-admin-border-width-focus:1.5px}}.wp-element-button{cursor:pointer}:root .has-very-light-gray-background-color{background-color:#eee}:root .has-very-dark-gray-background-color{background-color:#313131}:root .has-very-light-gray-color{color:#eee}:root .has-very-dark-gray-color{color:#313131}:root .has-vivid-green-cyan-to-vivid-cyan-blue-gradient-background{background:linear-gradient(135deg,#00d084,#0693e3)}:root .has-purple-crush-gradient-background{background:linear-gradient(135deg,#34e2e4,#4721fb 50%,#ab1dfe)}:root .has-hazy-dawn-gradient-background{background:linear-gradient(135deg,#faaca8,#dad0ec)}:root .has-subdued-olive-gradient-background{background:linear-gradient(135deg,#fafae1,#67a671)}:root .has-atomic-cream-gradient-background{background:linear-gradient(135deg,#fdd79a,#004a59)}:root .has-nightshade-gradient-background{background:linear-gradient(135deg,#330968,#31cdcf)}:root .has-midnight-gradient-background{background:linear-gradient(135deg,#020381,#2874fc)}:root{--wp--preset--font-size--normal:16px;--wp--preset--font-size--huge:42px}.has-regular-font-size{font-size:1em}.has-larger-font-size{font-size:2.625em}.has-normal-font-size{font-size:var(--wp--preset--font-size--normal)}.has-huge-font-size{font-size:var(--wp--preset--font-size--huge)}:root .has-text-align-center{text-align:center}:root .has-text-align-left{text-align:left}:root .has-text-align-right{text-align:right}.has-fit-text{white-space:nowrap!important}#end-resizable-editor-section{display:none}.aligncenter{clear:both}.items-justified-left{justify-content:flex-start}.items-justified-center{justify-content:center}.items-justified-right{justify-content:flex-end}.items-justified-space-between{justify-content:space-between}.screen-reader-text{word-wrap:normal!important;border:0;clip-path:inset(50%);height:1px;margin:-1px;overflow:hidden;padding:0;position:absolute;width:1px;word-break:normal!important}.screen-reader-text:focus{background-color:#ddd;clip-path:none;color:#444;display:block;font-size:1em;height:auto;left:5px;line-height:normal;padding:15px 23px 14px;text-decoration:none;top:5px;width:auto;z-index:100000}html :where(.has-border-color){border-style:solid}html :where([style^=border-color],[style*=";border-color"],[style*="; border-color"]){border-style:solid}html :where([style^=border-top-color],[style*=";border-top-color"],[style*="; border-top-color"]){border-top-style:solid}html :where([style^=border-right-color],[style*=";border-right-color"],[style*="; border-right-color"]){border-right-style:solid}html :where([style^=border-bottom-color],[style*=";border-bottom-color"],[style*="; border-bottom-color"]){border-bottom-style:solid}html :where([style^=border-left-color],[style*=";border-left-color"],[style*="; border-left-color"]){border-left-style:solid}html :where([style^=border-width],[style*=";border-width"],[style*="; border-width"]){border-style:solid}html :where([style^=border-top-width],[style*=";border-top-width"],[style*="; border-top-width"]){border-top-style:solid}html :where([style^=border-right-width],[style*=";border-right-width"],[style*="; border-right-width"]){border-right-style:solid}html :where([style^=border-bottom-width],[style*=";border-bottom-width"],[style*="; border-bottom-width"]){border-bottom-style:solid}html :where([style^=border-left-width],[style*=";border-left-width"],[style*="; border-left-width"]){border-left-style:solid}html :where(img[class*=wp-image-]){height:auto;max-width:100%}:where(figure){margin:0 0 1em}html :where(.is-position-sticky){--wp-admin--admin-bar--position-offset:var(--wp-admin--admin-bar--height,0px)}@media screen and (max-width:600px){html :where(.is-position-sticky){--wp-admin--admin-bar--position-offset:0px}}
+
+/*# sourceURL=/wp-includes/css/dist/block-library/common.min.css */
+</style>
+<style id="classic-theme-styles-inline-css">
+/*! This file is auto-generated */
+.wp-block-button__link{color:#fff;background-color:#32373c;border-radius:9999px;box-shadow:none;text-decoration:none;padding:calc(.667em + 2px) calc(1.333em + 2px);font-size:1.125em}.wp-block-file__button{background:#32373c;color:#fff;text-decoration:none}
+/*# sourceURL=/wp-includes/css/classic-themes.min.css */
+</style>
+
+<style id="global-styles-inline-css">
+:root{--wp--preset--aspect-ratio--square: 1;--wp--preset--aspect-ratio--4-3: 4/3;--wp--preset--aspect-ratio--3-4: 3/4;--wp--preset--aspect-ratio--3-2: 3/2;--wp--preset--aspect-ratio--2-3: 2/3;--wp--preset--aspect-ratio--16-9: 16/9;--wp--preset--aspect-ratio--9-16: 9/16;--wp--preset--color--black: #000000;--wp--preset--color--cyan-bluish-gray: #abb8c3;--wp--preset--color--white: #ffffff;--wp--preset--color--pale-pink: #f78da7;--wp--preset--color--vivid-red: #cf2e2e;--wp--preset--color--luminous-vivid-orange: #ff6900;--wp--preset--color--luminous-vivid-amber: #fcb900;--wp--preset--color--light-green-cyan: #7bdcb5;--wp--preset--color--vivid-green-cyan: #00d084;--wp--preset--color--pale-cyan-blue: #8ed1fc;--wp--preset--color--vivid-cyan-blue: #0693e3;--wp--preset--color--vivid-purple: #9b51e0;--wp--preset--gradient--vivid-cyan-blue-to-vivid-purple: linear-gradient(135deg,rgb(6,147,227) 0%,rgb(155,81,224) 100%);--wp--preset--gradient--light-green-cyan-to-vivid-green-cyan: linear-gradient(135deg,rgb(122,220,180) 0%,rgb(0,208,130) 100%);--wp--preset--gradient--luminous-vivid-amber-to-luminous-vivid-orange: linear-gradient(135deg,rgb(252,185,0) 0%,rgb(255,105,0) 100%);--wp--preset--gradient--luminous-vivid-orange-to-vivid-red: linear-gradient(135deg,rgb(255,105,0) 0%,rgb(207,46,46) 100%);--wp--preset--gradient--very-light-gray-to-cyan-bluish-gray: linear-gradient(135deg,rgb(238,238,238) 0%,rgb(169,184,195) 100%);--wp--preset--gradient--cool-to-warm-spectrum: linear-gradient(135deg,rgb(74,234,220) 0%,rgb(151,120,209) 20%,rgb(207,42,186) 40%,rgb(238,44,130) 60%,rgb(251,105,98) 80%,rgb(254,248,76) 100%);--wp--preset--gradient--blush-light-purple: linear-gradient(135deg,rgb(255,206,236) 0%,rgb(152,150,240) 100%);--wp--preset--gradient--blush-bordeaux: linear-gradient(135deg,rgb(254,205,165) 0%,rgb(254,45,45) 50%,rgb(107,0,62) 100%);--wp--preset--gradient--luminous-dusk: linear-gradient(135deg,rgb(255,203,112) 0%,rgb(199,81,192) 50%,rgb(65,88,208) 100%);--wp--preset--gradient--pale-ocean: linear-gradient(135deg,rgb(255,245,203) 0%,rgb(182,227,212) 50%,rgb(51,167,181) 100%);--wp--preset--gradient--electric-grass: linear-gradient(135deg,rgb(202,248,128) 0%,rgb(113,206,126) 100%);--wp--preset--gradient--midnight: linear-gradient(135deg,rgb(2,3,129) 0%,rgb(40,116,252) 100%);--wp--preset--font-size--small: 13px;--wp--preset--font-size--medium: 20px;--wp--preset--font-size--large: 36px;--wp--preset--font-size--x-large: 42px;--wp--preset--spacing--20: 0.44rem;--wp--preset--spacing--30: 0.67rem;--wp--preset--spacing--40: 1rem;--wp--preset--spacing--50: 1.5rem;--wp--preset--spacing--60: 2.25rem;--wp--preset--spacing--70: 3.38rem;--wp--preset--spacing--80: 5.06rem;--wp--preset--shadow--natural: 6px 6px 9px rgba(0, 0, 0, 0.2);--wp--preset--shadow--deep: 12px 12px 50px rgba(0, 0, 0, 0.4);--wp--preset--shadow--sharp: 6px 6px 0px rgba(0, 0, 0, 0.2);--wp--preset--shadow--outlined: 6px 6px 0px -3px rgb(255, 255, 255), 6px 6px rgb(0, 0, 0);--wp--preset--shadow--crisp: 6px 6px 0px rgb(0, 0, 0);}.wp-block-button{--wp--preset--dimension--25: 25%;--wp--preset--dimension--50: 50%;--wp--preset--dimension--75: 75%;--wp--preset--dimension--100: 100%;}:where(body) { margin: 0; }:where(.is-layout-flex){gap: 0.5em;}:where(.is-layout-grid){gap: 0.5em;}body .is-layout-flex{display: flex;}.is-layout-flex{flex-wrap: wrap;align-items: center;}.is-layout-flex > :is(*, div){margin: 0;}body .is-layout-grid{display: grid;}.is-layout-grid > :is(*, div){margin: 0;}body{padding-top: 0px;padding-right: 0px;padding-bottom: 0px;padding-left: 0px;}:root :where(.wp-element-button, .wp-block-button__link){background-color: #32373c;border-width: 0;color: #fff;font-family: inherit;font-size: inherit;font-style: inherit;font-weight: inherit;letter-spacing: inherit;line-height: inherit;padding-top: calc(0.667em + 2px);padding-right: calc(1.333em + 2px);padding-bottom: calc(0.667em + 2px);padding-left: calc(1.333em + 2px);text-decoration: none;text-transform: inherit;}.has-black-color{color: var(--wp--preset--color--black) !important;}.has-cyan-bluish-gray-color{color: var(--wp--preset--color--cyan-bluish-gray) !important;}.has-white-color{color: var(--wp--preset--color--white) !important;}.has-pale-pink-color{color: var(--wp--preset--color--pale-pink) !important;}.has-vivid-red-color{color: var(--wp--preset--color--vivid-red) !important;}.has-luminous-vivid-orange-color{color: var(--wp--preset--color--luminous-vivid-orange) !important;}.has-luminous-vivid-amber-color{color: var(--wp--preset--color--luminous-vivid-amber) !important;}.has-light-green-cyan-color{color: var(--wp--preset--color--light-green-cyan) !important;}.has-vivid-green-cyan-color{color: var(--wp--preset--color--vivid-green-cyan) !important;}.has-pale-cyan-blue-color{color: var(--wp--preset--color--pale-cyan-blue) !important;}.has-vivid-cyan-blue-color{color: var(--wp--preset--color--vivid-cyan-blue) !important;}.has-vivid-purple-color{color: var(--wp--preset--color--vivid-purple) !important;}.has-black-background-color{background-color: var(--wp--preset--color--black) !important;}.has-cyan-bluish-gray-background-color{background-color: var(--wp--preset--color--cyan-bluish-gray) !important;}.has-white-background-color{background-color: var(--wp--preset--color--white) !important;}.has-pale-pink-background-color{background-color: var(--wp--preset--color--pale-pink) !important;}.has-vivid-red-background-color{background-color: var(--wp--preset--color--vivid-red) !important;}.has-luminous-vivid-orange-background-color{background-color: var(--wp--preset--color--luminous-vivid-orange) !important;}.has-luminous-vivid-amber-background-color{background-color: var(--wp--preset--color--luminous-vivid-amber) !important;}.has-light-green-cyan-background-color{background-color: var(--wp--preset--color--light-green-cyan) !important;}.has-vivid-green-cyan-background-color{background-color: var(--wp--preset--color--vivid-green-cyan) !important;}.has-pale-cyan-blue-background-color{background-color: var(--wp--preset--color--pale-cyan-blue) !important;}.has-vivid-cyan-blue-background-color{background-color: var(--wp--preset--color--vivid-cyan-blue) !important;}.has-vivid-purple-background-color{background-color: var(--wp--preset--color--vivid-purple) !important;}.has-black-border-color{border-color: var(--wp--preset--color--black) !important;}.has-cyan-bluish-gray-border-color{border-color: var(--wp--preset--color--cyan-bluish-gray) !important;}.has-white-border-color{border-color: var(--wp--preset--color--white) !important;}.has-pale-pink-border-color{border-color: var(--wp--preset--color--pale-pink) !important;}.has-vivid-red-border-color{border-color: var(--wp--preset--color--vivid-red) !important;}.has-luminous-vivid-orange-border-color{border-color: var(--wp--preset--color--luminous-vivid-orange) !important;}.has-luminous-vivid-amber-border-color{border-color: var(--wp--preset--color--luminous-vivid-amber) !important;}.has-light-green-cyan-border-color{border-color: var(--wp--preset--color--light-green-cyan) !important;}.has-vivid-green-cyan-border-color{border-color: var(--wp--preset--color--vivid-green-cyan) !important;}.has-pale-cyan-blue-border-color{border-color: var(--wp--preset--color--pale-cyan-blue) !important;}.has-vivid-cyan-blue-border-color{border-color: var(--wp--preset--color--vivid-cyan-blue) !important;}.has-vivid-purple-border-color{border-color: var(--wp--preset--color--vivid-purple) !important;}.has-vivid-cyan-blue-to-vivid-purple-gradient-background{background: var(--wp--preset--gradient--vivid-cyan-blue-to-vivid-purple) !important;}.has-light-green-cyan-to-vivid-green-cyan-gradient-background{background: var(--wp--preset--gradient--light-green-cyan-to-vivid-green-cyan) !important;}.has-luminous-vivid-amber-to-luminous-vivid-orange-gradient-background{background: var(--wp--preset--gradient--luminous-vivid-amber-to-luminous-vivid-orange) !important;}.has-luminous-vivid-orange-to-vivid-red-gradient-background{background: var(--wp--preset--gradient--luminous-vivid-orange-to-vivid-red) !important;}.has-very-light-gray-to-cyan-bluish-gray-gradient-background{background: var(--wp--preset--gradient--very-light-gray-to-cyan-bluish-gray) !important;}.has-cool-to-warm-spectrum-gradient-background{background: var(--wp--preset--gradient--cool-to-warm-spectrum) !important;}.has-blush-light-purple-gradient-background{background: var(--wp--preset--gradient--blush-light-purple) !important;}.has-blush-bordeaux-gradient-background{background: var(--wp--preset--gradient--blush-bordeaux) !important;}.has-luminous-dusk-gradient-background{background: var(--wp--preset--gradient--luminous-dusk) !important;}.has-pale-ocean-gradient-background{background: var(--wp--preset--gradient--pale-ocean) !important;}.has-electric-grass-gradient-background{background: var(--wp--preset--gradient--electric-grass) !important;}.has-midnight-gradient-background{background: var(--wp--preset--gradient--midnight) !important;}.has-small-font-size{font-size: var(--wp--preset--font-size--small) !important;}.has-medium-font-size{font-size: var(--wp--preset--font-size--medium) !important;}.has-large-font-size{font-size: var(--wp--preset--font-size--large) !important;}.has-x-large-font-size{font-size: var(--wp--preset--font-size--x-large) !important;}
+/*# sourceURL=global-styles-inline-css */
+</style>
+
+<link rel='stylesheet' id='woocommerce-layout-css' href='/wp-content/plugins/woocommerce/assets/css/woocommerce-layout.css?ver=11.2.1' media='all' />
+<link rel='stylesheet' id='woocommerce-smallscreen-css' href='/wp-content/plugins/woocommerce/assets/css/woocommerce-smallscreen.css?ver=11.2.1' media='only screen and (max-width: 768px)' />
+<link rel='stylesheet' id='woocommerce-general-css' href='/wp-content/plugins/woocommerce/assets/css/woocommerce.css?ver=11.2.1' media='all' />
+<style id="woocommerce-inline-inline-css">
+.woocommerce form .form-row .required { visibility: visible; }
+/*# sourceURL=woocommerce-inline-inline-css */
+</style>
+<link rel='stylesheet' id='brk-fonts-css' href='/wp-content/themes/bicyrekkord/assets/css/fonts.css?ver=1.0.0' media='all' />
+<link rel='stylesheet' id='brk-theme-css' href='/wp-content/themes/bicyrekkord/assets/css/theme.css?ver=1.0.0' media='all' />
+<script id="jquery-core-js" src="/wp-includes/js/jquery/jquery.min.js?ver=3.7.1"></script>
+<script id="jquery-migrate-js" src="/wp-includes/js/jquery/jquery-migrate.min.js?ver=3.4.1"></script>
+<script data-wp-strategy="defer" defer id="wc-jquery-blockui-js" src="/wp-content/plugins/woocommerce/assets/js/jquery-blockui/jquery.blockUI.min.js?ver=2.7.0-wc.11.2.1"></script>
+<script id="wc-add-to-cart-js-extra">
+var wc_add_to_cart_params = {"ajax_url":"/wp-admin/admin-ajax.php","wc_ajax_url":"/?wc-ajax=%%endpoint%%","i18n_view_cart":"Ver carrito","cart_url":"/carrito/","is_cart":"","cart_redirect_after_add":"no"};
+//# sourceURL=wc-add-to-cart-js-extra
+</script>
+<script data-wp-strategy="defer" defer id="wc-add-to-cart-js" src="/wp-content/plugins/woocommerce/assets/js/frontend/add-to-cart.min.js?ver=11.2.1"></script>
+<script data-wp-strategy="defer" defer id="wc-js-cookie-js" src="/wp-content/plugins/woocommerce/assets/js/js-cookie/js.cookie.min.js?ver=2.1.4-wc.11.2.1"></script>
+<script id="woocommerce-js-extra">
+var woocommerce_params = {"ajax_url":"/wp-admin/admin-ajax.php","wc_ajax_url":"/?wc-ajax=%%endpoint%%","i18n_password_show":"Mostrar contrase\u00f1a","i18n_password_hide":"Ocultar contrase\u00f1a"};
+//# sourceURL=woocommerce-js-extra
+</script>
+<script data-wp-strategy="defer" defer id="woocommerce-js" src="/wp-content/plugins/woocommerce/assets/js/frontend/woocommerce.min.js?ver=11.2.1"></script>
+<link rel="https://api.w.org/" href="/wp-json/" /><link rel="alternate" title="JSON" type="application/json" href="/wp-json/wp/v2/pages/78" /><link rel="EditURI" type="application/rsd+xml" title="RSD" href="/xmlrpc.php?rsd" />
+<meta name="generator" content="WordPress 7.1.3" />
+<meta name="generator" content="WooCommerce 11.2.1" />
+<link rel="canonical" href="/" />
+<link rel='shortlink' href='/' />
+	<noscript><style>.woocommerce-product-gallery{ opacity: 1 !important; }</style></noscript>
+	<link rel="preconnect" href="https://playground.wordpress.net"><script src="/demo-rapida.js" defer></script></head>
+<body class="home wp-singular page-template-default page page-id-78 wp-theme-bicyrekkord theme-bicyrekkord woocommerce-no-js">
+<a class="skip-link screen-reader-text" href="#contenido">Saltar al contenido</a>
+
+<div class="brk-topbar">
+	<div class="brk-wrap">
+		<svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2 4 14h7l-1 8 9-12h-7l1-8z" fill="currentColor" stroke="none"/></svg>		<span>Envío GRATIS por compras a partir de $99.900</span>
+		<span class="brk-desk" aria-hidden="true">|</span>
+		<span class="brk-desk brk-topbar__2">Envíos a nivel nacional y global</span>
+	</div>
 </div>
 
-<div class="carga" id="carga">
-	<svg viewBox="0 0 600 600" aria-hidden="true"><circle cx="300" cy="300" r="250" fill="none" stroke="rgba(255,255,255,.08)" stroke-width="22"/><circle class="ring" id="ring" cx="300" cy="300" r="250" fill="none" stroke="#00BF1A" stroke-width="22" stroke-linecap="round" transform="rotate(-90 300 300)"/></svg>
-	<div class="pct"><span id="pct">0</span>%</div>
-	<h1 id="paso">Cargando WordPress en tu navegador…</h1>
-	<p>Este sitio de prueba corre completo dentro de tu navegador: WordPress, WooCommerce, el tema nuevo y el plugin de operaciones. La primera carga tarda alrededor de un minuto. Cada vez que recargas la página, el sitio vuelve a su estado inicial.</p>
-</div>
+<header class="brk-header" id="brk-header">
+	<div class="brk-wrap brk-header__row">
+		<a class="brk-brand" href="/" aria-label="Bicyrekkord — inicio">
+			<svg class="brk-iso" aria-hidden="true" width="46" height="46" viewBox="440 50 440 420"><circle class="brk-iso__ring" cx="644.5" cy="266" r="184.5" fill="none" stroke="#00BF1A" stroke-width="20" transform="rotate(-90 644.5 266)"/><path d="M627.7 453.8C653.3 421.8 686.0 379.3 685.8 378.4C685.5 377.1 628.1 307.2 625.8 305.2C624.8 304.5 620.4 306.6 609.0 313.2C600.5 318.2 593.3 322.4 593.1 322.6C592.9 322.8 589.7 335.5 586.0 350.7L579.2 378.5L531.1 378.8C492.2 379.0 483.0 378.8 483.0 377.7C483.0 376.6 500.3 305.7 547.7 113.2L559.3 66.0L607.7 66.0C653.4 66.0 656.1 66.1 655.6 67.8C655.1 69.5 628.7 177.5 618.9 218.0C616.2 229.3 613.7 239.2 613.4 240.0C613.0 241.2 613.1 241.3 614.2 240.2C614.9 239.5 630.1 219.5 648.0 195.7L680.5 152.5L755.0 152.3C796.0 152.1 835.2 152.4 842.2 152.8L855.0 153.5L843.2 162.5C823.7 177.4 714.7 261.1 711.3 263.9C709.5 265.3 708.0 266.9 708.0 267.3C708.0 267.8 713.3 274.5 719.8 282.3C765.4 337.1 799.2 378.2 798.9 378.5C798.7 378.6 773.8 389.8 743.5 403.3C713.2 416.8 675.7 433.5 660.0 440.5C626.6 455.4 626.3 455.5 627.7 453.8Z" fill="#0B0D0C" stroke="#0B0D0C" stroke-width="26" stroke-linejoin="round"/><path d="M627.7 453.8C653.3 421.8 686.0 379.3 685.8 378.4C685.5 377.1 628.1 307.2 625.8 305.2C624.8 304.5 620.4 306.6 609.0 313.2C600.5 318.2 593.3 322.4 593.1 322.6C592.9 322.8 589.7 335.5 586.0 350.7L579.2 378.5L531.1 378.8C492.2 379.0 483.0 378.8 483.0 377.7C483.0 376.6 500.3 305.7 547.7 113.2L559.3 66.0L607.7 66.0C653.4 66.0 656.1 66.1 655.6 67.8C655.1 69.5 628.7 177.5 618.9 218.0C616.2 229.3 613.7 239.2 613.4 240.0C613.0 241.2 613.1 241.3 614.2 240.2C614.9 239.5 630.1 219.5 648.0 195.7L680.5 152.5L755.0 152.3C796.0 152.1 835.2 152.4 842.2 152.8L855.0 153.5L843.2 162.5C823.7 177.4 714.7 261.1 711.3 263.9C709.5 265.3 708.0 266.9 708.0 267.3C708.0 267.8 713.3 274.5 719.8 282.3C765.4 337.1 799.2 378.2 798.9 378.5C798.7 378.6 773.8 389.8 743.5 403.3C713.2 416.8 675.7 433.5 660.0 440.5C626.6 455.4 626.3 455.5 627.7 453.8Z" fill="#fff"/></svg>			<img src="/wp-content/themes/bicyrekkord/assets/img/wordmark-light.svg" alt="" width="190" height="24">
+		</a>
+		<nav class="brk-nav" aria-label="Principal" id="brk-nav">
+			<ul id="menu-principal" class="brk-menu"><li id="menu-item-93" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-home current-menu-item page_item page-item-78 current_page_item menu-item-93"><a href="/" aria-current="page">Inicio</a></li>
+<li id="menu-item-94" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-94"><a href="/tienda/">Tienda</a></li>
+<li id="menu-item-95" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-95"><a href="/eres-en-taller/">¿Eres taller?</a></li>
+<li id="menu-item-96" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-96"><a href="/talleres-autorizados/">Talleres autorizados</a></li>
+<li id="menu-item-97" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-97"><a href="/blog/">Blog</a></li>
+<li id="menu-item-98" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-98"><a href="/contactanos/">Contáctanos</a></li>
+</ul>			<div class="brk-nav__langs-movil"></div>
+		</nav>
+		<div class="brk-header__tools">
+			<div class="brk-desk"></div>
+							<a class="brk-iconbtn" href="/mi-cuenta/" aria-label="Ingresar o crear cuenta">
+					<svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c1.5-4 4.5-6 8-6s6.5 2 8 6"/></svg>				</a>
+				<a class="brk-iconbtn" href="/carrito/" aria-label="Carrito">
+					<svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 4h2l2.4 11.2a2 2 0 0 0 2 1.6h7.7a2 2 0 0 0 2-1.5L21 8H6"/><circle cx="10" cy="20.5" r="1.3"/><circle cx="17" cy="20.5" r="1.3"/></svg>					<span class="brk-badge-cart" hidden>0</span>				</a>
+						<button class="brk-iconbtn brk-movil" type="button" aria-controls="brk-nav" aria-expanded="false" id="brk-menu-btn">
+				<span class="screen-reader-text">Menú</span>
+				<svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M4 12h16M4 17h10"/></svg>			</button>
+		</div>
+	</div>
+	<div class="brk-carga" aria-hidden="true"><i id="brk-carga"></i></div>
+</header>
+<div id="contenido" class="brk-contenido">
+<main class="brk-home">
 
-<iframe id="wp" title="Sitio de demostración de Bicyrekkord"></iframe>
+	<section class="brk-hero">
+		<div class="brk-lineas" aria-hidden="true"></div>
+		<div class="brk-wrap brk-hero__grid">
+			<div class="brk-hero__visual">
+				<svg class="brk-hero__ring" aria-hidden="true" viewBox="0 0 600 600">
+					<circle cx="300" cy="300" r="250" fill="none" stroke="rgba(255,255,255,.07)" stroke-width="18"/>
+					<circle class="brk-ring-charge" cx="300" cy="300" r="250" fill="none" stroke="#00BF1A" stroke-width="18" stroke-linecap="round" transform="rotate(-90 300 300)"/>
+					<circle class="brk-ring-spark" cx="300" cy="300" r="250" fill="none" stroke="#E9FFEC" stroke-width="10" stroke-linecap="round" transform="rotate(-90 300 300)"/>
+					<polyline class="brk-bolt" points="548,170 572,150 560,182 590,166" fill="none" stroke="#7CFF8A" stroke-width="4" stroke-linejoin="round"/>
+					<polyline class="brk-bolt b2" points="40,240 14,226 32,258 4,250" fill="none" stroke="#7CFF8A" stroke-width="4" stroke-linejoin="round"/>
+					<polyline class="brk-bolt b3" points="470,500 500,516 474,530 506,548" fill="none" stroke="#7CFF8A" stroke-width="4" stroke-linejoin="round"/>
+				</svg>
+				<div class="brk-hero__carga">
+					<svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2 4 14h7l-1 8 9-12h-7l1-8z" fill="currentColor" stroke="none"/></svg>					<div><small>CARGA</small><b class="brk-disp"><span id="brk-carga-num">0</span>%</b></div>
+				</div>
+									<img class="brk-hero__media" src="/wp-content/themes/bicyrekkord/assets/img/ricardo.webp" alt="Ricardo Henao con la camiseta de Bicyrekkord" width="781" height="761" fetchpriority="high">
+							</div>
+			<div class="brk-hero__texto">
+				<div class="brk-eyebrow brk-eyebrow--linea">Líderes desde 2012 · Bogotá, Colombia</div>
+				<h1 class="brk-disp brk-hero__h1"><span>Tu movilidad</span><span class="brk-verde">no se detiene</span></h1>
+				<p class="brk-hero__lead">Repuestos para vehículos eléctricos de dos ruedas: motores, controladores, cargadores, frenos y mucho más. Envíos a nivel nacional y global.</p>
+				<div class="brk-hero__ctas">
+					<a class="brk-btn brk-btn--verde brk-volt is-live" href="/tienda/">Ver tienda <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+					<a class="brk-btn brk-btn--linea" href="/eres-en-taller/">¿Eres taller?</a>
+				</div>
+				<dl class="brk-stats">
+					<div><dt class="brk-disp">2012</dt><dd>Líderes desde</dd></div>
+										<div><dt class="brk-disp">Envíos</dt><dd>A nivel nacional y global</dd></div>
+				</dl>
+			</div>
+		</div>
+	</section>
 
-<dialog id="dlg">
-	<h2>Accesos de prueba</h2>
-	<table>
-		<tr><td>Administrador (panel de pedidos)</td><td><code>admin</code> / <code>password</code></td></tr>
-		<tr><td>Cliente con pedidos</td><td><code>cliente@demo.com</code> / <code>demo1234</code></td></tr>
-		<tr><td>Taller con pedidos</td><td><code>taller@demo.com</code> / <code>demo1234</code></td></tr>
-	</table>
-	<p>Para probar el registro de un taller que <strong>ya está</strong> en la base de datos, usa el correo <code>taller.demo@ejemplo.com</code> o el celular <code>3001112233</code>: no te pedirá documento. Con cualquier otro dato te pedirá NIT o cédula.</p>
-	<p>Los correos (por ejemplo, la solicitud de factura electrónica a contabilidad@bicyrekkord.com) no salen a internet: los ves en «Correos enviados».</p>
-	<form method="dialog"><button style="font:inherit;font-weight:700;background:#00BF1A;border:0;border-radius:999px;padding:10px 18px;cursor:pointer">Cerrar</button></form>
-</dialog>
+	<section class="brk-marq" aria-label="Categorías">
+		<div class="brk-marq__track">
+			<span class="brk-disp">Motores<svg aria-hidden="true" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2 4 14h7l-1 8 9-12h-7l1-8z" fill="currentColor" stroke="none"/></svg></span><span class="brk-disp brk-outline">Frenos<svg aria-hidden="true" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2 4 14h7l-1 8 9-12h-7l1-8z" fill="currentColor" stroke="none"/></svg></span><span class="brk-disp">Amortiguadores<svg aria-hidden="true" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2 4 14h7l-1 8 9-12h-7l1-8z" fill="currentColor" stroke="none"/></svg></span><span class="brk-disp brk-outline">Llantas<svg aria-hidden="true" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2 4 14h7l-1 8 9-12h-7l1-8z" fill="currentColor" stroke="none"/></svg></span><span class="brk-disp">Controladores<svg aria-hidden="true" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2 4 14h7l-1 8 9-12h-7l1-8z" fill="currentColor" stroke="none"/></svg></span><span class="brk-disp brk-outline">Cargadores<svg aria-hidden="true" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2 4 14h7l-1 8 9-12h-7l1-8z" fill="currentColor" stroke="none"/></svg></span><span class="brk-disp">Aceleradores<svg aria-hidden="true" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2 4 14h7l-1 8 9-12h-7l1-8z" fill="currentColor" stroke="none"/></svg></span><span class="brk-disp brk-outline">Iluminación<svg aria-hidden="true" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2 4 14h7l-1 8 9-12h-7l1-8z" fill="currentColor" stroke="none"/></svg></span><span class="brk-disp" aria-hidden="true">Motores<svg aria-hidden="true" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2 4 14h7l-1 8 9-12h-7l1-8z" fill="currentColor" stroke="none"/></svg></span><span class="brk-disp brk-outline" aria-hidden="true">Frenos<svg aria-hidden="true" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2 4 14h7l-1 8 9-12h-7l1-8z" fill="currentColor" stroke="none"/></svg></span><span class="brk-disp" aria-hidden="true">Amortiguadores<svg aria-hidden="true" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2 4 14h7l-1 8 9-12h-7l1-8z" fill="currentColor" stroke="none"/></svg></span><span class="brk-disp brk-outline" aria-hidden="true">Llantas<svg aria-hidden="true" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2 4 14h7l-1 8 9-12h-7l1-8z" fill="currentColor" stroke="none"/></svg></span><span class="brk-disp" aria-hidden="true">Controladores<svg aria-hidden="true" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2 4 14h7l-1 8 9-12h-7l1-8z" fill="currentColor" stroke="none"/></svg></span><span class="brk-disp brk-outline" aria-hidden="true">Cargadores<svg aria-hidden="true" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2 4 14h7l-1 8 9-12h-7l1-8z" fill="currentColor" stroke="none"/></svg></span><span class="brk-disp" aria-hidden="true">Aceleradores<svg aria-hidden="true" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2 4 14h7l-1 8 9-12h-7l1-8z" fill="currentColor" stroke="none"/></svg></span><span class="brk-disp brk-outline" aria-hidden="true">Iluminación<svg aria-hidden="true" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2 4 14h7l-1 8 9-12h-7l1-8z" fill="currentColor" stroke="none"/></svg></span>		</div>
+	</section>
 
+		<section class="brk-sec brk-sec--claro">
+		<div class="brk-wrap">
+			<div class="brk-sec__head">
+				<div>
+					<div class="brk-eyebrow brk-verde-osc">Categorías</div>
+					<h2 class="brk-disp brk-h2">Encuentra tu repuesto</h2>
+					<p>Todas las categorías en un solo lugar para mantener tu vehículo eléctrico en movimiento.</p>
+				</div>
+				<a class="brk-btn brk-btn--negro" href="/tienda/">Ver todo</a>
+			</div>
+			<div class="brk-cats">
+									<a class="brk-cat brk-volt" href="/categoria-producto/aceleradores/">
+						<span class="brk-cat__img"><img src="/wp-content/uploads/brk-demo/RKAC036.webp" alt="" loading="lazy"></span>
+						<span class="brk-cat__txt">Aceleradores <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+					</a>
+									<a class="brk-cat brk-volt" href="/categoria-producto/bombillos-y-flashers/">
+						<span class="brk-cat__img"><img src="/wp-content/uploads/brk-demo/RKLD003-480x337.webp" alt="" loading="lazy"></span>
+						<span class="brk-cat__txt">Bombillos y flashers <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+					</a>
+									<a class="brk-cat brk-volt" href="/categoria-producto/cables-y-conectores/">
+						<span class="brk-cat__img"><img src="/wp-content/uploads/brk-demo/RKBR001.webp" alt="" loading="lazy"></span>
+						<span class="brk-cat__txt">Cables y conectores <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+					</a>
+									<a class="brk-cat brk-volt" href="/categoria-producto/cargadores/">
+						<span class="brk-cat__img"><img src="/wp-content/uploads/brk-demo/RKCG044-480x347.webp" alt="" loading="lazy"></span>
+						<span class="brk-cat__txt">Cargadores <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+					</a>
+									<a class="brk-cat brk-volt" href="/categoria-producto/baterias/">
+						<span class="brk-cat__img"><img src="/wp-content/uploads/brk-demo/RKBC001-480x205.webp" alt="" loading="lazy"></span>
+						<span class="brk-cat__txt">Baterías <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+					</a>
+									<a class="brk-cat brk-volt" href="/categoria-producto/controladores-y-convertidores/">
+						<span class="brk-cat__img"><img src="/wp-content/uploads/brk-demo/RKCV004-480x310.webp" alt="" loading="lazy"></span>
+						<span class="brk-cat__txt">Controladores y convertidores <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+					</a>
+									<a class="brk-cat brk-volt" href="/categoria-producto/corazas-y-neumaticos/">
+						<span class="brk-cat__img"><img src="/wp-content/uploads/brk-demo/RKRN006.webp" alt="" loading="lazy"></span>
+						<span class="brk-cat__txt">Corazas y neumáticos <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+					</a>
+									<a class="brk-cat brk-volt" href="/categoria-producto/motor-y-componentes/">
+						<span class="brk-cat__img"><img src="/wp-content/uploads/brk-demo/RKKT003.webp" alt="" loading="lazy"></span>
+						<span class="brk-cat__txt">Motor y componentes <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+					</a>
+									<a class="brk-cat brk-volt" href="/categoria-producto/sistema-de-frenado/">
+						<span class="brk-cat__img"><img src="/wp-content/uploads/brk-demo/RKFR048.webp" alt="" loading="lazy"></span>
+						<span class="brk-cat__txt">Sistema de frenado <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+					</a>
+									<a class="brk-cat brk-volt" href="/categoria-producto/miscelaneos/">
+						<span class="brk-cat__img"><img src="/wp-content/uploads/brk-demo/RKDP006-480x361.webp" alt="" loading="lazy"></span>
+						<span class="brk-cat__txt">Misceláneos <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+					</a>
+							</div>
+		</div>
+	</section>
+	
+		<section class="brk-sec brk-motor">
+		<div class="brk-wrap brk-motor__grid">
+			<div class="brk-rueda" aria-hidden="true">
+				<svg class="brk-rueda__gauge" viewBox="0 0 400 400">
+					<circle cx="200" cy="200" r="196" fill="none" stroke="rgba(255,255,255,.08)" stroke-width="4"/>
+					<circle id="brk-gauge" cx="200" cy="200" r="196" fill="none" stroke="#00BF1A" stroke-width="4" stroke-linecap="round" stroke-dasharray="1232" stroke-dashoffset="1232" transform="rotate(135 200 200)"/>
+				</svg>
+				<div class="brk-rueda__idle"><div id="brk-rueda">
+					<svg viewBox="0 0 400 400">
+						<circle cx="200" cy="200" r="178" fill="none" stroke="#1B1F1C" stroke-width="40"/>
+						<circle cx="200" cy="200" r="178" fill="none" stroke="#2A302C" stroke-width="36" stroke-dasharray="10 14"/>
+						<circle cx="200" cy="200" r="150" fill="none" stroke="#3A423D" stroke-width="10"/>
+						<circle cx="200" cy="200" r="140" fill="none" stroke="#00BF1A" stroke-width="3" stroke-dasharray="40 30"/>
+						<g stroke="#4A544D" stroke-width="16" stroke-linecap="round"><line x1="200" y1="200" x2="200" y2="58"/><line x1="200" y1="200" x2="335" y2="156"/><line x1="200" y1="200" x2="283" y2="315"/><line x1="200" y1="200" x2="117" y2="315"/><line x1="200" y1="200" x2="65" y2="156"/></g>
+						<circle cx="200" cy="200" r="74" fill="#111412" stroke="#00BF1A" stroke-width="4"/>
+						<text x="200" y="214" text-anchor="middle" font-family="Barlow Condensed, sans-serif" font-style="italic" font-weight="900" font-size="44" fill="#fff">BRK</text>
+					</svg>
+				</div></div>
+				<div class="brk-rueda__vel"><b class="brk-disp" id="brk-vel">0</b><small>Velocidad</small></div>
+			</div>
+			<div class="brk-motor__txt">
+				<div class="brk-eyebrow brk-verde">Motor y componentes</div>
+				<h2 class="brk-disp brk-h2">Potencia que te mueve</h2>
+				<p>Motores, kits y componentes para bicicletas, motos y patinetas eléctricas. Baja por la página y mira cómo acelera la rueda.</p>
+								<ul class="brk-motores">
+											<li class="brk-volt">
+							<a href="/producto/kit-motor-transversal-bldc-500w-48v-motorcontrolador/" class="brk-motores__img"><img width="100" height="100" src="/wp-content/uploads/brk-demo/RKKT003-100x100.webp" class="attachment-woocommerce_gallery_thumbnail size-woocommerce_gallery_thumbnail" alt="Kit Motor Transversal &quot;BLDC&quot; 500W-48V (Motor+Controlador)" /></a>
+							<div class="brk-motores__info">
+								<a href="/producto/kit-motor-transversal-bldc-500w-48v-motorcontrolador/">Kit Motor Transversal &quot;BLDC&quot; 500W-48V (Motor+Controlador)</a>
+								<span class="brk-sku">RKKT003</span>
+							</div>
+							<span class="brk-motores__precio"><span class="woocommerce-Price-amount amount"><span class="woocommerce-Price-currencySymbol" dir="auto">&#036;</span>490.000</span></span>
+						</li>
+											<li class="brk-volt">
+							<a href="/producto/motor-turbo-800w-48v-rin-18/" class="brk-motores__img"><img width="100" height="100" src="/wp-content/uploads/brk-demo/RKMT016-100x100.webp" class="attachment-woocommerce_gallery_thumbnail size-woocommerce_gallery_thumbnail" alt="Motor Turbo 800W -48V, Rin 18´" /></a>
+							<div class="brk-motores__info">
+								<a href="/producto/motor-turbo-800w-48v-rin-18/">Motor Turbo 800W -48V, Rin 18´</a>
+								<span class="brk-sku">RKMT016</span>
+							</div>
+							<span class="brk-motores__precio"><span class="woocommerce-Price-amount amount"><span class="woocommerce-Price-currencySymbol" dir="auto">&#036;</span>680.000</span></span>
+						</li>
+											<li class="brk-volt">
+							<a href="/producto/motor-central-qs-3000w-72v/" class="brk-motores__img"><img width="100" height="100" src="/wp-content/uploads/brk-demo/RKMT033-100x100.webp" class="attachment-woocommerce_gallery_thumbnail size-woocommerce_gallery_thumbnail" alt="Motor Central QS, 3000W, 72V" /></a>
+							<div class="brk-motores__info">
+								<a href="/producto/motor-central-qs-3000w-72v/">Motor Central QS, 3000W, 72V</a>
+								<span class="brk-sku">RKMT033</span>
+							</div>
+							<span class="brk-motores__precio"><span class="woocommerce-Price-amount amount"><span class="woocommerce-Price-currencySymbol" dir="auto">&#036;</span>1.900.000</span></span>
+						</li>
+											<li class="brk-volt">
+							<a href="/producto/motor-qs-2000w-nominal-72v-rin-12-freno-de-disco/" class="brk-motores__img"><img width="100" height="100" src="/wp-content/uploads/brk-demo/RKMT031-100x100.webp" class="attachment-woocommerce_gallery_thumbnail size-woocommerce_gallery_thumbnail" alt="Motor QS, 2000W Nominal, 72V, Rin 12, Freno de disco" /></a>
+							<div class="brk-motores__info">
+								<a href="/producto/motor-qs-2000w-nominal-72v-rin-12-freno-de-disco/">Motor QS, 2000W Nominal, 72V, Rin 12, Freno de disco</a>
+								<span class="brk-sku">RKMT031</span>
+							</div>
+							<span class="brk-motores__precio"><span class="woocommerce-Price-amount amount"><span class="woocommerce-Price-currencySymbol" dir="auto">&#036;</span>990.000</span></span>
+						</li>
+									</ul>
+							</div>
+		</div>
+	</section>
+
+		<section class="brk-sec brk-sec--claro">
+		<div class="brk-wrap">
+			<div class="brk-sec__head">
+				<div>
+					<div class="brk-eyebrow brk-verde-osc">Catálogo BRK</div>
+					<h2 class="brk-disp brk-h2">Destacados</h2>
+				</div>
+				<a class="brk-btn brk-btn--negro" href="/tienda/">Ver todo</a>
+			</div>
+			<div class="woocommerce">
+				<ul class="products columns-4">
+					<li class="product type-product post-75 status-publish first instock product_cat-miscelaneos has-post-thumbnail featured shipping-taxable purchasable product-type-simple">
+	<a href="/producto/gps-4g-voltaje-de-operacion-9v-95v-dc-tipo-a/" class="woocommerce-LoopProduct-link woocommerce-loop-product__link"><img width="480" height="318" src="/wp-content/uploads/brk-demo/RKGPS002-480x318.webp" class="attachment-woocommerce_thumbnail size-woocommerce_thumbnail" alt="GPS 4G - Voltaje de Operación 9V–95V DC, Tipo A" decoding="async" fetchpriority="high" /><span class="brk-sku">RKGPS002</span><h2 class="woocommerce-loop-product__title">GPS 4G &#8211; Voltaje de Operación 9V–95V DC, Tipo A</h2>
+	<span class="price"><span class="woocommerce-Price-amount amount"><bdi><span class="woocommerce-Price-currencySymbol" translate="no" dir="auto">&#36;</span>130.000</bdi></span></span>
+</a><a href="/?add-to-cart=75" aria-describedby="woocommerce_loop_add_to_cart_link_describedby_75" data-quantity="1" class="button product_type_simple add_to_cart_button ajax_add_to_cart" data-product_id="75" data-product_sku="RKGPS002" aria-label="Añadir al carrito: &ldquo;GPS 4G - Voltaje de Operación 9V–95V DC, Tipo A&rdquo;" rel="nofollow" data-success_message="«GPS 4G - Voltaje de Operación 9V–95V DC, Tipo A» se ha añadido a tu carrito" role="button">Agregar</a>	<span id="woocommerce_loop_add_to_cart_link_describedby_75" class="screen-reader-text">
+			</span>
+</li>
+<li class="product type-product post-71 status-publish instock product_cat-miscelaneos has-post-thumbnail featured shipping-taxable purchasable product-type-simple">
+	<a href="/producto/baul-rectangular-premium-45-litros-gris/" class="woocommerce-LoopProduct-link woocommerce-loop-product__link"><img width="437" height="369" src="/wp-content/uploads/brk-demo/RKBA009.webp" class="attachment-woocommerce_thumbnail size-woocommerce_thumbnail" alt="Baúl Rectangular Premium, 45 Litros-Gris" decoding="async" /><span class="brk-sku">RKBA009</span><h2 class="woocommerce-loop-product__title">Baúl Rectangular Premium, 45 Litros-Gris</h2>
+	<span class="price"><span class="woocommerce-Price-amount amount"><bdi><span class="woocommerce-Price-currencySymbol" translate="no" dir="auto">&#36;</span>145.000</bdi></span></span>
+</a><a href="/?add-to-cart=71" aria-describedby="woocommerce_loop_add_to_cart_link_describedby_71" data-quantity="1" class="button product_type_simple add_to_cart_button ajax_add_to_cart" data-product_id="71" data-product_sku="RKBA009" aria-label="Añadir al carrito: &ldquo;Baúl Rectangular Premium, 45 Litros-Gris&rdquo;" rel="nofollow" data-success_message="«Baúl Rectangular Premium, 45 Litros-Gris» se ha añadido a tu carrito" role="button">Agregar</a>	<span id="woocommerce_loop_add_to_cart_link_describedby_71" class="screen-reader-text">
+			</span>
+</li>
+<li class="product type-product post-65 status-publish instock product_cat-sistema-de-frenado has-post-thumbnail featured shipping-taxable purchasable product-type-simple">
+	<a href="/producto/freno-de-disco-delantero-full-disco-180mm/" class="woocommerce-LoopProduct-link woocommerce-loop-product__link"><img width="460" height="320" src="/wp-content/uploads/brk-demo/RKFR012.webp" class="attachment-woocommerce_thumbnail size-woocommerce_thumbnail" alt="Freno de Disco Delantero Full, disco 180mm" decoding="async" /><span class="brk-sku">RKFR012</span><h2 class="woocommerce-loop-product__title">Freno de Disco Delantero Full, disco 180mm</h2>
+	<span class="price"><span class="woocommerce-Price-amount amount"><bdi><span class="woocommerce-Price-currencySymbol" translate="no" dir="auto">&#36;</span>110.000</bdi></span></span>
+</a><a href="/?add-to-cart=65" aria-describedby="woocommerce_loop_add_to_cart_link_describedby_65" data-quantity="1" class="button product_type_simple add_to_cart_button ajax_add_to_cart" data-product_id="65" data-product_sku="RKFR012" aria-label="Añadir al carrito: &ldquo;Freno de Disco Delantero Full, disco 180mm&rdquo;" rel="nofollow" data-success_message="«Freno de Disco Delantero Full, disco 180mm» se ha añadido a tu carrito" role="button">Agregar</a>	<span id="woocommerce_loop_add_to_cart_link_describedby_65" class="screen-reader-text">
+			</span>
+</li>
+<li class="product type-product post-51 status-publish last instock product_cat-corazas-y-neumaticos has-post-thumbnail featured shipping-taxable purchasable product-type-simple">
+	<a href="/producto/coraza-sellomatic-215-40-12-para-citycoco/" class="woocommerce-LoopProduct-link woocommerce-loop-product__link"><img width="374" height="375" src="/wp-content/uploads/brk-demo/RKCZ026.webp" class="attachment-woocommerce_thumbnail size-woocommerce_thumbnail" alt="Coraza Sellomatic 215-40-12 para Citycoco" decoding="async" srcset="/wp-content/uploads/brk-demo/RKCZ026.webp 374w, /wp-content/uploads/brk-demo/RKCZ026-150x150.webp 150w, /wp-content/uploads/brk-demo/RKCZ026-100x100.webp 100w" sizes="(max-width: 374px) 100vw, 374px" /><span class="brk-sku">RKCZ026</span><h2 class="woocommerce-loop-product__title">Coraza Sellomatic 215-40-12 para Citycoco</h2>
+	<span class="price"><span class="woocommerce-Price-amount amount"><bdi><span class="woocommerce-Price-currencySymbol" translate="no" dir="auto">&#36;</span>165.000</bdi></span></span>
+</a><a href="/?add-to-cart=51" aria-describedby="woocommerce_loop_add_to_cart_link_describedby_51" data-quantity="1" class="button product_type_simple add_to_cart_button ajax_add_to_cart" data-product_id="51" data-product_sku="RKCZ026" aria-label="Añadir al carrito: &ldquo;Coraza Sellomatic 215-40-12 para Citycoco&rdquo;" rel="nofollow" data-success_message="«Coraza Sellomatic 215-40-12 para Citycoco» se ha añadido a tu carrito" role="button">Agregar</a>	<span id="woocommerce_loop_add_to_cart_link_describedby_51" class="screen-reader-text">
+			</span>
+</li>
+<li class="product type-product post-43 status-publish first instock product_cat-controladores-y-convertidores has-post-thumbnail featured shipping-taxable purchasable product-type-simple">
+	<a href="/producto/controlador-votol-em-150-con-bluetooth/" class="woocommerce-LoopProduct-link woocommerce-loop-product__link"><img width="480" height="337" src="/wp-content/uploads/brk-demo/RKCT025-480x337.webp" class="attachment-woocommerce_thumbnail size-woocommerce_thumbnail" alt="Controlador VOTOL EM-150 con Bluetooth" decoding="async" /><span class="brk-sku">RKCT025</span><h2 class="woocommerce-loop-product__title">Controlador VOTOL EM-150 con Bluetooth</h2>
+	<span class="price"><span class="woocommerce-Price-amount amount"><bdi><span class="woocommerce-Price-currencySymbol" translate="no" dir="auto">&#36;</span>990.000</bdi></span></span>
+</a><a href="/?add-to-cart=43" aria-describedby="woocommerce_loop_add_to_cart_link_describedby_43" data-quantity="1" class="button product_type_simple add_to_cart_button ajax_add_to_cart" data-product_id="43" data-product_sku="RKCT025" aria-label="Añadir al carrito: &ldquo;Controlador VOTOL EM-150 con Bluetooth&rdquo;" rel="nofollow" data-success_message="«Controlador VOTOL EM-150 con Bluetooth» se ha añadido a tu carrito" role="button">Agregar</a>	<span id="woocommerce_loop_add_to_cart_link_describedby_43" class="screen-reader-text">
+			</span>
+</li>
+<li class="product type-product post-31 status-publish instock product_cat-cargadores has-post-thumbnail featured shipping-taxable purchasable product-type-simple">
+	<a href="/producto/cargador-litio-48v-10a-aluminio/" class="woocommerce-LoopProduct-link woocommerce-loop-product__link"><img width="480" height="372" src="/wp-content/uploads/brk-demo/RKCG031-480x372.webp" class="attachment-woocommerce_thumbnail size-woocommerce_thumbnail" alt="Cargador Litio 48V-10A - Aluminio" decoding="async" /><span class="brk-sku">RKCG031</span><h2 class="woocommerce-loop-product__title">Cargador Litio 48V-10A &#8211; Aluminio</h2>
+	<span class="price"><span class="woocommerce-Price-amount amount"><bdi><span class="woocommerce-Price-currencySymbol" translate="no" dir="auto">&#36;</span>340.000</bdi></span></span>
+</a><a href="/?add-to-cart=31" aria-describedby="woocommerce_loop_add_to_cart_link_describedby_31" data-quantity="1" class="button product_type_simple add_to_cart_button ajax_add_to_cart" data-product_id="31" data-product_sku="RKCG031" aria-label="Añadir al carrito: &ldquo;Cargador Litio 48V-10A - Aluminio&rdquo;" rel="nofollow" data-success_message="«Cargador Litio 48V-10A - Aluminio» se ha añadido a tu carrito" role="button">Agregar</a>	<span id="woocommerce_loop_add_to_cart_link_describedby_31" class="screen-reader-text">
+			</span>
+</li>
+<li class="product type-product post-19 status-publish instock product_cat-bombillos-y-flashers has-post-thumbnail featured shipping-taxable purchasable product-type-simple">
+	<a href="/producto/unidad-de-luz-delantera-con-direccionales-incorporadas-tipo-a/" class="woocommerce-LoopProduct-link woocommerce-loop-product__link"><img width="388" height="359" src="/wp-content/uploads/brk-demo/RKUL002.webp" class="attachment-woocommerce_thumbnail size-woocommerce_thumbnail" alt="Unidad de luz delantera con direccionales incorporadas, Tipo A" decoding="async" /><span class="brk-sku">RKUL002</span><h2 class="woocommerce-loop-product__title">Unidad de luz delantera con direccionales incorporadas, Tipo A</h2>
+	<span class="price"><span class="woocommerce-Price-amount amount"><bdi><span class="woocommerce-Price-currencySymbol" translate="no" dir="auto">&#36;</span>79.000</bdi></span></span>
+</a><a href="/?add-to-cart=19" aria-describedby="woocommerce_loop_add_to_cart_link_describedby_19" data-quantity="1" class="button product_type_simple add_to_cart_button ajax_add_to_cart" data-product_id="19" data-product_sku="RKUL002" aria-label="Añadir al carrito: &ldquo;Unidad de luz delantera con direccionales incorporadas, Tipo A&rdquo;" rel="nofollow" data-success_message="«Unidad de luz delantera con direccionales incorporadas, Tipo A» se ha añadido a tu carrito" role="button">Agregar</a>	<span id="woocommerce_loop_add_to_cart_link_describedby_19" class="screen-reader-text">
+			</span>
+</li>
+<li class="product type-product post-17 status-publish last instock product_cat-aceleradores has-post-thumbnail featured shipping-taxable purchasable product-type-simple">
+	<a href="/producto/acelerador-termico-con-calefaccion/" class="woocommerce-LoopProduct-link woocommerce-loop-product__link"><img width="344" height="335" src="/wp-content/uploads/brk-demo/RKAC036.webp" class="attachment-woocommerce_thumbnail size-woocommerce_thumbnail" alt="Acelerador Térmico (con calefacción)" decoding="async" /><span class="brk-sku">RKAC036</span><h2 class="woocommerce-loop-product__title">Acelerador Térmico (con calefacción)</h2>
+	<span class="price"><span class="woocommerce-Price-amount amount"><bdi><span class="woocommerce-Price-currencySymbol" translate="no" dir="auto">&#36;</span>129.000</bdi></span></span>
+</a><a href="/?add-to-cart=17" aria-describedby="woocommerce_loop_add_to_cart_link_describedby_17" data-quantity="1" class="button product_type_simple add_to_cart_button ajax_add_to_cart" data-product_id="17" data-product_sku="RKAC036" aria-label="Añadir al carrito: &ldquo;Acelerador Térmico (con calefacción)&rdquo;" rel="nofollow" data-success_message="«Acelerador Térmico (con calefacción)» se ha añadido a tu carrito" role="button">Agregar</a>	<span id="woocommerce_loop_add_to_cart_link_describedby_17" class="screen-reader-text">
+			</span>
+</li>
+				</ul>
+			</div>
+		</div>
+	</section>
+			
+	<section class="brk-envio">
+		<div class="brk-wrap brk-envio__row">
+			<div>
+				<div class="brk-disp brk-h2">Envío GRATIS</div>
+				<p>
+				por compras a partir de <span class="woocommerce-Price-amount amount"><span class="woocommerce-Price-currencySymbol" dir="auto">&#036;</span>99.900</span>				</p>
+			</div>
+			<div class="brk-envio__cta">
+				<svg aria-hidden="true" width="150" height="64" viewBox="0 0 150 64"><rect x="2" y="2" width="134" height="60" rx="10" fill="none" stroke="#0B0D0C" stroke-width="4"/><rect x="138" y="20" width="10" height="24" rx="3" fill="#0B0D0C"/><rect x="10" y="10" width="26" height="44" rx="4" fill="#0B0D0C"/><rect x="41" y="10" width="26" height="44" rx="4" fill="#0B0D0C"/><rect x="72" y="10" width="26" height="44" rx="4" fill="#0B0D0C"/><rect class="brk-bolt" x="103" y="10" width="26" height="44" rx="4" fill="#0B0D0C"/></svg>
+				<a class="brk-btn brk-btn--negro" href="/tienda/">Ver tienda</a>
+			</div>
+		</div>
+	</section>
+
+	<section class="brk-sec brk-oscuro">
+		<div class="brk-wrap brk-dos">
+			<div class="brk-tarjeta brk-volt">
+				<svg aria-hidden="true" width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a4 4 0 0 0-5.4 5.4L3 18l3 3 6.3-6.3a4 4 0 0 0 5.4-5.4l-2.6 2.6-2.4-.6-.6-2.4z"/></svg>				<h2 class="brk-disp">¿Eres taller?</h2>
+				<p>Crea la cuenta de tu taller, haz tus pedidos y sigue cada despacho desde tu cuenta.</p>
+				<div class="brk-tarjeta__ctas">
+					<a class="brk-btn brk-btn--verde" href="/mi-cuenta/">Crear cuenta de taller</a>
+					<a class="brk-btn brk-btn--linea" href="/eres-en-taller/">Conocer más</a>
+				</div>
+			</div>
+			<div class="brk-tarjeta brk-volt">
+				<svg aria-hidden="true" width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg>				<h2 class="brk-disp">Talleres autorizados</h2>
+				<p>Encuentra un taller autorizado Bicyrekkord para mantenimiento, repuestos y diagnóstico.</p>
+				<div class="brk-tarjeta__ctas"><a class="brk-btn brk-btn--linea" href="/talleres-autorizados/">Ver talleres</a></div>
+			</div>
+		</div>
+	</section>
+
+	<section class="brk-oscuro brk-social">
+		<div class="brk-wrap brk-social__row">
+			<div>
+				<div class="brk-eyebrow brk-verde">Síguenos</div>
+				<a class="brk-disp brk-h2 brk-social__handle" href="https://www.instagram.com/bicyrekkord/" target="_blank" rel="noopener">@bicyrekkord</a>
+				<p>Estamos como @bicyrekkord en todas las redes.</p>
+			</div>
+		</div>
+	</section>
+</main>
+</div><!-- #contenido -->
+
+<footer class="brk-footer">
+	<div class="brk-wrap">
+		<div class="brk-footer__grid">
+			<div class="brk-footer__marca">
+				<img src="/wp-content/themes/bicyrekkord/assets/img/wordmark-light.svg" alt="Bicyrekkord" width="236" height="30">
+				<p>Líderes en repuestos para vehículos eléctricos de dos ruedas desde 2012. Envíos a nivel nacional y global.</p>
+				<div class="brk-redes">
+					<a class="brk-iconbtn" href="https://www.instagram.com/bicyrekkord/" target="_blank" rel="noopener" aria-label="Instagram"><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor"/></svg></a><a class="brk-iconbtn" href="https://www.facebook.com/BicyRekkord" target="_blank" rel="noopener" aria-label="Facebook"><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h-2.5A3.5 3.5 0 0 0 9 6.5V10H6.5v3.5H9V21h3.5v-7.5h2.7l.5-3.5h-3.2V7a1 1 0 0 1 1-1H15z"/></svg></a><a class="brk-iconbtn" href="https://www.youtube.com/@Bicyrekkord" target="_blank" rel="noopener" aria-label="YouTube"><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="5.5" width="19" height="13" rx="4"/><path d="M10 9.5v5l4.5-2.5z" fill="currentColor"/></svg></a><a class="brk-iconbtn" href="https://x.com/Bicyrekkord" target="_blank" rel="noopener" aria-label="X"><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4l16 16M20 4 4 20"/></svg></a>				</div>
+			</div>
+			<div>
+				<h2 class="brk-eyebrow">Visítanos</h2>
+				<p>Avenida Carrera 68 # 12-76<br />
+Bogotá D.C., Colombia</p>
+				<h2 class="brk-eyebrow">Horario</h2>
+				<p>Lunes a viernes: 9:00 a.m. – 5:00 p.m.<br />
+Sábado: 9:00 a.m. – 12:00 m.<br />
+Cerrado domingos y festivos</p>
+			</div>
+			<div>
+				<h2 class="brk-eyebrow">Contacto</h2>
+				<p>
+											<a href="tel:3212497479">321 249 7479</a><br>
+											<a href="tel:6017771400">601 777 1400</a><br>
+										<a href="mailto:contacto@bicyrekkord.com">contacto@bicyrekkord.com</a>
+				</p>
+			</div>
+			<div>
+				<h2 class="brk-eyebrow">Políticas</h2>
+				<ul id="menu-politicas" class="brk-legal"><li id="menu-item-99" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-99"><a href="/politicas-de-envios/">Política de envíos</a></li>
+<li id="menu-item-100" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-100"><a href="/politica-de-garantia/">Política de garantía</a></li>
+<li id="menu-item-101" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-privacy-policy menu-item-101"><a rel="privacy-policy" href="/politica-de-privacidad/">Política de privacidad</a></li>
+<li id="menu-item-102" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-102"><a href="/politica-tratamiento-de-datos-personales/">Tratamiento de datos personales</a></li>
+<li id="menu-item-103" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-103"><a href="/politica-de-devoluciones-y-reembolsos/">Devoluciones y reembolsos</a></li>
+</ul>			</div>
+		</div>
+		<div class="brk-footer__legal">
+			<span>© 2026 Rekkord S.A.S. · NIT 900.560.734-4 · Todos los derechos reservados.</span>
+			<span>@bicyrekkord</span>
+		</div>
+	</div>
+</footer>
+<script type="speculationrules">
+{"prefetch":[{"source":"document","where":{"and":[{"href_matches":"/*"},{"not":{"href_matches":["/wp-*.php","/wp-admin/*","/wp-content/uploads/*","/wp-content/*","/wp-content/plugins/*","/wp-content/themes/bicyrekkord/*","/*\\?(.+)"]}},{"not":{"selector_matches":"a[rel~=\"nofollow\"]"}},{"not":{"selector_matches":".no-prefetch, .no-prefetch a"}}]},"eagerness":"conservative"}]}
+</script>
+	<script>
+		(function () {
+			var c = document.body.className;
+			c = c.replace(/woocommerce-no-js/, 'woocommerce-js');
+			document.body.className = c;
+		})();
+	</script>
+	<script id="sourcebuster-js-js" src="/wp-content/plugins/woocommerce/assets/js/sourcebuster/sourcebuster.min.js?ver=11.2.1"></script>
+<script id="wc-order-attribution-js-extra">
+var wc_order_attribution = {"params":{"lifetime":1.0e-5,"session":30,"base64":false,"ajaxurl":"/wp-admin/admin-ajax.php","prefix":"wc_order_attribution_","allowTracking":true},"fields":{"source_type":"current.typ","referrer":"current_add.rf","utm_campaign":"current.cmp","utm_source":"current.src","utm_medium":"current.mdm","utm_content":"current.cnt","utm_id":"current.id","utm_term":"current.trm","utm_source_platform":"current.plt","utm_creative_format":"current.fmt","utm_marketing_tactic":"current.tct","session_entry":"current_add.ep","session_start_time":"current_add.fd","session_pages":"session.pgs","session_count":"udata.vst","user_agent":"udata.uag"}};
+//# sourceURL=wc-order-attribution-js-extra
+</script>
+<script id="wc-order-attribution-js" src="/wp-content/plugins/woocommerce/assets/js/frontend/order-attribution.min.js?ver=11.2.1"></script>
+<script id="brk-theme-js" src="/wp-content/themes/bicyrekkord/assets/js/theme.js?ver=1.0.0"></script>
+<script id="wp-emoji-settings" type="application/json">
+{"baseUrl":"https://s.w.org/images/core/emoji/17.0.2/72x72/","ext":".png","svgUrl":"https://s.w.org/images/core/emoji/17.0.2/svg/","svgExt":".svg","source":{"concatemoji":"/wp-includes/js/wp-emoji-release.min.js?ver=7.1.3"}}
+</script>
 <script type="module">
-import { startPlaygroundWeb } from 'https://cdn.jsdelivr.net/npm/@wp-playground/client@3.1.60/index.js';
-
-const base = location.origin;
-const pasos = [
-	'Instalando WooCommerce',
-	'Instalando el tema Bicyrekkord',
-	'Instalando el plugin de operaciones',
-	'Copiando el contenido de muestra',
-	'Creando productos, cuentas y pedidos de prueba',
-	'Traduciendo al español',
-];
-const blueprint = {
-	landingPage: '/',
-	preferredVersions: { php: '8.3', wp: 'latest' },
-	features: { networking: true },
-	steps: [
-		{ step: 'installPlugin', pluginData: { resource: 'url', url: base + '/woocommerce.zip' }, options: { activate: true } },
-		{ step: 'installTheme', themeData: { resource: 'url', url: base + '/bicyrekkord.zip' }, options: { activate: true } },
-		{ step: 'installPlugin', pluginData: { resource: 'url', url: base + '/brk-operaciones.zip' }, options: { activate: true } },
-		{ step: 'unzip', zipFile: { resource: 'url', url: base + '/brk-demo.zip' }, extractToPath: '/wordpress/wp-content' },
-		{ step: 'runPHP', code: "<?php require '/wordpress/wp-load.php'; require WP_CONTENT_DIR . '/brk-demo/seed.php';" },
-		{ step: 'setSiteLanguage', language: 'es_CO' },
-	],
-};
-
-const ring = document.getElementById('ring');
-const pct = document.getElementById('pct');
-const paso = document.getElementById('paso');
-let hechos = 0;
-function avance(n) {
-	const p = Math.min(100, Math.round(n));
-	pct.textContent = p;
-	ring.style.strokeDashoffset = 1571 - 1571 * p / 100;
-}
-avance(4);
-const lento = setInterval(() => { if (hechos === 0) { avance(Math.min(30, Number(pct.textContent) + 1)); } }, 900);
-
-let client;
-try {
-	client = await startPlaygroundWeb({
-		iframe: document.getElementById('wp'),
-		remoteUrl: 'https://playground.wordpress.net/remote.html',
-		blueprint,
-		onBlueprintStepCompleted: () => {
-			hechos++;
-			avance(30 + hechos * (68 / pasos.length));
-			if (pasos[hechos]) { paso.textContent = pasos[hechos] + '…'; }
-		},
-	});
-	paso.textContent = pasos[0] + '…';
-	await client.isReady();
-	clearInterval(lento);
-	avance(100);
-	setTimeout(() => { document.getElementById('carga').hidden = true; }, 400);
-} catch (e) {
-	clearInterval(lento);
-	paso.innerHTML = '<span class="err">No se pudo cargar la demostración.</span>';
-	console.error(e);
-}
-
-document.querySelectorAll('[data-ir]').forEach((b) => b.addEventListener('click', () => client && client.goTo(b.dataset.ir)));
-document.getElementById('accesos').addEventListener('click', () => document.getElementById('dlg').showModal());
+/*! This file is auto-generated */
+var e="script#wp-emoji-settings",t=document.querySelector(e);if(!(t instanceof HTMLScriptElement))throw new Error("Element missing: "+e);const r=JSON.parse(t.text),s=(window._wpemojiSettings=r,"wpEmojiSettingsSupports"),o=["flag","emoji"];function i(e){try{var t={supportTests:e,timestamp:(new Date).valueOf()};sessionStorage.setItem(s,JSON.stringify(t))}catch(e){}}function c(e,t,n){e.clearRect(0,0,e.canvas.width,e.canvas.height),e.fillText(t,0,0);t=new Uint32Array(e.getImageData(0,0,e.canvas.width,e.canvas.height).data);e.clearRect(0,0,e.canvas.width,e.canvas.height),e.fillText(n,0,0);const r=new Uint32Array(e.getImageData(0,0,e.canvas.width,e.canvas.height).data);return t.every((e,t)=>e===r[t])}function p(e,t){e.clearRect(0,0,e.canvas.width,e.canvas.height),e.fillText(t,0,0);var n=e.getImageData(16,16,1,1);for(let e=0;e<n.data.length;e++)if(0!==n.data[e])return!1;return!0}function u(e,t,n,r){switch(t){case"flag":return n(e,"\ud83c\udff3\ufe0f\u200d\u26a7\ufe0f","\ud83c\udff3\ufe0f\u200b\u26a7\ufe0f")?!1:!n(e,"\ud83c\udde8\ud83c\uddf6","\ud83c\udde8\u200b\ud83c\uddf6")&&!n(e,"\ud83c\udff4\udb40\udc67\udb40\udc62\udb40\udc65\udb40\udc6e\udb40\udc67\udb40\udc7f","\ud83c\udff4\u200b\udb40\udc67\u200b\udb40\udc62\u200b\udb40\udc65\u200b\udb40\udc6e\u200b\udb40\udc67\u200b\udb40\udc7f");case"emoji":return!r(e,"\ud83e\u1fac8")}return!1}function f(e,t,n,r){let a;const s=(a="undefined"!=typeof WorkerGlobalScope&&self instanceof WorkerGlobalScope?new OffscreenCanvas(300,150):document.createElement("canvas")).getContext("2d",{willReadFrequently:!0}),o=(s.textBaseline="top",s.font="600 32px Arial",{});return e.forEach(e=>{o[e]=t(s,e,n,r)}),o}function a(e){var t=document.createElement("script");t.src=e,t.defer=!0,document.head.appendChild(t)}r.supports={everything:!0,everythingExceptFlag:!0},new Promise(t=>{let n=function(){try{var e=JSON.parse(sessionStorage.getItem(s));if("object"==typeof e&&"number"==typeof e.timestamp&&(new Date).valueOf()<e.timestamp+604800&&"object"==typeof e.supportTests)return e.supportTests}catch(e){}return null}();if(!n){if("undefined"!=typeof Worker&&"undefined"!=typeof OffscreenCanvas&&"undefined"!=typeof URL&&URL.createObjectURL&&"undefined"!=typeof Blob)try{var e="postMessage("+f.toString()+"("+[JSON.stringify(o),u.toString(),c.toString(),p.toString()].join(",")+"));",r=new Blob([e],{type:"text/javascript"});const a=new Worker(URL.createObjectURL(r),{name:"wpTestEmojiSupports"});return void(a.onmessage=e=>{i(n=e.data),a.terminate(),t(n)})}catch(e){}i(n=f(o,u,c,p))}t(n)}).then(e=>{for(const n in e)r.supports[n]=e[n],r.supports.everything=r.supports.everything&&r.supports[n],"flag"!==n&&(r.supports.everythingExceptFlag=r.supports.everythingExceptFlag&&r.supports[n]);var t;r.supports.everythingExceptFlag=r.supports.everythingExceptFlag&&!r.supports.flag,r.supports.everything||((t=r.source||{}).concatemoji?a(t.concatemoji):t.wpemoji&&t.twemoji&&(a(t.twemoji),a(t.wpemoji)))});
+//# sourceURL=/wp-includes/js/wp-emoji-loader.min.js
 </script>
 </body>
 </html>

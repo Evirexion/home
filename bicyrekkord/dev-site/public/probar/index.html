@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Bicyrekkord — demo interactiva</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='44' fill='%230B0D0C' stroke='%2300BF1A' stroke-width='8'/%3E%3Cpath d='M38 22h14l-6 24 18-24h18L60 50l14 22-24 8 8-16-12-8-6 18H32z' fill='%23fff'/%3E%3C/svg%3E">
+<style>
+:root{--n:#0B0D0C;--v:#00BF1A;--g:#9AA39D}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;background:var(--n);color:#fff;font-family:Montserrat,system-ui,-apple-system,"Segoe UI",sans-serif}
+.bar{height:56px;display:flex;align-items:center;gap:12px;padding:0 14px;border-bottom:1px solid rgba(255,255,255,.1);overflow-x:auto;white-space:nowrap}
+.marca{display:flex;align-items:center;gap:10px;font-weight:800;font-size:14px;margin-right:6px}
+.marca small{display:block;font-weight:600;font-size:11px;color:var(--g)}
+.tag{font-size:10px;font-weight:800;letter-spacing:.12em;background:var(--v);color:var(--n);padding:3px 7px;border-radius:5px}
+.bar button{font:inherit;font-size:13px;font-weight:700;color:#fff;background:transparent;border:1px solid rgba(255,255,255,.18);border-radius:999px;padding:0 14px;min-height:36px;cursor:pointer}
+.bar button:hover{border-color:var(--v);color:var(--v)}
+.volver{color:#9AA39D;font-size:13px;font-weight:700;text-decoration:none;margin-right:4px}.volver:hover{color:#00BF1A}
+.bar button.prim{background:var(--v);color:var(--n);border-color:var(--v)}
+.sp{flex:1}
+#wp{display:block;width:100%;height:calc(100% - 56px);border:0;background:#fff}
+.carga{position:fixed;inset:56px 0 0 0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:22px;background:var(--n);z-index:5;text-align:center;padding:24px}
+.carga[hidden]{display:none}
+.carga svg{width:160px;height:160px}
+.carga .ring{stroke-dasharray:1571;stroke-dashoffset:1571;transition:stroke-dashoffset .6s ease}
+.carga h1{margin:0;font-size:22px}
+.carga p{margin:0;color:var(--g);font-size:14px;max-width:460px;line-height:1.5}
+.pct{font-size:40px;font-weight:900;font-style:italic}
+dialog{border:0;border-radius:18px;padding:24px;max-width:460px;width:calc(100% - 32px);background:#141815;color:#fff}
+dialog::backdrop{background:rgba(0,0,0,.6)}
+dialog h2{margin:0 0 12px;font-size:18px}
+dialog table{width:100%;border-collapse:collapse;font-size:14px}
+dialog td{padding:8px 4px;border-bottom:1px solid rgba(255,255,255,.08)}
+dialog code{color:var(--v);font-size:13px}
+dialog p{color:var(--g);font-size:13px;line-height:1.5}
+.err{color:#ff8a80}
+</style>
+</head>
+<body>
+<div class="bar" role="toolbar" aria-label="Navegación de la demostración">
+	<div class="marca"><span class="tag">DEMO</span><span>Bicyrekkord<small>WordPress + WooCommerce</small></span></div>
+	<a class="volver" href="/">← Vista rápida</a>
+	<button data-ir="/">Inicio</button>
+	<button data-ir="/tienda/">Tienda</button>
+	<button data-ir="/mi-cuenta/">Crear cuenta / Mi cuenta</button>
+	<button data-ir="/wp-admin/admin.php?page=brk-pedidos" class="prim">Panel de pedidos</button>
+	<button data-ir="/wp-admin/admin.php?page=brk-demo-correos">Correos enviados</button>
+	<span class="sp"></span>
+	<button id="accesos">Accesos de prueba</button>
+</div>
+
+<div class="carga" id="carga">
+	<svg viewBox="0 0 600 600" aria-hidden="true"><circle cx="300" cy="300" r="250" fill="none" stroke="rgba(255,255,255,.08)" stroke-width="22"/><circle class="ring" id="ring" cx="300" cy="300" r="250" fill="none" stroke="#00BF1A" stroke-width="22" stroke-linecap="round" transform="rotate(-90 300 300)"/></svg>
+	<div class="pct"><span id="pct">0</span>%</div>
+	<h1 id="paso">Abriendo la demo interactiva…</h1>
+	<p>Esta parte de la demostración corre completa dentro de tu navegador para que puedas crear cuentas, comprar y usar el panel de pedidos. Tarda unos segundos en abrir. Si recargas la página, vuelve a su estado inicial.</p>
+</div>
+
+<iframe id="wp" title="Sitio de demostración de Bicyrekkord"></iframe>
+
+<dialog id="dlg">
+	<h2>Accesos de prueba</h2>
+	<table>
+		<tr><td>Administrador (panel de pedidos)</td><td><code>admin</code> / <code>password</code></td></tr>
+		<tr><td>Cliente con pedidos</td><td><code>cliente@demo.com</code> / <code>demo1234</code></td></tr>
+		<tr><td>Taller con pedidos</td><td><code>taller@demo.com</code> / <code>demo1234</code></td></tr>
+	</table>
+	<p>Para probar el registro de un taller que <strong>ya está</strong> en la base de datos, usa el correo <code>taller.demo@ejemplo.com</code> o el celular <code>3001112233</code>: no te pedirá documento. Con cualquier otro dato te pedirá NIT o cédula.</p>
+	<p>Los correos (por ejemplo, la solicitud de factura electrónica a contabilidad@bicyrekkord.com) no salen a internet: los ves en «Correos enviados».</p>
+	<form method="dialog"><button style="font:inherit;font-weight:700;background:#00BF1A;border:0;border-radius:999px;padding:10px 18px;cursor:pointer">Cerrar</button></form>
+</dialog>
+
+<script type="module">
+import { startPlaygroundWeb } from 'https://cdn.jsdelivr.net/npm/@wp-playground/client@3.1.60/index.js';
+
+const base = location.origin;
+const destino = (() => {
+	const d = new URLSearchParams(location.search).get('ir') || '/';
+	return d.startsWith('/') && !d.startsWith('//') ? d : '/';
+})();
+const pasos = [
+	'Preparando WooCommerce',
+	'Cargando la tienda de demostración',
+];
+// Sitio ya construido (productos, cuentas, pedidos y español): solo se descomprime.
+const blueprint = {
+	landingPage: destino,
+	preferredVersions: { php: '8.3', wp: 'latest' },
+	features: { networking: false },
+	steps: [
+		{ step: 'installPlugin', pluginData: { resource: 'url', url: base + '/woocommerce.zip' }, options: { activate: false } },
+		{ step: 'unzip', zipFile: { resource: 'url', url: base + '/snapshot.zip' }, extractToPath: '/wordpress/wp-content' },
+	],
+};
+
+const ring = document.getElementById('ring');
+const pct = document.getElementById('pct');
+const paso = document.getElementById('paso');
+let hechos = 0;
+function avance(n) {
+	const p = Math.min(100, Math.round(n));
+	pct.textContent = p;
+	ring.style.strokeDashoffset = 1571 - 1571 * p / 100;
+}
+avance(4);
+const lento = setInterval(() => { if (hechos === 0) { avance(Math.min(40, Number(pct.textContent) + 2)); } }, 400);
+
+let client;
+try {
+	client = await startPlaygroundWeb({
+		iframe: document.getElementById('wp'),
+		remoteUrl: 'https://playground.wordpress.net/remote.html',
+		blueprint,
+		onBlueprintStepCompleted: () => {
+			hechos++;
+			avance(40 + hechos * (55 / pasos.length));
+			if (pasos[hechos]) { paso.textContent = pasos[hechos] + '…'; }
+		},
+	});
+	paso.textContent = pasos[0] + '…';
+	await client.isReady();
+	clearInterval(lento);
+	avance(100);
+	setTimeout(() => { document.getElementById('carga').hidden = true; }, 400);
+} catch (e) {
+	clearInterval(lento);
+	paso.innerHTML = '<span class="err">No se pudo cargar la demostración.</span>';
+	console.error(e);
+}
+
+document.querySelectorAll('[data-ir]').forEach((b) => b.addEventListener('click', () => client && client.goTo(b.dataset.ir)));
+document.getElementById('accesos').addEventListener('click', () => document.getElementById('dlg').showModal());
+</script>
+</body>
+</html>

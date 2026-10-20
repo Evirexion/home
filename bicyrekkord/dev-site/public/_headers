@@ -3,4 +3,10 @@
 
 /*.zip
   Access-Control-Allow-Origin: *
-  Cache-Control: public, max-age=300
+  Cache-Control: public, max-age=3600
+
+/wp-content/*
+  Cache-Control: public, max-age=86400
+
+/wp-includes/*
+  Cache-Control: public, max-age=86400

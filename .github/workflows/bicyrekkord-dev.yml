@@ -22,12 +22,8 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 22
-      - name: Construir ZIP del tema, plugin y demo
-        working-directory: bicyrekkord
-        run: |
-          ./build.sh
-          cp dist/bicyrekkord.zip dist/brk-operaciones.zip dist/brk-demo.zip dev-site/public/
-          curl -fL -o dev-site/public/woocommerce.zip https://github.com/woocommerce/woocommerce/releases/download/11.2.1/woocommerce.zip
+      - name: Descargar WooCommerce para la demo interactiva
+        run: curl -fL -o bicyrekkord/dev-site/public/woocommerce.zip https://github.com/woocommerce/woocommerce/releases/download/11.2.1/woocommerce.zip
       - name: Revisar la llave de Cloudflare
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
