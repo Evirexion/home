@@ -1,0 +1,27 @@
+2a02:4780:1d:fc63:2316:e5a1:fba8:8899 www.bicyrekkord.com.cdn.hstgr.net www.bicyrekkord.com
+2a02:4780:21:a807:60c9:8671:848a:309a www.bicyrekkord.com.cdn.hstgr.net www.bicyrekkord.com
+2a02:4780:1d:c8ab:7962:f0d5:546d:65fd bicyrekkord.com
+2a02:4780:1e:f106:25ea:3f64:b3c5:66a bicyrekkord.com
+{
+  "ip": "2a02:4780:21:a807:60c9:8671:848a:309a",
+  "city": "Asheville",
+  "region": "North Carolina",
+  "country": "US",
+  "loc": "35.6009,-82.5540",
+  "org": "AS47583 Hostinger International Limited",
+  "postal": "28801",
+  "timezone": "America/New_York",
+  "readme": "https://ipinfo.io/missingauth",
+  "anycast": true
+}{
+  "ip": "2a02:4780:1d:fc63:2316:e5a1:fba8:8899",
+  "city": "Asheville",
+  "region": "North Carolina",
+  "country": "US",
+  "loc": "35.6009,-82.5540",
+  "org": "AS47583 Hostinger International Limited",
+  "postal": "28801",
+  "timezone": "America/New_York",
+  "readme": "https://ipinfo.io/missingauth",
+  "anycast": true
+}{"Status":0,"TC":false,"RD":true,"RA":true,"AD":false,"CD":false,"Question":[{"name":"bicyrekkord.com.","type":2}],"Answer":[{"name":"bicyrekkord.com.","type":2,"TTL":21600,"data":"ns1.dns-parking.com."},{"name":"bicyrekkord.com.","type":2,"TTL":21600,"data":"ns2.dns-parking.com."}],"Comment":"Response from 162.159.24.201."}
