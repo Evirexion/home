@@ -34,7 +34,9 @@ jobs:
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
         run: |
           # Limpia espacios, saltos de línea, comillas o un "Bearer " pegado por error.
-          T=$(printf '%s' "$CLOUDFLARE_API_TOKEN" | tr -d '\r\n\t "'"'"'' | sed 's/^Bearer//I')
+          # Si se pegó el comando de prueba de Cloudflare completo, toma solo la llave que va después de "Bearer".
+          T=$(printf '%s' "$CLOUDFLARE_API_TOKEN" | grep -oE 'Bearer[[:space:]]+[A-Za-z0-9_-]+' | head -1 | awk '{print $2}')
+          [ -n "$T" ] || T=$(printf '%s' "$CLOUDFLARE_API_TOKEN" | tr -d '\r\n\t "'"'"'')
           echo "::add-mask::$T"
           echo "CF_TOKEN_LIMPIO=$T" >> "$GITHUB_ENV"
           echo "::notice::Longitud de la llave: ${#CLOUDFLARE_API_TOKEN} (limpia: ${#T}; una llave de Cloudflare suele tener 40)"
