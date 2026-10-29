@@ -47,3 +47,4 @@ add_action( 'wp_head', function () {
 require get_template_directory() . '/inc/helpers.php';
 require get_template_directory() . '/inc/customizer.php';
 require get_template_directory() . '/inc/woocommerce.php';
+require get_template_directory() . '/inc/despiece.php';

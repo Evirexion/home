@@ -123,6 +123,34 @@ foreach ( include $brk_dir . '/productos.php' as $row ) {
 	$prod_ids[ $sku ] = $p->save();
 }
 
+// ---------- Despiece de muestra (piezas recortadas de la foto del producto) ----------
+$despieces = array(
+	'RKCA002' => array( array( -8, -10, 'Carcasa' ), array( 14, 6, 'Terminal' ), array( 4, 16, 'Terminal' ) ),
+	'RKAC036' => array( array( 0, 16, 'Elemento calefactor' ), array( 12, -10, 'Puños' ), array( -14, -8, 'Interruptor' ) ),
+);
+foreach ( $despieces as $sku => $partes ) {
+	if ( empty( $prod_ids[ $sku ] ) || get_post_meta( $prod_ids[ $sku ], '_brk_despiece', true ) ) {
+		continue;
+	}
+	$piezas = array();
+	foreach ( $partes as $k => $pt ) {
+		$origen = $brk_dir . '/despiece/' . $sku . '-' . $k . '.webp';
+		if ( ! file_exists( $origen ) ) {
+			continue;
+		}
+		$archivo = $destino . '/' . $sku . '-pieza-' . $k . '.webp';
+		copy( $origen, $archivo );
+		$att = wp_insert_attachment( array( 'post_mime_type' => 'image/webp', 'post_title' => $pt[2], 'post_status' => 'inherit' ), $archivo );
+		if ( $att && ! is_wp_error( $att ) ) {
+			wp_update_attachment_metadata( $att, wp_generate_attachment_metadata( $att, $archivo ) );
+			$piezas[] = array( 'id' => $att, 'x' => $pt[0], 'y' => $pt[1], 'label' => $pt[2] );
+		}
+	}
+	if ( $piezas ) {
+		update_post_meta( $prod_ids[ $sku ], '_brk_despiece', $piezas );
+	}
+}
+
 // ---------- Páginas ----------
 function brk_demo_pagina( $slug, $titulo, $contenido, $padre = 0 ) {
 	$pag = get_page_by_path( $slug );

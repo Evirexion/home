@@ -54,18 +54,6 @@ $n_prod     = isset( $conteo->publish ) ? (int) $conteo->publish : 0;
 		</div>
 	</section>
 
-	<section class="brk-marq" aria-label="<?php esc_attr_e( 'Categorías', 'bicyrekkord' ); ?>">
-		<div class="brk-marq__track">
-			<?php
-			$palabras = array_filter( array_map( 'trim', explode( ',', brk_mod( 'brk_marquee' ) ) ) );
-			$todas    = array_merge( $palabras, $palabras );
-			foreach ( $todas as $i => $w ) {
-				printf( '<span class="brk-disp%s"%s>%s%s</span>', $i % 2 ? ' brk-outline' : '', $i >= count( $palabras ) ? ' aria-hidden="true"' : '', esc_html( $w ), brk_icono( 'rayo', 26 ) ); // phpcs:ignore
-			}
-			?>
-		</div>
-	</section>
-
 	<?php
 	$cats = get_terms( array( 'taxonomy' => 'product_cat', 'hide_empty' => true, 'parent' => 0, 'exclude' => array( (int) get_option( 'default_product_cat' ) ) ) );
 	if ( $cats && ! is_wp_error( $cats ) ) :
