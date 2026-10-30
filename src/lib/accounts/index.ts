@@ -263,6 +263,8 @@ export async function authenticate(email: string, password: string): Promise<Log
 export async function startSession(userId: string): Promise<void> {
   const token = randomToken();
   const expires = Date.now() + SESSION_DAYS * 24 * 60 * 60 * 1000;
+  // Expired sessions are dead weight in the database; clear them as we go.
+  await (await db()).prepare("DELETE FROM sessions WHERE expires_at < ?").bind(Date.now()).run();
   await (await db())
     .prepare("INSERT INTO sessions (token_hash, user_id, expires_at, created_at) VALUES (?, ?, ?, ?)")
     .bind(await sha256(token), userId, expires, new Date().toISOString())

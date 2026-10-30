@@ -1,3 +1,5 @@
+import { timingSafeEqual } from "@/lib/accounts/crypto";
+
 export const INTERNAL_SESSION_COOKIE = "evx_internal_session";
 const SESSION_DURATION_MS = 12 * 60 * 60 * 1000; // 12h
 
@@ -35,5 +37,5 @@ export async function isValidSession(value: string | undefined): Promise<boolean
   const expires = Number(expiresStr);
   if (!expires || Number.isNaN(expires) || Date.now() > expires) return false;
   const expected = await hmac(secret, expiresStr);
-  return expected === signature;
+  return typeof signature === "string" && timingSafeEqual(expected, signature);
 }

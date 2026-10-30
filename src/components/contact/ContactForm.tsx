@@ -24,14 +24,15 @@ export function ContactForm() {
   return (
     <div className="metal-edge rounded-2xl border border-silver-300/15 bg-ink-raised p-6 md:p-8">
       <form ref={formRef} action={formAction} className="flex flex-col gap-4">
+        <input type="text" name="website" tabIndex={-1} autoComplete="off" aria-hidden className="hidden" />
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
           <label className="flex flex-col gap-1.5 text-sm text-silver-300">
             Nombre
-            <input type="text" name="name" required className={inputClass} />
+            <input type="text" name="name" required maxLength={120} className={inputClass} />
           </label>
           <label className="flex flex-col gap-1.5 text-sm text-silver-300">
             Correo
-            <input type="email" name="email" required className={inputClass} />
+            <input type="email" name="email" required maxLength={254} className={inputClass} />
           </label>
         </div>
 
@@ -48,7 +49,7 @@ export function ContactForm() {
 
         <label className="flex flex-col gap-1.5 text-sm text-silver-300">
           Mensaje
-          <textarea name="message" required rows={6} className={inputClass} />
+          <textarea name="message" required rows={6} maxLength={5000} className={inputClass} />
         </label>
 
         {state.error && <p className="text-sm text-red-400">{state.error}</p>}

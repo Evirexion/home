@@ -1,9 +1,10 @@
 "use client";
 
-import { MapContainer, Marker, Popup, TileLayer, useMap } from "react-leaflet";
+import { Circle, MapContainer, Marker, Popup, TileLayer, useMap } from "react-leaflet";
 import L from "leaflet";
 import { useEffect } from "react";
 import type { ChargingStation } from "@/types/content";
+import type { LatLng } from "@/lib/geo";
 import "leaflet/dist/leaflet.css";
 
 const BOGOTA_CENTER: [number, number] = [4.698, -74.07];
@@ -19,6 +20,39 @@ function stationIcon(active: boolean) {
     iconSize: [active ? 20 : 14, active ? 20 : 14],
     iconAnchor: [active ? 10 : 7, active ? 10 : 7],
   });
+}
+
+/** The reader's position: a silver dot with an electric ring. */
+const userIcon = L.divIcon({
+  className: "",
+  html: `<span class="evx-user-dot"></span>`,
+  iconSize: [18, 18],
+  iconAnchor: [9, 9],
+});
+
+/** After "Cerca de mí": frame the reader and their nearest stations together. */
+function FlyToUser({
+  user,
+  nearest,
+  request,
+}: {
+  user: LatLng | null;
+  nearest: ChargingStation[];
+  request: number;
+}) {
+  const map = useMap();
+  useEffect(() => {
+    if (!user || request === 0) return;
+    const points: [number, number][] = [[user.lat, user.lng], ...nearest.map((s): [number, number] => [s.lat, s.lng])];
+    if (points.length === 1) {
+      map.flyTo(points[0], 13, { duration: 0.8 });
+      return;
+    }
+    map.flyToBounds(L.latLngBounds(points), { padding: [48, 48], duration: 0.9, maxZoom: 15 });
+    // Only when the reader asks to be located, not on every filter change.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [request, map]);
+  return null;
 }
 
 function FlyToStation({ station }: { station: ChargingStation | null }) {
@@ -53,11 +87,21 @@ export function MapView({
   focusStations,
   selectedStationId,
   onSelectStation,
+  userLocation = null,
+  userAccuracy = 0,
+  nearestStations = [],
+  locateRequest = 0,
 }: {
   stations: ChargingStation[];
   focusStations: ChargingStation[];
   selectedStationId: string | null;
   onSelectStation: (id: string) => void;
+  userLocation?: LatLng | null;
+  /** Accuracy radius of the browser's fix, in metres. */
+  userAccuracy?: number;
+  nearestStations?: ChargingStation[];
+  /** Increments each time the reader is located, to re-frame the map. */
+  locateRequest?: number;
 }) {
   const selected = stations.find((s) => s._id === selectedStationId) ?? null;
 
@@ -81,7 +125,25 @@ export function MapView({
         className="evx-map-tiles"
       />
       <FlyToFocus stations={focusStations} />
+      {/* After FlyToFocus so that, on the render where the reader is located, this framing wins. */}
+      <FlyToUser user={userLocation} nearest={nearestStations} request={locateRequest} />
       <FlyToStation station={selected} />
+      {userLocation && (
+        <>
+          {userAccuracy > 30 && userAccuracy < 5000 && (
+            <Circle
+              center={[userLocation.lat, userLocation.lng]}
+              radius={userAccuracy}
+              pathOptions={{ color: "#c9d1ce", weight: 1, opacity: 0.4, fillColor: "#c9d1ce", fillOpacity: 0.06 }}
+            />
+          )}
+          <Marker position={[userLocation.lat, userLocation.lng]} icon={userIcon} zIndexOffset={1000}>
+            <Popup>
+              <p className="font-sans text-xs font-semibold text-ink">Estás aquí (aproximado)</p>
+            </Popup>
+          </Marker>
+        </>
+      )}
       {stations.map((station) => (
         <Marker
           key={station._id}

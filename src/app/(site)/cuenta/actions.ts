@@ -29,6 +29,7 @@ import {
   sendPasswordResetEmail,
   sendVerificationEmail,
 } from "@/lib/accounts/mailer";
+import { RATE_LIMITED_MESSAGE, rateLimit } from "@/lib/rateLimit";
 
 export interface FormState {
   error?: string;
@@ -38,11 +39,23 @@ export interface FormState {
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 
+/**
+ * Hosts this site really answers on. Links in emails (activation, password
+ * reset) are only ever built from one of these: trusting a request header
+ * like X-Forwarded-Host would let an attacker get a victim's reset token
+ * mailed with a link to the attacker's own domain.
+ */
+const TRUSTED_HOSTS = new Set([
+  "evirexion.com",
+  "www.evirexion.com",
+  "e-virexion.evirexion.workers.dev",
+  "localhost:3000",
+]);
+
 async function siteOrigin(): Promise<string> {
-  const h = await headers();
-  const host = h.get("x-forwarded-host") ?? h.get("host") ?? "evirexion.com";
-  const proto = host.startsWith("localhost") ? "http" : "https";
-  return `${proto}://${host}`;
+  const host = (await headers()).get("host") ?? "";
+  if (!TRUSTED_HOSTS.has(host)) return "https://evirexion.com";
+  return `${host.startsWith("localhost") ? "http" : "https"}://${host}`;
 }
 
 /** Only allow redirects back into this site after login. */
@@ -69,6 +82,7 @@ export async function register(_prev: FormState, formData: FormData): Promise<Fo
   const marketing = formData.get("marketing") === "on";
 
   if (!name || !email || !password) return { error: "Completa nombre, correo y contraseña." };
+  if (name.length > 120 || email.length > 254) return { error: "Revisa el nombre y el correo: son demasiado largos." };
   if (!EMAIL_RE.test(email)) return { error: "Ingresa un correo electrónico válido." };
   const passwordProblem = validatePassword(password);
   if (passwordProblem) return { error: passwordProblem };
@@ -76,6 +90,7 @@ export async function register(_prev: FormState, formData: FormData): Promise<Fo
   if (!privacy) {
     return { error: "Para crear tu cuenta necesitamos tu autorización para el tratamiento de datos personales." };
   }
+  if (!(await rateLimit("register"))) return { error: RATE_LIMITED_MESSAGE };
   if (!isMailerConfigured()) {
     return { error: "El registro abre muy pronto: estamos terminando de configurar el envío de correos." };
   }
@@ -147,6 +162,8 @@ export async function login(_prev: FormState, formData: FormData): Promise<FormS
   const password = String(formData.get("password") ?? "");
   const next = safeNext(formData.get("next"));
   if (!email || !password) return { error: "Escribe tu correo y contraseña." };
+  if (email.length > 254 || password.length > 200) return { error: "Correo o contraseña incorrectos." };
+  if (!(await rateLimit("login"))) return { error: RATE_LIMITED_MESSAGE };
 
   let ok = false;
   try {
@@ -182,7 +199,8 @@ export async function logout() {
 
 export async function requestReset(_prev: FormState, formData: FormData): Promise<FormState> {
   const email = String(formData.get("email") ?? "").trim();
-  if (!EMAIL_RE.test(email)) return { error: "Ingresa un correo electrónico válido." };
+  if (email.length > 254 || !EMAIL_RE.test(email)) return { error: "Ingresa un correo electrónico válido." };
+  if (!(await rateLimit("reset"))) return { error: RATE_LIMITED_MESSAGE };
   try {
     const issued = await issuePasswordResetToken(email);
     if (issued) {
@@ -226,6 +244,7 @@ export async function savePreferences(_prev: FormState, formData: FormData): Pro
   if (!user) redirect("/cuenta/ingresar");
   const name = String(formData.get("name") ?? "").trim();
   if (!name) return { error: "El nombre no puede quedar vacío." };
+  if (name.length > 120) return { error: "El nombre es demasiado largo." };
   try {
     await updateProfile(user.id, { name, marketingConsent: formData.get("marketing") === "on" });
   } catch (error) {

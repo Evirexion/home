@@ -4,6 +4,8 @@ import { cookies } from "next/headers";
 import { createSessionValue, INTERNAL_SESSION_COOKIE, isValidSession } from "@/lib/auth";
 import { createDraftPost } from "@/lib/posts";
 import type { PostCategory } from "@/types/content";
+import { timingSafeEqual } from "@/lib/accounts/crypto";
+import { RATE_LIMITED_MESSAGE, rateLimit } from "@/lib/rateLimit";
 
 export interface LoginState {
   error?: string;
@@ -16,7 +18,8 @@ export async function login(_prevState: LoginState, formData: FormData): Promise
   if (!expected) {
     return { error: "INTERNAL_NEWS_PASSWORD no está configurada en el servidor." };
   }
-  if (typeof password !== "string" || password !== expected) {
+  if (!(await rateLimit("internal-login"))) return { error: RATE_LIMITED_MESSAGE };
+  if (typeof password !== "string" || !timingSafeEqual(password, expected)) {
     return { error: "Contraseña incorrecta." };
   }
 
@@ -57,6 +60,12 @@ export async function submitDraft(_prevState: DraftFormState, formData: FormData
 
   if (!title || !tag || !excerpt || !body) {
     return { error: "Completa título, tag, extracto y cuerpo antes de enviar." };
+  }
+  if (title.length > 300 || tag.length > 80 || excerpt.length > 1000 || body.length > 100_000 || author.length > 120) {
+    return { error: "Algún campo es demasiado largo." };
+  }
+  if (!["corriente", "innovations"].includes(category)) {
+    return { error: "Categoría no válida." };
   }
 
   const result = await createDraftPost({ title, category, tag, excerpt, body, author });

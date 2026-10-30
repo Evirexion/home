@@ -1,7 +1,8 @@
 "use client";
 
 import clsx from "clsx";
-import { Clock, DollarSign, Mail, MapPin, Phone, Wrench, Zap } from "lucide-react";
+import { Clock, DollarSign, Mail, MapPin, Navigation, Phone, Wrench, Zap } from "lucide-react";
+import { formatDistance } from "@/lib/geo";
 import { VEHICLE_TYPE_META } from "@/lib/vehicleTypes";
 import type { ChargingStation } from "@/types/content";
 
@@ -9,10 +10,13 @@ export function StationCard({
   station,
   active,
   onSelect,
+  distanceKm,
 }: {
   station: ChargingStation;
   active: boolean;
   onSelect: () => void;
+  /** Straight-line distance from the reader, when they shared their location. */
+  distanceKm?: number;
 }) {
   return (
     <button
@@ -33,6 +37,11 @@ export function StationCard({
           </p>
         </div>
         <div className="flex shrink-0 flex-col items-end gap-1.5">
+          {distanceKm !== undefined && (
+            <span className="flex items-center gap-1 rounded-full bg-electric/10 px-2 py-1 text-[11px] font-semibold text-electric">
+              <Navigation className="h-3 w-3" />a {formatDistance(distanceKm)}
+            </span>
+          )}
           {station.fastCharging && (
             <span className="flex items-center gap-1 rounded-full border border-electric/30 px-2 py-1 text-[10px] font-medium uppercase text-electric">
               <Zap className="h-3 w-3" />
