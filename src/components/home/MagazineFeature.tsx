@@ -84,7 +84,7 @@ export function MagazineFeature() {
               <BookOpen className="h-4 w-4" /> Leer Revista
             </Link>
             <span className="inline-flex items-center gap-2 text-sm text-silver-500">
-              <Lock className="h-4 w-4" /> {edition.previewPages} páginas gratis · {edition.pages} con tu cuenta gratuita
+              <Lock className="h-4 w-4" /> {edition.previewPages} páginas gratis · completa online con tu cuenta gratuita
             </span>
           </div>
         </Reveal>

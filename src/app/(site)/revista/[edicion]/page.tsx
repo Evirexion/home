@@ -41,11 +41,11 @@ export default async function EditionPage({
           </div>
           {!user && (
             <p className="text-sm text-silver-500">
-              Estás viendo la vista previa.{" "}
+              Vista previa: páginas 1 a {edition.previewPages}.{" "}
               <Link href="/cuenta/registro" className="text-electric hover:underline">
                 Regístrate gratis
               </Link>{" "}
-              para leerla completa.
+              para leerla completa online. No se descarga nada.
             </p>
           )}
         </div>

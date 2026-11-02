@@ -24,7 +24,7 @@ export const EDITIONS: Edition[] = [
     title: "La revolución eléctrica en Colombia",
     month: "Octubre 2026",
     pages: 52,
-    previewPages: 9,
+    previewPages: 10,
     width: 1100,
     height: 1556,
     highlights: [
