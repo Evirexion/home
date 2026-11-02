@@ -1,4 +1,5 @@
-import { BookOpen } from "lucide-react";
+import Link from "next/link";
+import { BookOpen, Zap } from "lucide-react";
 import { Container } from "@/components/ui/Container";
 import { Button } from "@/components/ui/Button";
 import { CurrentLine } from "@/components/ui/CurrentLine";
@@ -28,10 +29,20 @@ export function Hero() {
           <span aria-hidden className="hidden h-1 w-1 rounded-full bg-electric/70 sm:inline-block" />
           <span>Colombia y Latinoamérica</span>
         </p>
-        <div className="flex flex-wrap justify-center gap-4">
-          <Button href="/revista">
-            <BookOpen className="h-4 w-4" /> Leer Revista
-          </Button>
+        <div className="flex flex-col items-center gap-5">
+          <Link
+            href="/revista"
+            className="group relative inline-flex items-center justify-center gap-3 rounded-full px-10 py-5 [font-family:var(--font-display),system-ui,sans-serif] text-lg font-bold text-ink transition-transform duration-300 hover:scale-[1.04] active:scale-[0.98] md:px-14 md:py-6 md:text-2xl"
+          >
+            <span aria-hidden className="animate-cta-pulse absolute inset-0 rounded-full" />
+            <span
+              aria-hidden
+              className="brand-gradient-bg metal-edge absolute inset-0 rounded-full shadow-[0_0_40px_rgba(0,255,65,0.45),0_8px_32px_rgba(0,255,65,0.25)] transition-shadow duration-300 group-hover:shadow-[0_0_64px_rgba(0,255,65,0.65),0_10px_40px_rgba(0,255,65,0.35)]"
+            />
+            <BookOpen className="relative h-6 w-6 md:h-7 md:w-7" />
+            <span className="relative">Leer Revista</span>
+            <Zap className="relative h-5 w-5 transition-transform duration-300 group-hover:rotate-12 md:h-6 md:w-6" fill="currentColor" />
+          </Link>
           <Button href="/map" variant="outline">
             Explorar el mapa de carga
           </Button>
