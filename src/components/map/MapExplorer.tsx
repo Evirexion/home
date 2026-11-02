@@ -236,7 +236,7 @@ export function MapExplorer({ stations }: { stations: ChargingStation[] }) {
       <MapFilters query={query} onQueryChange={setQuery} activeTypes={activeTypes} onToggleType={toggleType} />
 
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-[380px_1fr]">
-        <div className="flex max-h-[720px] flex-col gap-3 overflow-y-auto pr-1 lg:max-h-[640px]">
+        <div className="order-2 flex max-h-[720px] flex-col gap-3 overflow-y-auto pr-1 lg:order-1 lg:max-h-[640px]">
           {filtered.length === 0 && (
             <p className="rounded-2xl border border-silver-300/15 bg-ink-raised p-6 text-center text-sm text-silver-500">
               No encontramos estaciones con esos filtros.
@@ -253,7 +253,7 @@ export function MapExplorer({ stations }: { stations: ChargingStation[] }) {
           ))}
         </div>
 
-        <div className="metal-edge h-[420px] overflow-hidden rounded-2xl border border-silver-300/15 lg:h-[640px]">
+        <div className="metal-edge order-1 h-[420px] overflow-hidden lg:order-2 rounded-2xl border border-silver-300/15 lg:h-[640px]">
           <MapView
             stations={filtered}
             focusStations={cityStations}

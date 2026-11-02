@@ -1,3 +1,4 @@
+import { BookOpen } from "lucide-react";
 import { Container } from "@/components/ui/Container";
 import { Button } from "@/components/ui/Button";
 import { CurrentLine } from "@/components/ui/CurrentLine";
@@ -21,9 +22,16 @@ export function Hero() {
         <HeroStage />
       </div>
 
-      <Container className="relative z-[5] flex justify-center pb-16 md:pb-20">
+      <Container className="relative z-[5] flex flex-col items-center gap-6 pb-16 md:pb-20">
+        <p className="flex flex-wrap items-center justify-center gap-x-3 gap-y-1 text-center text-[11px] font-semibold uppercase tracking-[0.3em] text-silver-300 md:text-xs">
+          <span className="text-electric">Revista de movilidad eléctrica</span>
+          <span aria-hidden className="hidden h-1 w-1 rounded-full bg-electric/70 sm:inline-block" />
+          <span>Colombia y Latinoamérica</span>
+        </p>
         <div className="flex flex-wrap justify-center gap-4">
-          <Button href="/news">Leer Corriente</Button>
+          <Button href="/revista">
+            <BookOpen className="h-4 w-4" /> Leer Revista
+          </Button>
           <Button href="/map" variant="outline">
             Explorar el mapa de carga
           </Button>
