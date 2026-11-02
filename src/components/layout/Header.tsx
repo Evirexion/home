@@ -5,6 +5,7 @@ import Link from "next/link";
 import { Menu, UserRound, X } from "lucide-react";
 import { Logo } from "@/components/ui/Logo";
 import { Container } from "@/components/ui/Container";
+import { FontSizeControl } from "./FontSizeControl";
 
 const NAV_LINKS = [
   { href: "/revista", label: "Revista" },
@@ -35,6 +36,7 @@ export function Header() {
               <span className="absolute inset-x-3 bottom-1 h-px scale-x-0 bg-electric transition-transform duration-300 group-hover:scale-x-100" />
             </Link>
           ))}
+          <FontSizeControl className="ml-1" />
           <Link
             href="/cuenta"
             aria-label="Mi cuenta"
@@ -75,6 +77,10 @@ export function Header() {
             >
               Mi cuenta
             </Link>
+            <div className="mt-2 flex items-center justify-between gap-3 border-t border-silver-700/15 px-3 pt-3">
+              <span className="text-sm text-silver-500">Tamaño de la letra</span>
+              <FontSizeControl />
+            </div>
           </Container>
         </nav>
       )}

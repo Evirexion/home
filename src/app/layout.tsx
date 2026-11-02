@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Inter, Space_Grotesk } from "next/font/google";
 import "./globals.css";
+import { FONT_INIT_SCRIPT } from "@/lib/fontSize";
 
 const spaceGrotesk = Space_Grotesk({
   variable: "--font-space-grotesk",
@@ -36,7 +37,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="es" className={`${spaceGrotesk.variable} ${inter.variable} h-full antialiased`}>
+    <html lang="es" className={`${spaceGrotesk.variable} ${inter.variable} h-full antialiased`} suppressHydrationWarning>
+      <head>
+        {/* Applies the reader's saved text size before first paint. */}
+        <script dangerouslySetInnerHTML={{ __html: FONT_INIT_SCRIPT }} />
+      </head>
       <body className="min-h-full bg-ink text-silver-100">{children}</body>
     </html>
   );
