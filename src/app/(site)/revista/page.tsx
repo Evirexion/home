@@ -67,7 +67,7 @@ export default async function MagazinePage({ searchParams }: { searchParams: Pro
                   </span>
                   {!user && (
                     <span className="inline-flex items-center gap-2 text-sm text-silver-500">
-                      <Lock className="h-4 w-4" /> {edition.previewPages} páginas gratis · {edition.pages} con tu cuenta
+                      <Lock className="h-4 w-4" /> {edition.previewPages} páginas gratis · completa online con tu cuenta gratuita
                     </span>
                   )}
                 </div>
@@ -79,7 +79,7 @@ export default async function MagazinePage({ searchParams }: { searchParams: Pro
         {!user && latest && (
           <div className="mt-10 flex flex-wrap items-center justify-between gap-4 rounded-2xl border border-electric/25 bg-electric/5 p-6">
             <p className="text-silver-100">
-              Crea tu cuenta gratis y lee las {latest.pages} páginas de cada edición.
+              Crea tu cuenta gratis y lee online las {latest.pages} páginas de cada edición. Se lee aquí mismo: no se descarga ningún archivo.
             </p>
             <div className="flex gap-3">
               <Link href="/cuenta/registro" className="brand-gradient-bg rounded-full px-5 py-2 text-sm font-semibold text-ink">

@@ -31,9 +31,9 @@ function lockedPage(totalPages: number, previewPages: number): HTMLElement {
   page.className = "evx-page evx-page--locked";
   page.innerHTML = `
     <div class="evx-locked">
-      <p class="evx-locked__eyebrow">Sigue leyendo</p>
-      <p class="evx-locked__title">Te quedan ${totalPages - previewPages} páginas de esta edición</p>
-      <p class="evx-locked__text">Crea tu cuenta gratis para leer la revista completa: Corriente, pioneros y la guía de precios de todos los eléctricos de Colombia.</p>
+      <p class="evx-locked__eyebrow">Fin de la vista previa</p>
+      <p class="evx-locked__title">Regístrate gratis para seguir leyendo online</p>
+      <p class="evx-locked__text">Te quedan ${totalPages - previewPages} páginas de esta edición. La revista se lee solo aquí, en línea: no se descarga ningún archivo. Crear tu cuenta es gratis y toma un minuto.</p>
       <a class="evx-locked__cta" href="/cuenta/registro">Crear cuenta gratis</a>
       <a class="evx-locked__link" href="/cuenta/ingresar?next=${encodeURIComponent(window.location.pathname)}">Ya tengo cuenta · Ingresar</a>
     </div>`;
@@ -49,6 +49,7 @@ function imagePage(src: string, number: number, eager: boolean): HTMLElement {
   img.loading = eager ? "eager" : "lazy";
   img.decoding = "async";
   img.draggable = false;
+  img.addEventListener("contextmenu", (e) => e.preventDefault());
   page.appendChild(img);
   return page;
 }
