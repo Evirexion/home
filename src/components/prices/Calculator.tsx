@@ -101,13 +101,19 @@ export function Calculator({ listings }: { listings: VehicleListing[] }) {
             <div className="rounded-xl border border-electric/30 bg-electric/5 p-5">
               <p className="text-xs uppercase tracking-wide text-silver-500">Precio nuevo</p>
               <p className="brand-gradient-text mt-2 text-2xl font-bold">
-                {formatPriceRange(result.priceMin, result.priceMax, result.priceNote, "No disponible")}
+                {formatPriceRange(result.priceMin, result.priceMax, result.priceNote, "No disponible", result.currency)}
               </p>
             </div>
             <div className="rounded-xl border border-silver-300/20 bg-white/[0.02] p-5">
               <p className="text-xs uppercase tracking-wide text-silver-500">Precio usado</p>
               <p className="mt-2 text-2xl font-bold text-silver-100">
-                {formatPriceRange(result.usedPriceMin, result.usedPriceMax, result.usedPriceNote, "No disponible")}
+                {formatPriceRange(
+                  result.usedPriceMin,
+                  result.usedPriceMax,
+                  result.usedPriceNote,
+                  "No disponible",
+                  result.usedCurrency ?? result.currency
+                )}
               </p>
             </div>
           </div>

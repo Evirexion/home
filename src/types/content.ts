@@ -1,3 +1,4 @@
+import type { CountryCode, Currency } from "@/lib/countries";
 import type { PortableTextBlock } from "@portabletext/types";
 
 export type PostCategory = "corriente" | "innovations";
@@ -62,6 +63,11 @@ export interface VehicleListing {
   usedPriceMin?: number | null;
   usedPriceMax?: number | null;
   usedPriceNote?: string | null;
-  currency: "COP";
+  /** Currency of the new price. Perú mixes US$ (cars) and S/ (two-wheelers), so it is per vehicle. */
+  currency: Currency;
+  /** Currency of the used price, when it differs from `currency`. */
+  usedCurrency?: Currency;
+  /** Country tab this vehicle came from; absent on older data, which is Colombia. */
+  country?: CountryCode;
   source: string;
 }
