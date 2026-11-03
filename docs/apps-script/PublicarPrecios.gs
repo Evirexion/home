@@ -7,11 +7,28 @@
  *
  * Uso: edita el Sheet › E-Virexion › Publicar precios en la web › revisa el
  * resumen › Sí. La página /prices se actualiza al instante.
+ *
+ * Varios países: cada país es una pestaña. El país se reconoce por el nombre
+ * de la pestaña ("Colombia", "México", "Brasil", "Perú", "Argentina", "Chile")
+ * o, si el nombre no lo dice, por el título de las dos primeras filas. Solo se
+ * publican pestañas que tengan la fila de encabezados con "Marca" y "Modelo",
+ * así que "Notas" y "Marcas" se ignoran solas.
  */
 
-// Pestaña con la lista maestra (gid de la URL). Si no existe, usa la pestaña activa.
-var PRICES_SHEET_GID = 1865210025;
 var DEFAULT_SITE_URL = 'https://e-virexion.evirexion.workers.dev';
+
+// Código de país que entiende la web → palabras que lo identifican (sin tildes, minúsculas).
+var COUNTRY_WORDS = {
+  CO: ['colombia'],
+  MX: ['mexico'],
+  BR: ['brasil', 'brazil'],
+  PE: ['peru'],
+  AR: ['argentina'],
+  CL: ['chile'],
+};
+var COUNTRY_NAMES = { CO: 'Colombia', MX: 'México', BR: 'Brasil', PE: 'Perú', AR: 'Argentina', CL: 'Chile' };
+// Pestañas de apoyo que nunca son una lista de precios.
+var IGNORED_TABS = /^(notas?|marcas?|instrucciones|leeme|backup|respaldo|copia)/;
 
 function onOpen() {
   SpreadsheetApp.getUi()
@@ -57,11 +74,54 @@ function configurarConexion() {
   ui.alert('Conexión guardada ✔');
 }
 
-function getRows_() {
-  var ss = SpreadsheetApp.getActiveSpreadsheet();
-  var sheet = ss.getSheets().filter(function (s) { return s.getSheetId() === PRICES_SHEET_GID; })[0] || ss.getActiveSheet();
-  // Valores tal como se ven ("$79M – $85M"), que es lo que la web sabe leer.
-  return sheet.getDataRange().getDisplayValues();
+function plain_(text) {
+  return String(text || '').normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase();
+}
+
+function countryIn_(text) {
+  var t = plain_(text);
+  for (var code in COUNTRY_WORDS) {
+    if (COUNTRY_WORDS[code].some(function (w) { return t.indexOf(w) !== -1; })) return code;
+  }
+  return null;
+}
+
+function hasHeader_(rows) {
+  for (var i = 0; i < Math.min(rows.length, 15); i++) {
+    var cells = rows[i].map(function (c) { return plain_(c).trim(); });
+    if (cells.indexOf('marca') !== -1 && cells.indexOf('modelo') !== -1) return true;
+  }
+  return false;
+}
+
+/** Una entrada por país: { country, tab, rows }. Lanza error si dos pestañas dicen ser el mismo país. */
+function getCountryTabs_() {
+  var found = {};
+  SpreadsheetApp.getActiveSpreadsheet().getSheets().forEach(function (sheet) {
+    var name = sheet.getName();
+    if (IGNORED_TABS.test(plain_(name).trim())) return;
+    // Valores tal como se ven ("$79M – $85M", "R$ 118.990"), que es lo que la web sabe leer.
+    var rows = sheet.getDataRange().getDisplayValues();
+    if (!hasHeader_(rows)) return;
+
+    var byName = countryIn_(name);
+    var code = byName || countryIn_((rows[0] || []).join(' ') + ' ' + (rows[1] || []).join(' '));
+    // La pestaña original de Colombia se llama "Guía de Precios" y su título dice "Colombia".
+    if (!code) return;
+
+    var entry = { country: code, tab: name, rows: rows, byName: Boolean(byName) };
+    var other = found[code];
+    if (!other) { found[code] = entry; return; }
+    if (entry.byName && !other.byName) { found[code] = entry; return; }
+    if (other.byName && !entry.byName) return;
+    throw new Error(
+      'Las pestañas "' + other.tab + '" y "' + name + '" parecen ser las dos de ' + COUNTRY_NAMES[code] +
+      '. Renombra la que no se debe publicar (por ejemplo "Copia ' + name + '").'
+    );
+  });
+  var list = Object.keys(COUNTRY_WORDS).filter(function (c) { return found[c]; }).map(function (c) { return found[c]; });
+  if (!list.length) throw new Error('No encontré ninguna pestaña de país con encabezados "Marca" y "Modelo".');
+  return list;
 }
 
 function call_(payload) {
@@ -83,28 +143,42 @@ function call_(payload) {
 
 function list_(title, items, max) {
   if (!items || !items.length) return '';
-  max = max || 15;
-  var shown = items.slice(0, max).map(function (x) { return '  • ' + x; }).join('\n');
-  var more = items.length > max ? '\n  … y ' + (items.length - max) + ' más' : '';
-  return '\n\n' + title + ' (' + items.length + '):\n' + shown + more;
+  var shown = items.slice(0, max).map(function (x) { return '    • ' + x; }).join('\n');
+  var more = items.length > max ? '\n    … y ' + (items.length - max) + ' más' : '';
+  return '\n  ' + title + ' (' + items.length + '):\n' + shown + more;
 }
 
-function describe_(s) {
-  var text = 'Vehículos en el Sheet: ' + s.total + '   (en la web ahora: ' + s.previousTotal + ')';
-  if (!s.added.length && !s.changed.length && !s.removed.length) text += '\n\nNo hay cambios frente a lo que ya está publicado.';
-  text += list_('Nuevos', s.added);
-  text += list_('Con cambios', s.changed);
-  text += list_('Se quitarán de la web', s.removed);
-  text += list_('⚠ Filas que NO se publicarán (revisar)', s.problems, 10);
-  return text;
+function hasChanges_(s) {
+  return s.added.length + s.changed.length + s.removed.length > 0;
+}
+
+function describe_(previews) {
+  var max = previews.length > 1 ? 6 : 15;
+  return previews.map(function (p) {
+    var s = p.summary;
+    var text = '■ ' + COUNTRY_NAMES[p.country] + ' (pestaña "' + p.tab + '"): ' + s.total + ' vehículos   (en la web ahora: ' + s.previousTotal + ')';
+    if (!hasChanges_(s)) text += '\n  Sin cambios.';
+    text += list_('Nuevos', s.added, max);
+    text += list_('Con cambios', s.changed, max);
+    text += list_('Se quitarán de la web', s.removed, max);
+    text += list_('⚠ Filas que NO se publicarán (revisar)', s.problems, max);
+    text += list_('Notas', s.notes, max);
+    return text;
+  }).join('\n\n');
+}
+
+function preview_() {
+  return getCountryTabs_().map(function (t) {
+    var r = call_({ country: t.country, rows: t.rows, dryRun: true });
+    if (!r.ok) throw new Error(COUNTRY_NAMES[t.country] + ': ' + r.error);
+    return { country: t.country, tab: t.tab, rows: t.rows, summary: r.summary };
+  });
 }
 
 function verCambios() {
   var ui = SpreadsheetApp.getUi();
   try {
-    var r = call_({ rows: getRows_(), dryRun: true });
-    if (!r.ok) throw new Error(r.error);
-    ui.alert('Cambios pendientes', describe_(r.summary), ui.ButtonSet.OK);
+    ui.alert('Cambios pendientes', describe_(preview_()), ui.ButtonSet.OK);
   } catch (e) {
     ui.alert('No se pudo revisar', String(e.message || e), ui.ButtonSet.OK);
   }
@@ -113,28 +187,43 @@ function verCambios() {
 function publicarPrecios() {
   var ui = SpreadsheetApp.getUi();
   try {
-    var rows = getRows_();
-    var preview = call_({ rows: rows, dryRun: true });
-    if (!preview.ok) throw new Error(preview.error);
-    var s = preview.summary;
+    var previews = preview_();
+    var pending = previews.filter(function (p) { return hasChanges_(p.summary); });
+    if (!pending.length) {
+      ui.alert('Nada que publicar', describe_(previews), ui.ButtonSet.OK);
+      return;
+    }
 
-    var force = false;
-    if (s.blocked) {
+    var blocked = pending.filter(function (p) { return p.summary.blocked; });
+    if (blocked.length) {
       var warn = ui.alert(
         '⚠ Cuidado',
-        'Esta publicación dejaría solo ' + s.total + ' vehículos (hoy hay ' + s.previousTotal + ').\n¿Seguro que quieres publicar de todas formas?',
+        blocked.map(function (p) {
+          return COUNTRY_NAMES[p.country] + ': quedarían solo ' + p.summary.total + ' vehículos (hoy hay ' + p.summary.previousTotal + ').';
+        }).join('\n') + '\n\n¿Seguro que quieres publicar de todas formas?',
         ui.ButtonSet.YES_NO
       );
       if (warn !== ui.Button.YES) return;
-      force = true;
     }
 
-    var ok = ui.alert('¿Publicar en la web?', describe_(s), ui.ButtonSet.YES_NO);
+    var ok = ui.alert('¿Publicar en la web?', describe_(previews), ui.ButtonSet.YES_NO);
     if (ok !== ui.Button.YES) return;
 
-    var r = call_({ rows: rows, dryRun: false, force: force, publishedBy: Session.getActiveUser().getEmail() });
-    if (!r.ok) throw new Error(r.error);
-    ui.alert('Publicado ✔', s.total + ' vehículos ya están en ' + getConfig_().siteUrl + '/prices', ui.ButtonSet.OK);
+    var user = Session.getActiveUser().getEmail();
+    var done = [];
+    pending.forEach(function (p) {
+      var r = call_({ country: p.country, rows: p.rows, dryRun: false, force: Boolean(p.summary.blocked), publishedBy: user });
+      if (!r.ok) {
+        throw new Error(COUNTRY_NAMES[p.country] + ': ' + r.error + (done.length ? '\n\nYa se publicó: ' + done.join(', ') : ''));
+      }
+      done.push(COUNTRY_NAMES[p.country]);
+      // Lo que se publicó, para que "Deshacer" sepa qué países restaurar.
+      PropertiesService.getScriptProperties().setProperty(
+        'LAST_PUBLISHED_COUNTRIES',
+        pending.slice(0, done.length).map(function (x) { return x.country; }).join(',')
+      );
+    });
+    ui.alert('Publicado ✔', 'Actualizado: ' + done.join(', ') + '\n\n' + getConfig_().siteUrl + '/prices', ui.ButtonSet.OK);
   } catch (e) {
     ui.alert('No se pudo publicar', String(e.message || e), ui.ButtonSet.OK);
   }
@@ -142,11 +231,17 @@ function publicarPrecios() {
 
 function deshacerPublicacion() {
   var ui = SpreadsheetApp.getUi();
-  if (ui.alert('Deshacer', '¿Volver a la versión publicada antes de la última?', ui.ButtonSet.YES_NO) !== ui.Button.YES) return;
+  var last = (PropertiesService.getScriptProperties().getProperty('LAST_PUBLISHED_COUNTRIES') || 'CO').split(',');
+  var names = last.map(function (c) { return COUNTRY_NAMES[c] || c; }).join(', ');
+  if (ui.alert('Deshacer', '¿Volver a la versión anterior de: ' + names + '?', ui.ButtonSet.YES_NO) !== ui.Button.YES) return;
   try {
-    var r = call_({ action: 'rollback' });
-    if (!r.ok) throw new Error(r.error);
-    ui.alert('Listo ✔', r.message, ui.ButtonSet.OK);
+    var messages = last.map(function (c) {
+      var r = call_({ action: 'rollback', country: c });
+      // La web ya antepone el nombre del país a sus mensajes.
+      return r.ok ? r.message : r.error;
+    });
+    PropertiesService.getScriptProperties().deleteProperty('LAST_PUBLISHED_COUNTRIES');
+    ui.alert('Listo', messages.join('\n'), ui.ButtonSet.OK);
   } catch (e) {
     ui.alert('No se pudo deshacer', String(e.message || e), ui.ButtonSet.OK);
   }

@@ -4,7 +4,7 @@ import { useMemo, useState } from "react";
 import { Bar, BarChart, CartesianGrid, Legend, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 import { Search } from "lucide-react";
 import { PRICE_VEHICLE_TYPES, VEHICLE_TYPE_META } from "@/lib/vehicleTypes";
-import { formatCOP, formatPriceRange } from "@/lib/format";
+import { formatMoney, formatMoneyCompact, formatPriceRange } from "@/lib/format";
 import type { VehicleListing, VehicleType } from "@/types/content";
 
 export function PriceBrowser({ listings }: { listings: VehicleListing[] }) {
@@ -27,17 +27,25 @@ export function PriceBrowser({ listings }: { listings: VehicleListing[] }) {
     });
   }, [listings, vehicleType, brand, query]);
 
+  // The chart only compares like with like: in Perú cars are in US$ and
+  // two-wheelers in S/, so it shows the most common currency in the current filter.
+  const chartCurrency = useMemo(() => {
+    const counts = new Map<VehicleListing["currency"], number>();
+    for (const l of filtered) if (l.priceMin !== null) counts.set(l.currency, (counts.get(l.currency) ?? 0) + 1);
+    return [...counts].sort((a, b) => b[1] - a[1])[0]?.[0] ?? "COP";
+  }, [filtered]);
+
   const chartData = useMemo(
     () =>
       filtered
-        .filter((l) => l.priceMin !== null)
+        .filter((l) => l.priceMin !== null && l.currency === chartCurrency)
         .slice(0, 10)
         .map((l) => ({
           name: `${l.brand} ${l.model}`,
           Mínimo: l.priceMin as number,
           Máximo: l.priceMax as number,
         })),
-    [filtered]
+    [filtered, chartCurrency]
   );
 
   return (
@@ -92,11 +100,12 @@ export function PriceBrowser({ listings }: { listings: VehicleListing[] }) {
                 textAnchor="end"
                 height={55}
               />
-              <YAxis tick={{ fill: "#9aa3a0", fontSize: 11 }} tickFormatter={(v) => `${(v / 1_000_000).toFixed(0)}M`} />
+              <YAxis tick={{ fill: "#9aa3a0", fontSize: 11 }} tickFormatter={(v) => formatMoneyCompact(Number(v), chartCurrency)}
+                width={72} />
               <Tooltip
                 contentStyle={{ background: "#12140f", border: "1px solid rgba(244,246,245,0.15)", borderRadius: 8 }}
                 labelStyle={{ color: "#f4f6f5" }}
-                formatter={(value) => formatCOP(Number(value))}
+                formatter={(value) => formatMoney(Number(value), chartCurrency)}
               />
               <Legend wrapperStyle={{ fontSize: 12, color: "#9aa3a0" }} />
               <Bar dataKey="Mínimo" fill="#1d9e75" radius={[4, 4, 0, 0]} />
@@ -126,10 +135,10 @@ export function PriceBrowser({ listings }: { listings: VehicleListing[] }) {
                 <td className="px-4 py-3 text-silver-500">{VEHICLE_TYPE_META[l.vehicleType].label}</td>
                 <td className="px-4 py-3 text-silver-500">{l.range || "N/D"}</td>
                 <td className="whitespace-nowrap px-4 py-3 text-right font-medium text-electric">
-                  {formatPriceRange(l.priceMin, l.priceMax, l.priceNote)}
+                  {formatPriceRange(l.priceMin, l.priceMax, l.priceNote, "N/D", l.currency)}
                 </td>
                 <td className="whitespace-nowrap px-4 py-3 text-right text-silver-300">
-                  {formatPriceRange(l.usedPriceMin, l.usedPriceMax, l.usedPriceNote)}
+                  {formatPriceRange(l.usedPriceMin, l.usedPriceMax, l.usedPriceNote, "N/D", l.usedCurrency ?? l.currency)}
                 </td>
               </tr>
             ))}

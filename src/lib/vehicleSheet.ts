@@ -1,4 +1,5 @@
 import type { VehicleType } from "@/types/content";
+import type { Currency } from "./countries";
 
 /**
  * Parsing for the "EVirexion_Guia_de_Precios" sheet.
@@ -43,9 +44,12 @@ export interface ParsedVehicle {
   priceMax: number | null;
   /** The price cell exactly as written, for reporting cells that couldn't be read. */
   priceRaw: string;
+  /** Currency the price cell was written in ("US$ …", "S/ …", or the tab's default for a bare "$"). */
+  priceCurrency: Currency;
   usedPriceMin: number | null;
   usedPriceMax: number | null;
   usedPriceRaw: string;
+  usedPriceCurrency: Currency;
   source: string;
 }
 
@@ -144,7 +148,19 @@ function cell(row: string[], index: number): string {
 const MILLIONS_SUFFIX = /^(mm|millones|millon|mill|mlls?|m)$/;
 
 /** Turns one number as written ("79", "79,5", "79.000.000") into a plain number. */
-function readNumber(text: string, millions: boolean): number | null {
+function readNumber(text: string, millions: boolean, currency: Currency): number | null {
+  if (currency !== "COP") {
+    // Other countries write full amounts: "R$ 118.990", "$1,606,900", "S/ 1.400".
+    // A run of 3-digit groups is thousands; anything else is a decimal.
+    let plain: number;
+    if (/^\d{1,3}([.,]\d{3})+$/.test(text)) {
+      plain = Number.parseInt(text.replace(/[.,]/g, ""), 10);
+    } else {
+      plain = Number.parseFloat(text.replace(/[.,](?=.*[.,])/g, "").replace(",", "."));
+    }
+    if (!Number.isFinite(plain)) return null;
+    return Math.round(millions ? plain * 1_000_000 : plain);
+  }
   let value: number;
   // With an "M" suffix the sheet's convention is "." as decimal ("$4.745M" = 4,745,000),
   // so only a run of 3-digit groups ("79.000.000") counts as thousands separators.
@@ -167,15 +183,30 @@ function readNumber(text: string, millions: boolean): number | null {
  * "$79M – $85M", "$2.1M", "$79.000.000 - $85.000.000", "79 a 85 millones",
  * "Desde $79M", "COP 79,5M". "N/D", "-" or empty → no price.
  */
-export function parsePriceRange(raw: string): { min: number | null; max: number | null } {
-  const text = (raw ?? "")
+export function parsePriceRange(
+  raw: string,
+  defaultCurrency: Currency = "COP"
+): { min: number | null; max: number | null; currency: Currency } {
+  let text = (raw ?? "")
     .normalize("NFD")
     .replace(/[\u0300-\u036f]/g, "")
     .toLowerCase()
     .trim();
   if (!text || /^n\/?\.?d\.?$/.test(text) || /^[-–—]+$/.test(text) || /consultar|no disponible|sin precio/.test(text)) {
-    return { min: null, max: null };
+    return { min: null, max: null, currency: defaultCurrency };
   }
+
+  // The cell's own currency marker wins over the tab's default ("US$ 19.990" in Perú).
+  let currency = defaultCurrency;
+  for (const [marker, code] of CURRENCY_MARKERS) {
+    if (marker.test(text)) {
+      currency = code;
+      break;
+    }
+  }
+  // Every marker becomes a plain "$" so the number after it counts as money.
+  for (const [marker] of CURRENCY_MARKERS) text = text.replace(new RegExp(marker.source, "g"), "$");
+  text = text.replace(/\$+/g, "$");
 
   const pattern = /(\$?)\s*(\d[\d.,]*)\s*(mm|millones|millon|mill|mlls?|m)?(?![a-z])/g;
   const found: { value: number; strong: boolean }[] = [];
@@ -185,7 +216,7 @@ export function parsePriceRange(raw: string): { min: number | null; max: number 
     const number = digits.replace(/[.,]$/, "");
     if (!number) continue;
     const millions = Boolean(suffix && MILLIONS_SUFFIX.test(suffix));
-    const value = readNumber(number, millions);
+    const value = readNumber(number, millions, currency);
     if (value !== null) found.push({ value, strong: Boolean(dollar) || millions || /[.,]\d{3}/.test(number) });
   }
   // Prefer numbers that clearly are money ("$…", "…M", "79.000.000") over stray ones like a year.
@@ -196,9 +227,20 @@ export function parsePriceRange(raw: string): { min: number | null; max: number 
   const values = (strong.length ? found.filter((item) => item.strong || ballpark(item.value)) : found).map(
     (item) => item.value
   );
-  if (values.length === 0) return { min: null, max: null };
-  return { min: Math.min(...values), max: Math.max(...values) };
+  if (values.length === 0) return { min: null, max: null, currency };
+  return { min: Math.min(...values), max: Math.max(...values), currency };
 }
+
+/** Currency written inside a price cell. Checked in order: "US$" before a bare "$". */
+const CURRENCY_MARKERS: [RegExp, Currency][] = [
+  [/us\$|u\$s|\busd\b|dolares/, "USD"],
+  [/r\$|\bbrl\b|reais|reales/, "BRL"],
+  [/s\/\.?(?=\s*\d)|\bpen\b|soles/, "PEN"],
+  [/\bmxn\b/, "MXN"],
+  [/\bclp\b/, "CLP"],
+  [/\bars\b/, "ARS"],
+  [/\bcop\b/, "COP"],
+];
 
 /**
  * Keyword fallback for category names that aren't in CATEGORY_MAP verbatim
@@ -206,12 +248,14 @@ export function parsePriceRange(raw: string): { min: number | null; max: number 
  * Checked in order, so "bici" wins over "moto" and "moto" over "scooter".
  */
 const CATEGORY_KEYWORDS: [RegExp, VehicleType][] = [
+  // México's "VEMEPE Tipo B — Bicimoto / Motoneta" is a light motorbike, not a bicycle.
+  [/bicimoto|motoneta|motocarro/, "motorcycle"],
   [/bici|bike|bicycle|pedelec|cicla\b/, "e-bike"],
   [/autobus|\bbus|buseta|microbus/, "bus"],
   [/camion(?!eta)|tractomula|tractocamion|volqueta|furgon|carga pesada/, "truck"],
   [/cuadriciclo|cuatrimoto|\bquad|\batv\b/, "quad"],
   [/moto|ciclomotor|moped|tricimoto/, "motorcycle"],
-  [/scooter|patinet|vmp|kick/, "scooter"],
+  [/scooter|patinet|monopatin|vmp|kick/, "scooter"],
   [/carro|auto|taxi|suv|sedan|camioneta|pickup|hatchback|crossover|\bvan\b|vehiculoliviano/, "car"],
 ];
 
@@ -269,7 +313,8 @@ function findHeader(rows: string[][]): { index: number; columns: ColumnIndex; la
   return null;
 }
 
-export function parseVehicleSheet(rows: string[][]): ParseResult {
+export function parseVehicleSheet(rows: string[][], options: { currency?: Currency } = {}): ParseResult {
+  const defaultCurrency = options.currency ?? "COP";
   const header = findHeader(rows);
   if (!header) {
     throw new Error(
@@ -345,9 +390,10 @@ export function parseVehicleSheet(rows: string[][]): ParseResult {
     seen.set(key, rowNumber);
 
     const priceRaw = cell(row, columns.price);
-    const { min, max } = parsePriceRange(priceRaw);
+    const { min, max, currency: priceCurrency } = parsePriceRange(priceRaw, defaultCurrency);
     const usedPriceRaw = cell(row, columns.usedPrice);
-    const used = parsePriceRange(usedPriceRaw);
+    // A used price with no marker of its own is in the same currency as the new price.
+    const used = parsePriceRange(usedPriceRaw, priceCurrency);
 
     vehicles.push({
       rowNumber,
@@ -362,9 +408,11 @@ export function parseVehicleSheet(rows: string[][]): ParseResult {
       priceMin: min,
       priceMax: max,
       priceRaw,
+      priceCurrency,
       usedPriceMin: used.min,
       usedPriceMax: used.max,
       usedPriceRaw,
+      usedPriceCurrency: used.currency,
       source: cell(row, columns.source),
     });
   }

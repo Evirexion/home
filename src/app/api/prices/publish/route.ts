@@ -6,13 +6,18 @@ import {
   writePublishedPrices,
 } from "@/lib/priceStore";
 import { mockVehicleListings } from "@/data/vehicles";
+import { DEFAULT_COUNTRY, getCountry } from "@/lib/countries";
 import { parseVehicleSheet, vehicleDocumentId, vehicleKey, type SkipReason } from "@/lib/vehicleSheet";
 
 /**
  * Receives the price sheet from the Google Sheet's "Publicar precios" menu
  * (see docs/apps-script/PublicarPrecios.gs) and publishes it to the site.
  *
- * Body: { rows: string[][], dryRun?: boolean, publishedBy?: string, action?: "publish" | "rollback", force?: boolean }
+ * Body: { country?: "CO" | "MX" | …, rows: string[][], dryRun?: boolean, publishedBy?: string,
+ *         action?: "publish" | "rollback", force?: boolean }
+ *
+ * One call publishes one country tab; the Sheet calls once per country.
+ * `country` defaults to Colombia so an older copy of the Apps Script keeps working.
  *
  * The Sheet always calls with dryRun first, shows the operator what will
  * change, and only sends the real publish once they confirm.
@@ -48,6 +53,8 @@ const COMPARED_FIELDS: (keyof VehicleListing)[] = [
   "usedPriceMin",
   "usedPriceMax",
   "usedPriceNote",
+  "currency",
+  "usedCurrency",
   "source",
 ];
 
@@ -89,6 +96,7 @@ export async function POST(request: Request) {
     publishedBy?: string;
     action?: string;
     force?: boolean;
+    country?: string;
   };
   try {
     body = await request.json();
@@ -96,15 +104,22 @@ export async function POST(request: Request) {
     return json({ ok: false, error: "Cuerpo de la petición inválido." }, 400);
   }
 
+  const country = getCountry(body.country ?? DEFAULT_COUNTRY);
+  if (!country) {
+    return json({ ok: false, error: `País desconocido: "${String(body.country)}".` }, 400);
+  }
+
   if (body.action === "rollback") {
     if (body.dryRun) {
       return json({ ok: true, message: "Listo para restaurar la versión anterior." });
     }
-    const restored = await rollbackPublishedPrices();
-    if (!restored) return json({ ok: false, error: "No hay una versión anterior para restaurar." }, 404);
+    const restored = await rollbackPublishedPrices(country.code);
+    if (!restored) {
+      return json({ ok: false, error: `${country.name}: no hay una versión anterior para restaurar.` }, 404);
+    }
     return json({
       ok: true,
-      message: `Restaurada la versión publicada el ${restored.publishedAt} (${restored.vehicles.length} vehículos).`,
+      message: `${country.name}: restaurada la versión publicada el ${restored.publishedAt} (${restored.vehicles.length} vehículos).`,
     });
   }
 
@@ -116,13 +131,16 @@ export async function POST(request: Request) {
 
   let parsed;
   try {
-    parsed = parseVehicleSheet(stringRows);
+    parsed = parseVehicleSheet(stringRows, { currency: country.currency });
   } catch (error) {
     return json({ ok: false, error: error instanceof Error ? error.message : "No se pudo leer el Sheet." }, 422);
   }
 
   const vehicles: VehicleListing[] = parsed.vehicles.map((vehicle) => ({
-    _id: vehicleDocumentId(vehicle.brand, vehicle.model).replace(/^vehicle-/, ""),
+    // Colombia keeps its original ids; other countries are prefixed so ids never collide.
+    _id:
+      (country.code === "CO" ? "" : `${country.code.toLowerCase()}-`) +
+      vehicleDocumentId(vehicle.brand, vehicle.model).replace(/^vehicle-/, ""),
     brand: vehicle.brand,
     model: vehicle.model,
     vehicleType: vehicle.vehicleType,
@@ -137,7 +155,11 @@ export async function POST(request: Request) {
     usedPriceMin: vehicle.usedPriceMin,
     usedPriceMax: vehicle.usedPriceMax,
     usedPriceNote: priceNote(vehicle.usedPriceMin, vehicle.usedPriceRaw),
-    currency: "COP",
+    currency: vehicle.priceCurrency,
+    ...(vehicle.usedPriceMin !== null && vehicle.usedPriceCurrency !== vehicle.priceCurrency
+      ? { usedCurrency: vehicle.usedPriceCurrency }
+      : {}),
+    country: country.code,
     source: vehicle.source,
   }));
 
@@ -146,8 +168,8 @@ export async function POST(request: Request) {
   }
 
   // Compare against what the site shows right now.
-  const current = await readPublishedPrices();
-  const baseline = current?.vehicles ?? mockVehicleListings;
+  const current = await readPublishedPrices(country.code);
+  const baseline = current?.vehicles ?? (country.code === "CO" ? mockVehicleListings : []);
   const before = new Map(baseline.map((v) => [vehicleKey(v.brand, v.model), v]));
   const after = new Map(vehicles.map((v) => [vehicleKey(v.brand, v.model), v]));
 
@@ -191,8 +213,13 @@ export async function POST(request: Request) {
     if (empty > 0) priceProblems.push(`${empty} vehículo(s) sin precio (vacío o N/D) se mostrarán como N/D`);
   }
 
+  const notes: string[] = [];
   if (parsed.priceHeader && !parsed.usedPriceHeader) {
-    priceProblems.push('No encontré columna de precio usado (un encabezado con "Usado"); solo se publicará el precio nuevo');
+    notes.push("Sin columna de precio usado: la web mostrará N/D en precio usado");
+  }
+  const currencies = [...new Set(vehicles.map((v) => v.currency))];
+  if (currencies.length > 1 || currencies[0] !== country.currency) {
+    notes.push(`Monedas leídas: ${currencies.join(", ")}`);
   }
 
   const problems = [
@@ -214,6 +241,9 @@ export async function POST(request: Request) {
   const shrinksTooMuch = baseline.length > 0 && vehicles.length < baseline.length * SHRINK_GUARD;
 
   const summary = {
+    country: country.code,
+    countryName: country.name,
+    notes,
     total: vehicles.length,
     previousTotal: baseline.length,
     previousPublishedAt: current?.publishedAt ?? null,
@@ -241,7 +271,7 @@ export async function POST(request: Request) {
   }
 
   const publishedAt = new Date().toISOString();
-  await writePublishedPrices({
+  await writePublishedPrices(country.code, {
     publishedAt,
     publishedBy: typeof body.publishedBy === "string" ? body.publishedBy.slice(0, 200) : null,
     vehicles,
