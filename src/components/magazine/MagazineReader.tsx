@@ -11,6 +11,7 @@ interface PageFlipInstance {
   flip(page: number): void;
   getCurrentPageIndex(): number;
   getPageCount(): number;
+  getOrientation(): "portrait" | "landscape";
   on(event: "flip" | "init" | "changeOrientation", callback: (e: { data: unknown }) => void): void;
   update(): void;
   destroy(): void;
@@ -60,7 +61,10 @@ export function MagazineReader({ slug, totalPages, previewPages, canReadAll, wid
   const flipRef = useRef<PageFlipInstance | null>(null);
   const [current, setCurrent] = useState(0);
   const [count, setCount] = useState(0);
-  const [fullscreen, setFullscreen] = useState(false);
+  // "native" = Fullscreen API; "overlay" = fixed layer over the page, for browsers without the API
+  // (Safari on iPhone only allows native fullscreen for <video>) or that reject the request.
+  const [fullscreen, setFullscreen] = useState<false | "native" | "overlay">(false);
+  const [portrait, setPortrait] = useState(false);
 
   const visiblePages = canReadAll ? totalPages : previewPages;
 
@@ -100,9 +104,11 @@ export function MagazineReader({ slug, totalPages, previewPages, canReadAll, wid
       });
       flip.loadFromHTML(pages);
       flip.on("flip", (e) => setCurrent(Number(e.data)));
+      flip.on("changeOrientation", (e) => setPortrait(e.data === "portrait"));
       flipRef.current = flip;
       setCount(flip.getPageCount());
       setCurrent(flip.getCurrentPageIndex());
+      setPortrait(flip.getOrientation() === "portrait");
     })();
 
     return () => {
@@ -140,17 +146,69 @@ export function MagazineReader({ slug, totalPages, previewPages, canReadAll, wid
 
   useEffect(() => {
     function onChange() {
-      setFullscreen(Boolean(document.fullscreenElement));
-      setTimeout(() => flipRef.current?.update(), 50);
+      const doc = document as Document & { webkitFullscreenElement?: Element | null };
+      const active = Boolean(document.fullscreenElement ?? doc.webkitFullscreenElement);
+      setFullscreen((state) => (active ? "native" : state === "native" ? false : state));
     }
     document.addEventListener("fullscreenchange", onChange);
-    return () => document.removeEventListener("fullscreenchange", onChange);
+    document.addEventListener("webkitfullscreenchange", onChange);
+    return () => {
+      document.removeEventListener("fullscreenchange", onChange);
+      document.removeEventListener("webkitfullscreenchange", onChange);
+    };
   }, []);
 
-  function toggleFullscreen() {
-    if (document.fullscreenElement) void document.exitFullscreen();
-    else void frameRef.current?.requestFullscreen?.();
+  // Re-measure the book whenever the reader changes size.
+  useEffect(() => {
+    const id = setTimeout(() => flipRef.current?.update(), 60);
+    return () => clearTimeout(id);
+  }, [fullscreen, portrait]);
+
+  // Overlay mode: lock the page behind it and let Escape close it.
+  useEffect(() => {
+    if (fullscreen !== "overlay") return;
+    const { overflow } = document.body.style;
+    document.body.style.overflow = "hidden";
+    function onKey(event: KeyboardEvent) {
+      if (event.key === "Escape") setFullscreen(false);
+    }
+    window.addEventListener("keydown", onKey);
+    return () => {
+      document.body.style.overflow = overflow;
+      window.removeEventListener("keydown", onKey);
+    };
+  }, [fullscreen]);
+
+  async function toggleFullscreen() {
+    const doc = document as Document & {
+      webkitFullscreenElement?: Element | null;
+      webkitExitFullscreen?: () => Promise<void> | void;
+    };
+    if (fullscreen === "overlay") {
+      setFullscreen(false);
+      return;
+    }
+    if (document.fullscreenElement ?? doc.webkitFullscreenElement) {
+      if (document.exitFullscreen) void document.exitFullscreen();
+      else void doc.webkitExitFullscreen?.();
+      return;
+    }
+    const el = frameRef.current as (HTMLDivElement & { webkitRequestFullscreen?: () => Promise<void> | void }) | null;
+    const request = el?.requestFullscreen?.bind(el) ?? el?.webkitRequestFullscreen?.bind(el);
+    if (request) {
+      try {
+        await request();
+        return;
+      } catch {
+        // Fall through to the overlay.
+      }
+    }
+    setFullscreen("overlay");
   }
+
+  // Width that lets the visible page(s) fit the available height: one page in portrait, a spread otherwise.
+  const ratio = (portrait ? 1 : 2) * (width / height);
+  // Phones held sideways (max-height:500px): in fullscreen the controls move beside the book so the page keeps its height.
 
   const label =
     count === 0
@@ -165,23 +223,35 @@ export function MagazineReader({ slug, totalPages, previewPages, canReadAll, wid
   return (
     <div
       ref={frameRef}
-      className={fullscreen ? "flex h-full flex-col justify-center bg-ink p-4" : "flex flex-col"}
+      className={
+        fullscreen
+          ? `${fullscreen === "overlay" ? "fixed inset-0 z-[100] h-dvh" : "h-full"} flex flex-col justify-center overflow-hidden bg-ink p-3 [--evx-chrome:110px] [@media(max-height:500px)]:flex-row [@media(max-height:500px)]:items-center [@media(max-height:500px)]:gap-3 [@media(max-height:500px)]:p-2 [@media(max-height:500px)]:[--evx-chrome:16px]`
+          : "flex flex-col"
+      }
+      role={fullscreen === "overlay" ? "dialog" : undefined}
+      aria-modal={fullscreen === "overlay" ? true : undefined}
+      aria-label={fullscreen === "overlay" ? "Revista en pantalla completa" : undefined}
     >
       {/* Two pages side by side must fit the viewport height (minus header and controls). */}
       <div
         ref={hostRef}
-        className="evx-book mx-auto w-full"
+        className={`evx-book mx-auto w-full ${fullscreen ? `min-w-0 [@media(max-height:500px)]:flex-1` : ""}`}
         style={{
           maxWidth: fullscreen
-            ? `calc((100vh - 120px) * ${(2 * width) / height})`
+            ? `min(100%, calc((100dvh - var(--evx-chrome)) * ${ratio}))`
             : `min(72rem, calc((100vh - 340px) * ${(2 * width) / height}))`,
         }}
       />
-      <div className="mt-6 flex items-center justify-center gap-4">
+      <div
+        className={`${fullscreen ? `mt-4 [@media(max-height:500px)]:mt-0 [@media(max-height:500px)]:flex-col` : "mt-6"} flex items-center justify-center gap-2 sm:gap-4`}
+      >
         <button type="button" onClick={prev} disabled={current === 0} className={control} aria-label="Página anterior">
           <ChevronLeft className="h-5 w-5" />
         </button>
-        <p className="min-w-40 text-center font-mono text-xs uppercase tracking-[0.2em] text-silver-500" aria-live="polite">
+        <p
+          className={`min-w-32 text-center font-mono text-xs uppercase tracking-[0.2em] text-silver-500 sm:min-w-40 ${fullscreen ? `[@media(max-height:500px)]:w-24 [@media(max-height:500px)]:min-w-0` : ""}`}
+          aria-live="polite"
+        >
           {label}
         </p>
         <button
@@ -193,13 +263,20 @@ export function MagazineReader({ slug, totalPages, previewPages, canReadAll, wid
         >
           <ChevronRight className="h-5 w-5" />
         </button>
-        <button type="button" onClick={toggleFullscreen} className={control} aria-label="Pantalla completa">
+        <button
+          type="button"
+          onClick={() => void toggleFullscreen()}
+          className={control}
+          aria-label={fullscreen ? "Salir de pantalla completa" : "Pantalla completa"}
+        >
           {fullscreen ? <Minimize2 className="h-4 w-4" /> : <Maximize2 className="h-4 w-4" />}
         </button>
       </div>
-      <p className="mt-3 text-center text-xs text-silver-700">
-        Arrastra la esquina de la página, usa las flechas o el teclado para pasar las hojas.
-      </p>
+      {!fullscreen && (
+        <p className="mt-3 text-center text-xs text-silver-700">
+          Arrastra la esquina de la página, usa las flechas o el teclado para pasar las hojas.
+        </p>
+      )}
     </div>
   );
 }
