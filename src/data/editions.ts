@@ -36,8 +36,8 @@ export const EDITIONS: Edition[] = [
     previewPages: 10,
     width: 1100,
     height: 1556,
-    // v2: new timeline spread (pages 6–7).
-    version: 2,
+    // v2: new timeline spread (pages 6–7); v3: page 6 without the divider line.
+    version: 3,
     highlights: [
       "4.603 eléctricos en un solo mes",
       "Fórmula E: arranca la era Gen4",
