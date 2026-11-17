@@ -9,6 +9,7 @@ import { FontSizeControl } from "./FontSizeControl";
 
 const NAV_LINKS = [
   { href: "/revista", label: "Revista" },
+  { href: "/ediciones", label: "Ediciones" },
   { href: "/map", label: "Mapa" },
   { href: "/news", label: "Corriente" },
   { href: "/prices", label: "Guía de precios" },

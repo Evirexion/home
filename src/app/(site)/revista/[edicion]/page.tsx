@@ -5,7 +5,7 @@ import { ArrowLeft } from "lucide-react";
 import { Container } from "@/components/ui/Container";
 import { MagazineReader } from "@/components/magazine/MagazineReader";
 import { getCurrentUser } from "@/lib/accounts";
-import { getEdition } from "@/data/editions";
+import { EDITIONS, getEdition } from "@/data/editions";
 
 export async function generateMetadata({ params }: { params: Promise<{ edicion: string }> }): Promise<Metadata> {
   const edition = getEdition((await params).edicion);
@@ -25,14 +25,18 @@ export default async function EditionPage({
   if (!edition) notFound();
   const user = await getCurrentUser();
   const { bienvenida } = await searchParams;
+  const isLatest = EDITIONS[0]?.slug === edition.slug;
 
   return (
     <div className="py-10 md:py-14">
       <Container className="max-w-6xl">
         <div className="flex flex-wrap items-end justify-between gap-4">
           <div>
-            <Link href="/revista" className="inline-flex items-center gap-2 text-sm text-silver-500 hover:text-electric">
-              <ArrowLeft className="h-4 w-4" /> Ediciones
+            <Link
+              href={isLatest ? "/revista" : "/ediciones"}
+              className="inline-flex items-center gap-2 text-sm text-silver-500 hover:text-electric"
+            >
+              <ArrowLeft className="h-4 w-4" /> {isLatest ? "Revista" : "Ediciones"}
             </Link>
             <h1 className="mt-3 font-display text-3xl font-bold text-silver-100 md:text-4xl">
               Edición {edition.number} · <span className="brand-gradient-text">{edition.month}</span>

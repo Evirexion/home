@@ -18,12 +18,17 @@ const inter = Inter({
 export const metadata: Metadata = {
   metadataBase: new URL("https://evirexion.com"),
   title: {
-    default: "E-VIREXION — Driving the Electric Shift",
+    default: "E-VIREXION — La primera revista de movilidad eléctrica",
     template: "%s | E-VIREXION",
   },
   description:
     "E-VIREXION es la revista de movilidad eléctrica premium para Colombia y Latinoamérica: revista digital, noticias, mapa de carga y precios de vehículos eléctricos.",
+  applicationName: "E-VIREXION",
+  appleWebApp: { title: "E-VIREXION" },
   openGraph: {
+    title: "E-VIREXION — La primera revista de movilidad eléctrica",
+    description:
+      "Revista de movilidad eléctrica para Colombia y Latinoamérica. Nueva edición el 17 de cada mes.",
     type: "website",
     locale: "es_CO",
     siteName: "E-VIREXION",

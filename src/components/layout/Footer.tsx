@@ -14,6 +14,7 @@ const SOCIAL_LINKS = [
 
 const FOOTER_LINKS = [
   { href: "/revista", label: "Revista" },
+  { href: "/ediciones", label: "Ediciones" },
   { href: "/map", label: "Mapa de carga" },
   { href: "/news", label: "Corriente" },
   { href: "/prices", label: "Guía de precios" },

@@ -38,12 +38,299 @@ function toBlocks(text: string): PortableTextBlock[] {
 }
 
 /**
- * Corriente: the articles from the magazine's October 2026 edition (Edición 001),
- * transcribed from the printed pages. Structure mirrors the `post` document type
+ * Corriente: the Corriente articles from each magazine edition, newest first —
+ * Edición 002 (noviembre 2026), then Edición 001 (octubre 2026) — transcribed
+ * from the printed pages. Structure mirrors the `post` document type
  * in /studio, so this can be swapped for a live Sanity query (see lib/posts.ts)
  * without UI changes.
  */
 export const mockPosts: Post[] = [
+  {
+    _id: "corriente-colombia-acelera-4603",
+    title: "Colombia acelera hacia lo eléctrico… y el freno podría venir del Congreso",
+    slug: "colombia-acelera-4603-electricos-octubre-iva",
+    category: "corriente",
+    tag: "Mercado",
+    excerpt:
+      "Octubre dejó 4.603 eléctricos matriculados en un solo mes. Pero mientras los concesionarios celebran, en el Congreso se discute subir el IVA a los eléctricos e híbridos.",
+    body: toBlocks(`Octubre dejó una cifra que hace dos años habría sonado a ciencia ficción. Pero mientras los concesionarios celebran, en el Congreso se discute una propuesta que podría cambiar las reglas del juego justo cuando el mercado pisa el acelerador a fondo.
+
+## 150 carros eléctricos al día
+
+Haga la cuenta: en octubre, cada día del mes salieron a las calles colombianas unos 150 carros eléctricos nuevos. En total fueron 4.603 matrículas en un solo mes, según el informe del sector automotor de Fenalco y la Andi con datos del Runt.
+
+Eso es más del doble que en octubre de 2025: un salto del 120,2 %. Y no es un mes aislado. Es la confirmación de una tendencia que ya no tiene reversa.
+
+## El año en que todo cambió
+
+Entre enero y octubre, Colombia ya suma 44.387 vehículos eléctricos matriculados. La cifra triplica lo registrado en el mismo periodo del año anterior, con un crecimiento del 207 %. Y todavía faltan noviembre y diciembre, tradicionalmente dos de los meses más fuertes para la venta de carros en el país.
+
+- 4.603: eléctricos matriculados en octubre de 2026
+
+- +120,2 %: frente a octubre de 2025
+
+- 44.387: eléctricos matriculados entre enero y octubre
+
+- +207 %: crecimiento enero–octubre
+
+## ¿Quién va ganando la carrera?
+
+El trono tiene dueño: Tesla. Su Model Y supera las 15.000 unidades en lo corrido del año. Dicho de otra forma: aproximadamente uno de cada tres carros eléctricos nuevos que ruedan hoy en Colombia lleva su logo.
+
+> 1 de cada 3 carros eléctricos nuevos en Colombia es un Tesla Model Y.
+
+Pero la pelea está lejos de terminar. BYD le respira en la nuca con referencias como el Yuan UP y el Yuan Plus, que han conquistado a quienes buscan dar el salto eléctrico sin disparar el presupuesto. Detrás aparecen MG y Chery, marcas que llegaron sin hacer ruido y hoy ocupan un lugar firme en la conversación.
+
+## La nube negra: el IVA
+
+Aquí es donde la historia da un giro. Mientras las cifras rompen récords, la propuesta de Ley de Rescate plantea subir el IVA a los vehículos eléctricos e híbridos. Una medida que, de aprobarse, encarecería justo el tipo de carro que más está creciendo en el país.
+
+El sector ya encendió las alarmas. La gran pregunta es qué pasará en 2027: ¿seguirá la curva hacia arriba o veremos el primer frenazo de la movilidad eléctrica en Colombia?
+
+## Y usted: elija su favorito
+
+Imagine que mañana firma la compra de su primer carro eléctrico. ¿A quién le entregaría la llave?
+
+- Tesla: el líder indiscutible… pero ¿paga usted por el carro o por el logo?
+
+- BYD: más carro por menos plata. ¿Le alcanzará para destronar al rey?
+
+- MG: la apuesta que llegó en silencio. ¿Sorpresa del año?
+
+- Chery: ¿la opción inteligente que nadie está mirando?
+
+- ¿Otra? Tal vez la suya todavía no aparece en este ranking.
+
+En E-virexion seguiremos de cerca cada cifra, cada lanzamiento y cada debate en el Congreso. Porque la revolución eléctrica en Colombia ya no es una promesa: está pasando ahora, y apenas va en el primer cambio.
+
+Fuente de datos: Informe del sector automotor de octubre de 2026, Fenalco y Andi, con base en el Runt.`),
+    author: "E-Virexion",
+    publishedAt: "2026-11-17",
+    status: "published",
+  },
+  {
+    _id: "corriente-expo-2r-2026",
+    title: "Expo 2R 2026: lo que encontramos en el lado eléctrico de Corferias",
+    slug: "expo-2r-2026-lado-electrico-corferias",
+    category: "corriente",
+    tag: "Evento",
+    excerpt:
+      "Fuimos a la Expo 2R esperando ver motos. Salimos con una pregunta que todavía no nos deja tranquilos: ¿cuánto falta para que la moto a gasolina se vuelva la rareza en la calle?",
+    body: toBlocks(`Fuimos a la Expo 2R esperando ver motos. Salimos con una pregunta que todavía no nos deja tranquilos: ¿cuánto falta para que la moto a gasolina se vuelva la rareza en la calle?
+
+Del 29 de octubre al 1 de noviembre, Corferias se llenó de cascos, chaquetas y miles de visitantes. La feria tuvo de todo: pista deportiva, test ride a combustión, clubes moteros. Pero hubo un pabellón entero, el Pabellón 4, dedicado a la movilidad alternativa. Y ahí fue donde pasó lo más interesante.
+
+## Una moto de policía que carga en 30 minutos
+
+La primera parada nos detuvo en seco. En el stand de Vmoto, una moto eléctrica con sirena, baúl y colores de policía nos recibió con las luces encendidas. Es la Stash, y su mensaje era directo: cargador rápido, del 0 al 80 % en 30 minutos, según anunciaba la marca en su stand.
+
+Si una moto eléctrica ya puede patrullar, ¿qué excusa nos queda a los demás?
+
+## El regreso de lo retro… pero sin gasolina
+
+Si algo dejó claro la feria es que lo eléctrico ya no tiene que verse futurista. Mobulaa, que llegó como patrocinador oficial de Millonarios F.C., montó uno de los stands más vistosos, con scooters de líneas clásicas, faros redondos y asientos tapizados que parecen salidos de otra época.
+
+iGoma jugó la misma carta con su línea Pandora: scooters en tonos pastel con aire vintage. Y, para quien quiere algo más deportivo, en el mismo stand estaban la GTR y la RS100.
+
+## Bicicletas con alma de moto
+
+En el stand de Profat las protagonistas no fueron las motos sino las bicicletas eléctricas de llanta ancha. La EON-XR, con suspensión dorada y estética de moto de enduro, fue de las más fotografiadas.
+
+Es una categoría que está creciendo rápido entre quienes buscan moverse por la ciudad sin licencia de moto y sin tráfico de por medio.
+
+## La guerra de precios ya empezó
+
+Aquí es donde la feria se puso seria. Varias marcas llegaron con descuentos y financiación a la vista de todos.
+
+En Evobike, la Águila Pro pasaba de $4.120.000 a $3.708.000, y el stand invitaba a participar por una moto. Al lado, Roadmaster desplegó una pared completa de modelos (City, Águila Ninja, Urban 500 y la patineta Spider), e incluso motos eléctricas para niños.
+
+Ecomobility ofrecía financiación para llevarse la moto el mismo día, y Legacy Motors lanzó la pregunta más provocadora de toda la feria en su pendón.
+
+> "¿Todas las motos eléctricas son iguales?" Spoiler: no. Y esa es justamente la decisión difícil para el comprador.
+
+## E-Virexion también estuvo ahí
+
+En medio del movimiento, Vivian Gómez, de E-virexion, fue entrevistada por Fox Erider a la entrada del pabellón. Hablaron de la movilidad eléctrica en Colombia y de nuestra revista, que Vivian tenía en sus manos durante la conversación.
+
+Estar en la Expo 2R no fue solo cubrir una feria. Fue confirmar que la conversación sobre movilidad eléctrica ya se tomó la calle.
+
+## La pregunta que nos llevamos a casa
+
+Recorrimos los stands, vimos precios, probamos sillines y escuchamos a vendedores y visitantes. Y salimos con la sensación de que la próxima Expo 2R podría verse muy distinta: con más pabellones eléctricos que de combustión.
+
+¿Exageramos? Tal vez. Pero si usted estuvo en Corferias, ya sabe de qué hablamos.
+
+Fotos: Revista E-virexion, Expo 2R 2026, Corferias, Bogotá.`),
+    author: "E-Virexion",
+    publishedAt: "2026-11-17",
+    status: "published",
+  },
+  {
+    _id: "corriente-mexico-peru",
+    title: "México y Perú: dos mercados eléctricos, dos velocidades",
+    slug: "mexico-peru-mercados-electricos-dos-velocidades",
+    category: "corriente",
+    tag: "Región",
+    excerpt:
+      "En México ya circulan más de un cuarto de millón de vehículos electrificados y el reto ahora es la red eléctrica. En Perú, en nueve meses, el mercado superó todo lo que vendió en 2024 y 2025.",
+    body: toBlocks(`En México ya circulan más de un cuarto de millón de vehículos electrificados y el reto ahora es la red eléctrica. En Perú, en apenas nueve meses, el mercado superó todo lo que vendió en 2024 y 2025. Pero hay un dato peruano que sorprende, y no para bien.
+
+## México: más de 81.000 conectables en nueve meses
+
+El Barómetro de Electromovilidad de la Electro Movilidad Asociación (EMA) trae los números más frescos. Entre enero y septiembre de 2026, las marcas asociadas vendieron 81.488 vehículos eléctricos, híbridos conectables y de rango extendido, un 19,3 % más que en el mismo periodo del año pasado.
+
+Solo en el tercer trimestre se comercializaron 28.230 unidades, frente a 24.498 entre julio y septiembre de 2025: un alza del 15,2 %.
+
+- 81.488: eléctricos, híbridos conectables y de rango extendido vendidos en México, ene–sep 2026
+
+- +19,3 %: crecimiento ene–sep frente a 2025
+
+- 62.883: conexiones de recarga en México a septiembre (54.080 un año antes)
+
+## El problema que viene
+
+Con más de 250.000 vehículos electrificados en la calle, la conversación en México cambió de tema. Ya no se trata de vender más carros, sino de si la red eléctrica aguantará la demanda de recarga en las grandes ciudades.
+
+En el foro Latam Mobility 2026, el presidente de la planta de BMW en San Luis Potosí advirtió que el país tiene pendientes en generación y distribución de energía hacia 2030. Además, menos del 10 % de los puntos de carga en México son de acceso público.
+
+Y mientras tanto, la industria se mueve: GAC Motor anunció el inicio de operaciones de su primera planta de ensamble en México durante el segundo semestre de 2026.
+
+## Perú: el año que lo cambió todo
+
+Si México va en velocidad crucero, Perú acaba de pisar el acelerador. Según AEDIVE Perú, entre enero y septiembre de 2026 se registraron 13.285 vehículos electrificados.
+
+Para dimensionarlo: en todo 2024 se vendieron 6.664 y en todo 2025, 10.239. Es decir, en nueve meses Perú ya superó cualquier año anterior completo. Desde 2012, el país acumula 40.216 vehículos electrificados.
+
+- 2024: 6.664
+
+- 2025: 10.239
+
+- Ene–sep 2026: 13.285
+
+El Gobierno también se mueve. El Ministerio de Energía y Minas firmó con Corea del Sur un proyecto piloto para 2026-2028 que incluye la donación de un vehículo eléctrico y dos estaciones de carga alimentadas con energía solar y almacenamiento en baterías.
+
+## El dato que preocupa
+
+Aquí viene la sorpresa: en esos mismos nueve meses, Perú registró apenas tres buses eléctricos. Uno en marzo y dos en agosto.
+
+El boom peruano, por ahora, es de carros particulares. El transporte público, que es donde se mueve la mayoría de la gente, sigue casi intacto.
+
+## Y Colombia…
+
+Mientras México discute cómo reforzar su red y Perú vive su año récord, Colombia ya superó las 44.000 matrículas de carros eléctricos entre enero y octubre, según Fenalco y la Andi. La pregunta es inevitable: ¿quién liderará la carrera eléctrica en Latinoamérica en 2027?
+
+Fuentes: Electro Movilidad Asociación (EMA), Barómetro de Electromovilidad de México, vía El Siglo de Torreón; El Financiero; Latam Mobility 2026, vía Puerto Interior Guanajuato y Pasajero7; AEDIVE Perú, vía Surtidores LATAM (27 de octubre de 2026); Ministerio de Energía y Minas del Perú, vía Agencia Andina (2 de octubre de 2026).`),
+    author: "E-Virexion",
+    publishedAt: "2026-11-17",
+    status: "published",
+  },
+  {
+    _id: "corriente-antes-de-comprar",
+    title: "Antes de comprar un eléctrico, nuevo o usado",
+    slug: "antes-de-comprar-vehiculo-electrico-nuevo-o-usado",
+    category: "corriente",
+    tag: "Guía",
+    excerpt:
+      "En un vehículo eléctrico, la batería y el uso que le va a dar pesan más que el precio de vitrina. Lo que conviene revisar antes de pagar, en concesionario o de segunda mano.",
+    body: toBlocks(`En un vehículo eléctrico, la batería y el uso que le va a dar pesan más que el precio de vitrina. Esta guía reúne lo que conviene revisar antes de pagar, tanto si compra en concesionario como si compra de segunda mano.
+
+La oferta de carros, motos, bicicletas y patinetas eléctricas crece cada mes en Colombia, y con ella el mercado de usados. Elegir bien significa revisar cosas que en un vehículo de gasolina no existen: el estado de la batería, la forma de cargar, la garantía del sistema eléctrico y las reglas que aplican a cada tipo de vehículo.
+
+## Primero: ¿qué necesita y cómo lo va a usar?
+
+- ¿Cuántos kilómetros recorre al día? Sume ida, vuelta y algo de margen. La autonomía real suele ser menor que la del catálogo, sobre todo con pendientes, carga pesada o lluvia.
+
+- ¿Dónde va a cargar? En casa, en el edificio, en el trabajo o en estaciones públicas. Si vive en conjunto, confirme con la administración. Los edificios con licencia radicada después de julio de 2019 deben tener acometida para carga, salvo VIS y VIP (Ley 1964 de 2019, art. 10).
+
+- ¿Qué vehículo encaja con su recorrido? Una bicicleta o patineta resuelve trayectos urbanos cortos. Una moto o un carro cubren distancias mayores, pero cambian los papeles, el seguro y la licencia.
+
+## Si compra nuevo
+
+En un vehículo nuevo, la garantía de la batería y el respaldo de servicio técnico valen tanto como la ficha técnica.
+
+- Autonomía real, no de catálogo. Pregunte bajo qué norma se midió y pida una prueba de manejo en su recorrido habitual.
+
+- Carga. Confirme el tipo de conector, cuánto tarda una carga completa en un tomacorriente normal y si el cargador viene incluido.
+
+- Garantía separada para la batería. Pida por escrito cuántos años o kilómetros cubre y desde qué pérdida de capacidad aplica.
+
+- Repuestos y taller. Pregunte dónde se hace el mantenimiento en su ciudad, si hay repuestos en el país y cuánto tarda un pedido. Una marca sin red de servicio puede dejar el vehículo parado semanas.
+
+- Papeles. Exija factura con el número de serie o VIN. En carros y motos, verifique que el vehículo esté homologado y pueda matricularse.
+
+## Beneficios para carros y motos eléctricas (Ley 1964 de 2019)
+
+- Impuesto vehicular: no puede superar el 1 % del valor comercial (art. 3).
+
+- SOAT: descuento del 10 % en la prima (art. 4).
+
+- Revisión técnico-mecánica: descuento en su valor, según reglamentación (art. 4).
+
+- Pico y placa y día sin carro: exentos, salvo restricciones por seguridad (art. 6).
+
+- Parqueaderos: al menos 2 % de cupos preferenciales en parqueaderos públicos y comerciales de ciudades grandes (art. 7).
+
+- IVA: tarifa reducida del 5 % (INCP).
+
+## Si es bicicleta o patineta eléctrica
+
+Desde agosto de 2026 rigen reglas nuevas para los vehículos eléctricos livianos (Resolución 20263040030675 de 2026). Revise en qué categoría queda el modelo, porque de eso depende por dónde puede circular.
+
+- Bicicleta de pedaleo asistido: hasta 1.000 W, sin acelerador autónomo. Ciclorruta, máximo 25 km/h.
+
+- Patineta (VEP): hasta 1.000 W y 25 km/h. Ciclorruta.
+
+- Patineta tipo 2: hasta 1.000 W, puede llegar a 40 km/h. Ciclorruta a 25 km/h; si va más rápido, calzada.
+
+- Por encima de esos límites (más de 1.000 W o más de 40 km/h): solo calzada, como ciclomotor.
+
+Todo vehículo eléctrico liviano de más de 60 kg o más de 40 km/h necesita matrícula, SOAT y licencia. Desde el 1 de enero de 2027 deben llevar una lámina de identificación con marca, modelo, serie, año, peso, potencia, velocidad máxima y categoría. Pida esos datos por escrito.
+
+El casco certificado es obligatorio, y de noche se exigen prendas reflectivas.
+
+## Si compra usado
+
+En un eléctrico usado, el dato que más importa no es el kilometraje sino el estado de salud de la batería (SOH): el porcentaje de capacidad que conserva frente a cuando era nueva. Por encima del 80 % se considera un buen estado.
+
+> SOH mínimo recomendado: 80 %.
+
+- Pida un diagnóstico de la batería. Que lo haga un taller de la marca o un especialista con equipo de diagnóstico, no el vendedor. El informe debe mostrar la capacidad actual frente a la original.
+
+- Verifique la garantía restante. En carros, los fabricantes suelen cubrir la batería hasta 8 años o 160.000 km cuando la capacidad cae por debajo del 70 %. Confirme si sigue vigente y si pasa al nuevo dueño.
+
+- Pregunte cómo se cargaba. El uso frecuente de carga rápida desgasta más las celdas que la carga lenta.
+
+- Revise el historial. Mantenimientos, actualizaciones de software, accidentes y reparaciones. En carros y motos, consulte el RUNT para confirmar dueño, multas, SOAT y que no tenga embargos.
+
+- Desconfíe de modificaciones. Baterías sin marca, controladores reprogramados o cargadores no originales son señales de alerta. En bicicletas y patinetas, un vehículo modificado puede quedar fuera de su categoría legal.
+
+- Revise que vengan los cables y el cargador. Reponerlos puede costar bastante.
+
+- Pruébelo en su recorrido. Mire cuánto baja la batería, escuche ruidos en suspensión y frenos y revise que no haya golpes debajo del vehículo, donde suele ir la batería.
+
+## Lista de chequeo antes de pagar
+
+- La autonomía real cubre mi recorrido diario con margen.
+
+- Sé dónde voy a cargar y tengo permiso si es en un conjunto.
+
+- Tengo por escrito la garantía de la batería.
+
+- Usado: tengo un diagnóstico de la batería hecho por un tercero.
+
+- Bici o patineta: sé su categoría y por dónde puede circular.
+
+- Confirmé dónde se hace el mantenimiento y si hay repuestos.
+
+- Usado: revisé el historial y, en carros y motos, el RUNT.
+
+- Recibí factura o contrato con número de serie o VIN.
+
+Fuentes: Ley 1964 de 2019, Congreso de la República (Minambiente); INCP, Beneficios de contar con carro eléctrico en Colombia; El Carro Colombiano, Nueva reglamentación y Nuevas reglas para patinetas y bicicletas eléctricas; Híbridos y Eléctricos, Consejos para comprar un eléctrico de segunda mano.`),
+    author: "E-Virexion",
+    publishedAt: "2026-11-17",
+    status: "published",
+  },
   {
     _id: "corriente-velmpu",
     title: "El día que Colombia le puso nombre y apellido a sus ruedas eléctricas",
