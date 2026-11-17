@@ -61,6 +61,7 @@ export default async function EditionPage({
         <div className="mt-8">
           <MagazineReader
             slug={edition.slug}
+            version={edition.version}
             totalPages={edition.pages}
             previewPages={edition.previewPages}
             canReadAll={Boolean(user)}

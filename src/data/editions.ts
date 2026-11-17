@@ -15,6 +15,11 @@ export interface Edition {
   width: number;
   height: number;
   highlights: string[];
+  /**
+   * Bump when page images are replaced in KV: it goes into the image URLs so
+   * browsers and Cloudflare's cache fetch the new pages instead of old copies.
+   */
+  version?: number;
 }
 
 /**
@@ -31,6 +36,8 @@ export const EDITIONS: Edition[] = [
     previewPages: 10,
     width: 1100,
     height: 1556,
+    // v2: new timeline spread (pages 6–7).
+    version: 2,
     highlights: [
       "4.603 eléctricos en un solo mes",
       "Fórmula E: arranca la era Gen4",
