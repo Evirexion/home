@@ -332,6 +332,155 @@ Fuentes: Ley 1964 de 2019, Congreso de la República (Minambiente); INCP, Benefi
     status: "published",
   },
   {
+    _id: "corriente-formula-e-gen4",
+    title: "Arranca la era Gen4: 815 caballos eléctricos ruedan en el Jarama",
+    slug: "formula-e-gen4-815-caballos-jarama",
+    category: "corriente",
+    tag: "Fórmula E",
+    excerpt:
+      "Del 16 al 20 de noviembre el Gen4 sale por primera vez a pista en un test oficial. Es el monoplaza eléctrico más potente de la historia, y la temporada 2026/27 arrancará en Ciudad de México.",
+    body: toBlocks(`Esta semana, del 16 al 20 de noviembre, el Gen4 sale por primera vez a pista en un test oficial. Es el monoplaza eléctrico más potente de la historia, y la temporada 2026/27 arrancará en Latinoamérica: Ciudad de México, el 16 de enero.
+
+El silencio cambió de volumen. En el Circuito del Jarama, en Madrid, los equipos de la Fórmula E estrenan desde hoy el Gen4, el carro con el que la categoría quiere dejar de ser "la alternativa" y convertirse en el referente del automovilismo de alto rendimiento.
+
+Las cifras hablan solas: 600 kW de potencia, el equivalente a más de 815 caballos, y tracción en las cuatro ruedas activa durante toda la carrera. El Gen3 Evo se retiró en agosto en Londres. A partir de ahora la potencia eléctrica no es una promesa: se pone a prueba vuelta a vuelta.
+
+> 815 caballos: el monoplaza eléctrico más potente de la historia.
+
+## Un campeonato más grande que nunca
+
+La temporada 13 trae 21 carreras en 13 eventos y circuitos de tradición:
+
+- Debutan Austin (COTA), Zandvoort y Brands Hatch. Brands Hatch reemplaza al ExCeL de Londres, que se queda pequeño para el Gen4.
+
+- Zandvoort estrena una carrera sprint el viernes y una principal nocturna el sábado.
+
+- Madrid pasa a finales de junio con doble fecha. Cierra Tokio el 24 y 25 de julio de 2027.
+
+El calendario original abría en Yeda en diciembre, pero esa fecha se aplazó por la situación en Oriente Medio. Así, el primer semáforo verde de la era Gen4 se encenderá en el Autódromo Hermanos Rodríguez de Ciudad de México. Le siguen Miami, Austin y São Paulo (13 de marzo): cuatro de las primeras cinco fechas en América.
+
+## El campeón que defiende
+
+Pascal Wehrlein (Porsche) llega como bicampeón. Ganó el título 2025/26 en una final caótica en Londres, con 169 puntos frente a 164 de Jake Dennis y 160 de Mitch Evans, aunque no sumó en la última carrera. Porsche también se quedó con el campeonato de fabricantes y Jaguar con el de equipos. Esa misma tarde, Taylor Barnard se convirtió en el ganador más joven de la historia de la categoría, a los 22 años.
+
+## Por qué importa
+
+Lo que se aprende en la pista termina en la calle: gestión de baterías, regeneración en frenada, software de eficiencia. Cada kilovatio que el Gen4 exprime en Jarama es una lección para el próximo carro eléctrico que compres.
+
+Dato E-Virexion: con la fecha inaugural en México, la temporada 13 es la primera de la Fórmula E que arranca en Latinoamérica con un carro de más de 800 caballos. El shift eléctrico también se corre.
+
+Fuentes: Motorsport.com – Calendario 2026/27 de Fórmula E; Correio da Manhã – Wehrlein bicampeón y datos del Gen4.`),
+    author: "E-Virexion",
+    publishedAt: "2026-11-17",
+    status: "published",
+  },
+  {
+    _id: "corriente-stark-e-tracto",
+    title: "Stärk E-Tracto 6x4: la tractomula que cambió el ACPM por 282 kWh",
+    slug: "stark-e-tracto-tractomula-electrica-282-kwh",
+    category: "corriente",
+    tag: "Carga pesada",
+    excerpt:
+      "La primera tractomula 100 % eléctrica de Colombia: 475 caballos, 2.000 Nm de torque y hasta 16,4 toneladas, sin emisiones locales ni ruido.",
+    body: toBlocks(`Es la primera tractomula 100 % eléctrica de Colombia: 475 caballos, 2.000 Nm de torque y hasta 16,4 toneladas, sin emisiones locales ni ruido. Auteco Blue y Renting Colombia la pusieron a trabajar para demostrar que la carga pesada también puede enchufarse.
+
+Durante décadas, hablar de tractomulas en Colombia era hablar de diésel, humo negro y rugido de motor. La Stärk E-Tracto 6x4 llega para reescribir esa imagen. Auteco Blue, en alianza con Renting Colombia, la presentó oficialmente a finales de febrero de 2024. Desde entonces, la tractomula eléctrica dejó de ser promesa y se volvió operación real.
+
+## Ficha técnica: músculo eléctrico
+
+- Potencia: 475 HP
+
+- Torque: 2.000 Nm
+
+- Transmisión: automatizada
+
+- Capacidad de carga: hasta 16,4 t (similar a un dobletroque)
+
+- Velocidad máxima: 90 km/h (limitada)
+
+- Batería: 282 kWh
+
+- Autonomía: cerca de 96 km por carga
+
+- Carga rápida: entre 1 y 4 horas
+
+- Frenado: regenerativo
+
+Los 2.000 Nm están disponibles desde el arranque, sin esperar revoluciones. En la topografía colombiana, donde cada pendiente pone a prueba un motor, eso marca la diferencia. Y en cada bajada, el frenado regenerativo devuelve energía a la batería.
+
+## Hecha para la ruta corta
+
+Con unos 96 km de autonomía, la E-Tracto no busca cruzar el país. Su terreno son los trayectos cortos y repetitivos: última milla, crossdocking y logística portuaria. Son operaciones que salen y vuelven a centros de distribución con puntos de carga fijos. Ahí la carga rápida le permite operar de forma continua, turno tras turno.
+
+## De Medellín al resto del país
+
+- Febrero de 2024: presentación oficial de Auteco Blue y Renting Colombia.
+
+- Primer semestre de 2024: la primera unidad entra en operación real en el Valle de Aburrá con Postobón, en rutas de distribución.
+
+- Segundo semestre de 2024 en adelante: arranca la comercialización y la expansión hacia Bogotá, el Valle del Cauca y la costa Caribe.
+
+El piloto en Antioquia demostró algo clave: se pueden mover grandes volúmenes de mercancía en entornos urbanos sin emisiones locales y sin ruido. Después de ese hito, Auteco Blue amplió su portafolio eléctrico con la familia Stärk E-Truck de 2,7 y 4 toneladas, para cubrir desde la distribución urbana hasta la carga pesada.
+
+## ¿Por qué importa ahora?
+
+A enero de 2026 circulaban cerca de 637 vehículos eléctricos de carga en Colombia. El país ya tiene además Ruta-E, su primer corredor de carga eléctrica entre Bogotá y Cartagena. La E-Tracto es la prueba de que la tecnología ya está aquí. Lo que sigue es multiplicar los puntos de carga para que más flotas den el salto.
+
+Dato E-Virexion: 16,4 toneladas, cero escape, cero rugido. La próxima vez que una tractomula pase a tu lado en silencio, no es que el motor esté apagado: es que el futuro de la carga ya va enchufado. Driving the electric shift.
+
+Fuentes: ficha técnica y cronograma de la Stärk E-Tracto 6x4, información de Auteco Blue entregada por el equipo E-Virexion; Portafolio – Auteco trae la tractomula eléctrica Stärk; Enter.co – Ruta-E y 637 vehículos eléctricos de carga.`),
+    author: "E-Virexion",
+    publishedAt: "2026-11-17",
+    status: "published",
+  },
+  {
+    _id: "corriente-volar-enchufado",
+    title: "Volar enchufado: el avión más grande a baterías ya despegó y el primero comercial busca su certificado",
+    slug: "volar-enchufado-heart-x1-beta-alia-cx300",
+    category: "corriente",
+    tag: "Aviación eléctrica",
+    excerpt:
+      "El Heart X1 voló con alas de 32 metros y unos 5 dólares de electricidad. Beta Technologies acumula pedidos por más de 4.000 millones de dólares para su Alia CX300.",
+    body: toBlocks(`El Heart X1 voló con alas de 32 metros y unos 5 dólares de electricidad. Beta Technologies acumula pedidos por más de 4.000 millones de dólares para su Alia CX300 y apunta a la carga y las misiones médicas.
+
+La aviación era el último territorio que parecía imposible de electrificar. En 2026 empezó a ceder.
+
+## El gigante de las baterías
+
+El 12 de agosto, en el aeropuerto de Plattsburgh, en el norte del estado de Nueva York, Heart Aerospace hizo volar su demostrador X1. Fue un vuelo tripulado de 27 minutos que alcanzó 335 metros de altura. Las cifras explican el récord:
+
+- Envergadura: 32,3 m
+
+- Peso al despegue: cerca de 11.340 kg
+
+- Potencia: más de 1 MW durante el vuelo
+
+Es el avión de baterías más grande que ha volado. Según la empresa, ese primer vuelo consumió alrededor de 5 dólares de electricidad. El X1 abre camino al ES-30, un regional híbrido-eléctrico de 30 puestos previsto para 2031, con compromisos de United Airlines, Air Canada y JSX.
+
+> 32 m de envergadura: las alas del Heart X1, el avión a baterías más grande.
+
+## El que quiere llegar primero
+
+Mientras Heart demuestra escala, Beta Technologies busca ser el primer fabricante de aviones eléctricos certificado por la FAA. Su Alia CX300 despega y aterriza como un avión convencional:
+
+- Lleva hasta 5 pasajeros o 1.250 libras de carga (unos 567 kg).
+
+- Demostró 336 millas náuticas de alcance (unos 622 km) en pruebas.
+
+- Su costo de operación estimado es de unos 450 dólares por hora, frente a 800-850 de un turbohélice Cessna Caravan.
+
+Con el combustible caro, Beta enfocó sus ventas en la carga y las misiones médicas. El CX300 ya ha transportado radioisótopos, suministros médicos, correo y repuestos. La compañía suma 1.040 aviones entre pedidos firmes y opciones, por más de 4.000 millones de dólares.
+
+El certificado todavía no llega. En noviembre, Beta reportó un 89 % de avance en la planeación de cumplimiento del CX300 y apenas un 5 % en la implementación final. Su CEO evitó dar una fecha. Tampoco ha logrado la meta de producir 4,5 aviones al mes: su ritmo demostrado es de 0,5.
+
+Dato E-Virexion: un avión que vuela unos 600 km con carga médica y la mitad del costo operativo de un turbohélice encaja con la geografía colombiana: pistas cortas, regiones apartadas y rutas donde hoy cada galón de combustible pesa. El cielo también se está enchufando.
+
+Fuentes: electrive – Primer vuelo del Heart X1; PR Newswire vía Webull – Heart X1, el avión eléctrico más grande; Leeham News / AIN – Beta Alia CX300, carga y certificación.`),
+    author: "E-Virexion",
+    publishedAt: "2026-11-17",
+    status: "published",
+  },
+  {
     _id: "corriente-velmpu",
     title: "El día que Colombia le puso nombre y apellido a sus ruedas eléctricas",
     slug: "velmpu-placa-micromovilidad-electrica",
