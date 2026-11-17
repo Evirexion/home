@@ -24,6 +24,8 @@ interface Props {
   canReadAll: boolean;
   width: number;
   height: number;
+  /** Cache-busting version of the page images (see Edition.version). */
+  version?: number;
 }
 
 /** Builds the call-to-action page shown after the free preview. Plain DOM: page-flip owns these nodes. */
@@ -55,7 +57,7 @@ function imagePage(src: string, number: number, eager: boolean): HTMLElement {
   return page;
 }
 
-export function MagazineReader({ slug, totalPages, previewPages, canReadAll, width, height }: Props) {
+export function MagazineReader({ slug, totalPages, previewPages, canReadAll, width, height, version }: Props) {
   const frameRef = useRef<HTMLDivElement>(null);
   const hostRef = useRef<HTMLDivElement>(null);
   const flipRef = useRef<PageFlipInstance | null>(null);
@@ -83,7 +85,7 @@ export function MagazineReader({ slug, totalPages, previewPages, canReadAll, wid
       if (cancelled) return;
       const pages: HTMLElement[] = [];
       for (let n = 1; n <= visiblePages; n += 1) {
-        pages.push(imagePage(`/api/revista/${slug}/${n}`, n, n <= 3));
+        pages.push(imagePage(`/api/revista/${slug}/${n}${version ? `?v=${version}` : ""}`, n, n <= 3));
       }
       if (!canReadAll) pages.push(lockedPage(totalPages, previewPages));
 
@@ -117,7 +119,7 @@ export function MagazineReader({ slug, totalPages, previewPages, canReadAll, wid
       flipRef.current = null;
       book.remove();
     };
-  }, [slug, visiblePages, canReadAll, totalPages, previewPages, width, height]);
+  }, [slug, version, visiblePages, canReadAll, totalPages, previewPages, width, height]);
 
   // Analytics: which pages get read, and how many readers reach the free-preview wall.
   const seenPages = useRef(new Set<number>());
