@@ -50,7 +50,7 @@ export function Manifesto() {
             </p>
             <p className="text-sm uppercase tracking-[0.2em] text-silver-500">— Equipo E-Virexion</p>
             <Link
-              href="/revista"
+              href="/revista/2026-10"
               className="brand-gradient-bg metal-edge mt-4 inline-flex items-center gap-2 rounded-full px-6 py-3 text-sm font-semibold text-ink transition-transform duration-300 hover:scale-[1.02]"
             >
               <BookOpen className="h-4 w-4" /> Lee la Edición 001

@@ -40,6 +40,7 @@ export function ArticleCard({ post, showCategory = false }: { post: Post; showCa
           <span>{post.author}</span>
           <time dateTime={post.publishedAt}>
             {new Date(post.publishedAt).toLocaleDateString("es-CO", {
+              timeZone: "UTC",
               day: "2-digit",
               month: "short",
               year: "numeric",

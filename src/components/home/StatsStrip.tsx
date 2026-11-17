@@ -3,11 +3,11 @@ import { Reveal } from "@/components/ui/Reveal";
 import { CountUp } from "@/components/ui/CountUp";
 import { getStations } from "@/lib/stations";
 
-// Figures from Edición 001 (octubre 2026): TransMilenio S.A.; Fenalco y ANDI con datos del RUNT.
+// Figures from Edición 001 (TransMilenio S.A.) and Edición 002 (Fenalco y ANDI con datos del RUNT, guía de precios).
 const OTHER_STATS = [
-  { value: 300, suffix: "+", label: "Vehículos en la guía de precios" },
+  { value: 343, suffix: "", label: "Vehículos en la guía de precios" },
   { value: 1485, suffix: "", label: "Buses eléctricos contratados en TransMilenio" },
-  { value: 33889, suffix: "", label: "Eléctricos matriculados en Colombia, ene–ago 2026" },
+  { value: 44387, suffix: "", label: "Eléctricos matriculados en Colombia, ene–oct 2026" },
 ];
 
 export async function StatsStrip() {

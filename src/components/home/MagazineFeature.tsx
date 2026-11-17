@@ -3,6 +3,7 @@ import { BookOpen, Lock, Zap } from "lucide-react";
 import { Container } from "@/components/ui/Container";
 import { Reveal } from "@/components/ui/Reveal";
 import { EDITIONS } from "@/data/editions";
+import { NextEditionBadge } from "@/components/magazine/NextEditionBadge";
 
 /**
  * Right under the hero: makes it obvious that E-VIREXION is a magazine,
@@ -62,6 +63,7 @@ export function MagazineFeature() {
             {edition.title.split(" ").slice(0, -1).join(" ")}{" "}
             <span className="brand-gradient-text">{edition.title.split(" ").slice(-1)}</span>
           </h2>
+          <NextEditionBadge className="mt-6" />
           <p className="mt-5 max-w-xl text-lg leading-relaxed text-silver-300">
             E-VIREXION es una revista de movilidad eléctrica: historia, regulación, mercado y precios, contados con
             rigor y sin agenda. Hojéala aquí mismo, página por página.

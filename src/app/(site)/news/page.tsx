@@ -6,7 +6,7 @@ import { Reveal } from "@/components/ui/Reveal";
 import { getPosts } from "@/lib/posts";
 
 export const metadata: Metadata = {
-  title: "CORRIENTE",
+  title: "Corriente",
   description: "Noticias de movilidad eléctrica en Colombia y Latinoamérica.",
 };
 
@@ -17,7 +17,7 @@ export default async function NewsPage() {
     <div className="py-16 md:py-20">
       <Container>
         <SectionHeading
-          eyebrow="CORRIENTE"
+          eyebrow="Corriente"
           title="Noticias de movilidad eléctrica"
           description="Política pública, infraestructura y mercado: lo que está pasando con los vehículos eléctricos en Colombia y la región."
         />

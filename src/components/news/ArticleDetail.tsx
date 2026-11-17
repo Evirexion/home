@@ -36,6 +36,7 @@ export async function ArticleDetail({ slug, category }: { slug: string; category
           <span aria-hidden>·</span>
           <time dateTime={post.publishedAt}>
             {new Date(post.publishedAt).toLocaleDateString("es-CO", {
+              timeZone: "UTC",
               day: "2-digit",
               month: "long",
               year: "numeric",

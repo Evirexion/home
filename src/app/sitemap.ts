@@ -5,7 +5,7 @@ import { EDITIONS } from "@/data/editions";
 const BASE = "https://evirexion.com";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const pages = ["", "/revista", "/news", "/map", "/prices", "/contact", "/privacidad"].map((path) => ({
+  const pages = ["", "/revista", "/ediciones", "/news", "/map", "/prices", "/contact", "/privacidad"].map((path) => ({
     url: `${BASE}${path}`,
     changeFrequency: "weekly" as const,
   }));

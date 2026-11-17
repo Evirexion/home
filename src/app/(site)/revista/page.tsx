@@ -1,10 +1,11 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { BookOpen, Lock } from "lucide-react";
+import { ArrowRight, BookOpen, Lock } from "lucide-react";
 import { Container } from "@/components/ui/Container";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { getCurrentUser } from "@/lib/accounts";
 import { EDITIONS } from "@/data/editions";
+import { NextEditionBadge } from "@/components/magazine/NextEditionBadge";
 
 export const metadata: Metadata = {
   title: "Revista",
@@ -14,7 +15,9 @@ export const metadata: Metadata = {
 export default async function MagazinePage({ searchParams }: { searchParams: Promise<{ bienvenida?: string }> }) {
   const user = await getCurrentUser();
   const { bienvenida } = await searchParams;
+  // Only the current edition lives here; earlier ones are in /ediciones.
   const latest = EDITIONS[0];
+  const hasPrevious = EDITIONS.length > 1;
 
   return (
     <div className="py-16 md:py-20">
@@ -24,6 +27,7 @@ export default async function MagazinePage({ searchParams }: { searchParams: Pro
           title="E-VIREXION"
           description="Historia, regulación, mercado y la guía de precios de la movilidad eléctrica en Colombia. Hojea la revista aquí mismo."
         />
+        <NextEditionBadge className="mt-6" />
         {user && bienvenida && (
           <p className="mt-6 rounded-xl border border-electric/30 bg-electric/5 px-4 py-3 text-sm text-silver-100">
             ¡Bienvenido, {user.name}! Tu cuenta está activa.
@@ -31,7 +35,7 @@ export default async function MagazinePage({ searchParams }: { searchParams: Pro
         )}
 
         <div className="mt-10 grid gap-8 md:grid-cols-12">
-          {EDITIONS.map((edition) => (
+          {[latest].filter(Boolean).map((edition) => (
             <Link
               key={edition.slug}
               href={`/revista/${edition.slug}${bienvenida ? "?bienvenida=1" : ""}`}
@@ -48,7 +52,7 @@ export default async function MagazinePage({ searchParams }: { searchParams: Pro
               </div>
               <div className="flex flex-col justify-center p-6 md:col-span-7 md:p-10">
                 <p className="text-xs uppercase tracking-[0.3em] text-electric">
-                  Edición {edition.number} · {edition.month}
+                  Última edición · {edition.number} · {edition.month}
                 </p>
                 <h2 className="mt-3 font-display text-3xl font-bold text-silver-100 md:text-4xl">{edition.title}</h2>
                 <ul className="mt-6 space-y-2 text-silver-300">
@@ -75,6 +79,15 @@ export default async function MagazinePage({ searchParams }: { searchParams: Pro
             </Link>
           ))}
         </div>
+
+        {hasPrevious && (
+          <Link
+            href="/ediciones"
+            className="mt-6 inline-flex items-center gap-2 text-sm font-medium text-silver-300 transition-colors hover:text-electric"
+          >
+            Ver ediciones anteriores <ArrowRight className="h-4 w-4" />
+          </Link>
+        )}
 
         {!user && latest && (
           <div className="mt-10 flex flex-wrap items-center justify-between gap-4 rounded-2xl border border-electric/25 bg-electric/5 p-6">

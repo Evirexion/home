@@ -36,7 +36,7 @@ export default async function NewsInternalPage() {
         <div className="flex flex-wrap items-end justify-between gap-4">
           <SectionHeading
             eyebrow="Equipo editorial"
-            title="Borradores de CORRIENTE / Innovación"
+            title="Borradores de Corriente / Innovación"
             description="Envía historias como borrador; un editor las revisa y publica desde Sanity Studio."
           />
           <form action={logout}>

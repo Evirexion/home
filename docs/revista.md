@@ -26,7 +26,12 @@ npx wrangler kv bulk put revista-upload/revista-2026-10.json --binding PRICES_KV
 1. Exportar el PDF desde Canva.
 2. Convertir cada página a WebP de 1100 px de ancho y armar el JSON
    `[{ "key": "revista:<edición>:01", "value": "<base64>" }, …]`.
-3. Subirlo con el comando de arriba y agregar la edición en `src/data/editions.ts`.
+3. Subirlo con el comando de arriba y agregar la edición **al principio** de
+   `EDITIONS` en `src/data/editions.ts`. La primera de la lista es la que sale
+   en `/revista` y en el inicio; las demás pasan solas a `/ediciones`.
+
+Las ediciones salen el 17 de cada mes (`RELEASE_DAY`); el aviso con la cuenta
+regresiva está en `src/components/magazine/NextEditionBadge.tsx`.
 
 ## Aviso de nuevos lectores y lista de suscriptores
 
