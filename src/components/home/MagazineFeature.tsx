@@ -40,6 +40,10 @@ export function MagazineFeature() {
                 alt={`Portada de la Edición ${edition.number} de E-VIREXION`}
                 width={edition.width}
                 height={edition.height}
+                // Below the fold: load it as the reader scrolls instead of
+                // preloading it with the hero (React skips the preload for lazy images).
+                loading="lazy"
+                decoding="async"
                 className="aspect-[1100/1556] w-full bg-ink-raised object-cover"
               />
               {/* Glossy sweep on hover */}
